@@ -151,7 +151,11 @@ export function useSettingsActions(tenantId: string, slug: string) {
       mutationFn: async (s: { id?: string; key: string; name: string; description: string; price: number; duration_min: number; active: boolean; sort: number }) =>
         s.id
           ? (ok(await supabase.from("services").update(s).eq("id", s.id)), s.id)
-          : ok<{ id: string }>(await supabase.from("services").insert({ ...s, tenant_id: tenantId }).select("id").single()).id,
+          : await (async () => {
+              const r = await supabase.from("services").insert({ ...s, tenant_id: tenantId }).select("id").single();
+              if (r.error) throw r.error;
+              return (r.data as { id: string }).id;
+            })(),
       onSuccess: done,
     }),
     /** Посты услуги: пустой список = любой активный пост */
