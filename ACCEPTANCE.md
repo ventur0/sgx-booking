@@ -42,7 +42,7 @@
 | Playwright `e2e/booking-flow.spec.ts` | нет браузеров и сборки | `pnpm build && pnpm preview`, затем `pnpm test:e2e` |
 | Миграции на настоящем Supabase (Auth, Storage, Realtime) | нет проекта и ключей | `pnpm db:push`, затем `pnpm test:db` с `SKIP_SETUP=1` |
 | `tenant:publish`, `tenant:verify` | нужен Supabase и опубликованный сайт | по CLONE-IN-6-MINUTES.md |
-| Edge Function `send-reminders`, доставка Web Push | нужны VAPID-ключи, Supabase Cron, реальные устройства | SETUP.md, раздел 5. **Доставка push не проверялась** |
+| Напоминания | Web Push отключён по решению владельца; клиенту — событие календаря (.ics) | — |
 | Установка PWA и режим standalone на телефонах | нет устройств | открыть `/s/<slug>/`, «На экран „Домой“» на iPhone и «Установить» на Android |
 | Публикация на Cloudflare Pages | нет аккаунта | `pnpm deploy` |
 
