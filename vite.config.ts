@@ -7,7 +7,7 @@ import { resolve } from "node:path";
 const root = import.meta.dirname;
 
 export default defineConfig({
-  // студия по умолчанию для корня сайта (переменная DEFAULT_TENANT в Cloudflare); на собственном домене — студия этого домена
+  // студия по умолчанию для корня сайта (переменная DEFAULT_TENANT в Cloudflare)
   define: { __DEFAULT_TENANT__: JSON.stringify(process.env.DEFAULT_TENANT ?? "graphite") },
   plugins: [
     react(),

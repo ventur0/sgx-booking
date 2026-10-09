@@ -211,7 +211,6 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
           {s.suspended && <span className="pill bad">Приостановлена</span>}
         </div>
       </div>
-      <DomainRow s={s} />
       <p className="muted small">Записей за 30 дней: {s.bookings30}{s.lastBookingAt ? ` · последняя ${new Date(s.lastBookingAt).toLocaleDateString("ru-BY")}` : ""}</p>
       <div className="row">
         <a className="btn small ghost" href={siteUrl(s.slug)} target="_blank" rel="noreferrer">Сайт</a>
@@ -320,38 +319,5 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
       {msg && <Notice kind={msg.kind}>{msg.text}</Notice>}
       {handoff && <Handoff slug={s.slug} name={s.name} email={handoff.email} password={handoff.password} onClose={() => setHandoff(null)} />}
     </article>
-  );
-}
-
-/** Собственный домен студии: продавец вписывает домен, покупатель (или вы) подключает его в Cloudflare. */
-function DomainRow({ s }: { s: StudioRow }) {
-  const act = useAdminActions();
-  const [edit, setEdit] = useState(false);
-  const [val, setVal] = useState(s.customDomain ?? "");
-  const [err, setErr] = useState("");
-  const save = (e: FormEvent) => {
-    e.preventDefault();
-    setErr("");
-    act.setDomain.mutate({ tenantId: s.id, domain: val }, { onSuccess: () => setEdit(false), onError: (x) => setErr(humanError(x)) });
-  };
-  return (
-    <div className="stack">
-      <div className="row between">
-        <span className="muted small">
-          Домен: {s.customDomain ? <a className="link mono" href={`https://${s.customDomain}/`} target="_blank" rel="noreferrer">{s.customDomain}</a> : "не подключён"}
-        </span>
-        <button className="btn small ghost" onClick={() => { setEdit(!edit); setVal(s.customDomain ?? ""); }}>{s.customDomain ? "Изменить домен" : "Свой домен…"}</button>
-      </div>
-      {edit && (
-        <form className="stack" onSubmit={save} noValidate>
-          <Field id={`dm-${s.id}`} label="Домен студии" hint="Например zapis.studio.by. Пусто — отключить">
-            <input className="input mono" id={`dm-${s.id}`} autoComplete="off" value={val} onChange={(e) => setVal(e.target.value)} />
-          </Field>
-          <p className="muted small">После сохранения добавьте этот домен в Cloudflare: Workers & Pages → sgx-booking → Custom domains → Set up a custom domain. Cloudflare покажет запись DNS (CNAME), которую нужно добавить у регистратора домена. Через 5–30 минут сайт студии откроется по этому адресу.</p>
-          <div className="row"><button className="btn primary small" disabled={act.setDomain.isPending}>Сохранить</button><button type="button" className="btn ghost small" onClick={() => setEdit(false)}>Отмена</button></div>
-        </form>
-      )}
-      {err && <p className="err" role="alert">{err}</p>}
-    </div>
   );
 }

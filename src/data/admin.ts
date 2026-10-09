@@ -7,8 +7,6 @@ export type StudioRow = {
   id: string; slug: string; name: string; mode: "preview" | "live"; suspended: boolean;
   createdAt: string; wentLiveAt: string | null; bookings30: number; lastBookingAt: string | null;
   owners: { userId: string; email: string }[];
-  /** собственный домен студии, например zapis.studio.by */
-  customDomain: string | null;
 };
 
 export function useIsPlatformAdmin(userId: string | undefined) {
@@ -74,7 +72,6 @@ export function useAdminActions() {
       mutationFn: (a: { tenantId: string; confirmEmail: string }) => users<{ ok: true }>({ action: "delete_studio", ...a }),
       onSuccess: done,
     }),
-    setDomain: useMutation({ mutationFn: (a: { tenantId: string; domain: string }) => rpc<string | null>("admin_set_domain", { p_tenant: a.tenantId, p_domain: a.domain }), onSuccess: done }),
     setSuspended: useMutation({ mutationFn: (a: { tenantId: string; suspended: boolean }) => rpc<void>("admin_set_suspended", { p_tenant: a.tenantId, p_suspended: a.suspended }), onSuccess: done }),
   };
 }

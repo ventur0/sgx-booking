@@ -12,7 +12,7 @@ if [ "${SKIP_SETUP:-0}" != "1" ]; then
   psql "$DB_URL" -q -v ON_ERROR_STOP=1 -o /dev/null -f ../../supabase/seed.sql
 fi
 fail=0; pass=0
-for f in 01_booking.sql 02_rls.sql 03_outbox.sql 04_stats_tz.sql 05_platform.sql 06_domains.sql; do
+for f in 01_booking.sql 02_rls.sql 03_outbox.sql 04_stats_tz.sql 05_platform.sql; do
   out=$(psql "$DB_URL" -q -v ON_ERROR_STOP=1 -f "$f" 2>&1) || { echo "$out" | grep -E "ERROR|FAIL" | sed 's/^psql:[^ ]* //'; echo "✗ $f"; fail=1; continue; }
   n=$(echo "$out" | grep -c "NOTICE:  ok" || true); pass=$((pass + n)); echo "✓ $f — проверок: $n"
 done
