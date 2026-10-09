@@ -12,7 +12,7 @@
 //   { action: "delete_user", userId, confirmEmail }       — удалить аккаунт владельца целиком (студии остаются);
 //     confirmEmail — почта этого аккаунта, которую продавец вписывает для подтверждения
 //   { action: "delete_studio", tenantId, confirmEmail }   — продавец удаляет студию; подтверждение — почта её владельца
-//     (если владельцев нет — адрес студии)
+//     (если владельцев нет — почта самого продавца)
 //   владелец, с подтверждением текущим паролем:
 //   { action: "change_own_email", email, password }
 //   { action: "delete_own_studio", tenantId, password }   — удалить свою студию со всеми записями и фото
@@ -174,7 +174,7 @@ Deno.serve(async (req) => {
       if (!t) return fail("tenant_not_found", 404);
       const { data: owners } = await admin.rpc("service_tenant_owner_emails", { p_tenant: body.tenantId });
       const emails = (owners ?? []) as string[];
-      const confirmed = emails.length ? emails.some((e) => sameEmail(body.confirmEmail, e)) : sameEmail(body.confirmEmail, t.slug);
+      const confirmed = emails.length ? emails.some((e) => sameEmail(body.confirmEmail, e)) : sameEmail(body.confirmEmail, me.email);
       if (!confirmed) return fail("confirm_mismatch");
       const err = await deleteStudio(body.tenantId);
       return err ? fail(err, 500) : reply({ ok: true });

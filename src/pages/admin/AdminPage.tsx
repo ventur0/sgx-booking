@@ -172,10 +172,11 @@ function StudioCard({ s }: { s: StudioRow }) {
   const me = useSession().data?.user.id;
   const [panel, setPanel] = useState<null | { kind: "add" | "delete" } | { kind: "password" | "email" | "deleteUser"; userId: string; email: string }>(null);
   const [confirmText, setConfirmText] = useState("");
-  // подтверждение удаления студии: почта любого её владельца; если владельцев нет — адрес студии
+  const myEmail = useSession().data?.user.email ?? "";
+  // подтверждение удаления студии: почта любого её владельца; если владельцев нет — ваша почта продавца
   const studioConfirmOk = s.owners.length
     ? s.owners.some((o) => o.email.toLowerCase() === confirmText.trim().toLowerCase())
-    : confirmText.trim().toLowerCase() === s.slug;
+    : !!myEmail && confirmText.trim().toLowerCase() === myEmail.toLowerCase();
   const [val, setVal] = useState({ email: "", password: makePassword() });
   const [msg, setMsg] = useState<{ kind: "ok" | "bad"; text: string } | null>(null);
   const [handoff, setHandoff] = useState<{ email: string; password: string | null } | null>(null);
@@ -285,8 +286,8 @@ function StudioCard({ s }: { s: StudioRow }) {
         }}>
           <b>Удалить «{s.name}» навсегда?</b>
           <p className="muted small">Сайт перестанет открываться. Удалятся все записи клиентов, оплаты, статистика, услуги, график и фото. Вернуть нельзя. Если нужно только временно закрыть запись — нажмите «Приостановить».</p>
-          <Field id={`del-${s.id}`} label={s.owners.length ? "Для подтверждения введите почту владельца студии" : `Владельцев нет — для подтверждения введите адрес студии: ${s.slug}`}>
-            <input className="input" id={`del-${s.id}`} type={s.owners.length ? "email" : "text"} autoComplete="off" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
+          <Field id={`del-${s.id}`} label={s.owners.length ? "Для подтверждения введите почту владельца студии" : "Владельцев нет — для подтверждения введите вашу почту (почту продавца)"}>
+            <input className="input" id={`del-${s.id}`} type="email" autoComplete="off" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
           </Field>
           <div className="row">
             <button className="btn small danger-solid" disabled={!studioConfirmOk || act.deleteStudio.isPending}>{act.deleteStudio.isPending ? "Удаляем…" : "Удалить навсегда"}</button>
