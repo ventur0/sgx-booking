@@ -9,8 +9,6 @@ export type StudioRow = {
   owners: { userId: string; email: string }[];
   /** собственный домен студии, например zapis.studio.by */
   customDomain: string | null;
-  /** учёт оплат покупателя (виден только продавцу) */
-  paidUntil: string | null; monthlyPrice: number | null; billingNote: string;
 };
 
 export function useIsPlatformAdmin(userId: string | undefined) {
@@ -76,13 +74,6 @@ export function useAdminActions() {
       mutationFn: (a: { tenantId: string; confirmEmail: string }) => users<{ ok: true }>({ action: "delete_studio", ...a }),
       onSuccess: done,
     }),
-    setBilling: useMutation({
-      mutationFn: (a: { tenantId: string; paidUntil: string | null; monthlyPrice: number | null; note: string; extendMonths?: number }) =>
-        rpc<string | null>("admin_set_billing", {
-          p_tenant: a.tenantId, p_paid_until: a.paidUntil, p_monthly_price: a.monthlyPrice, p_note: a.note, p_extend_months: a.extendMonths ?? 0,
-        }),
-      onSuccess: done,
-    }),
     setDomain: useMutation({ mutationFn: (a: { tenantId: string; domain: string }) => rpc<string | null>("admin_set_domain", { p_tenant: a.tenantId, p_domain: a.domain }), onSuccess: done }),
     setSuspended: useMutation({ mutationFn: (a: { tenantId: string; suspended: boolean }) => rpc<void>("admin_set_suspended", { p_tenant: a.tenantId, p_suspended: a.suspended }), onSuccess: done }),
   };
@@ -118,12 +109,3 @@ export function existingAccount(e: unknown): string[] | null {
   return d?.error === "user_exists" ? (d.studios ?? []) : null;
 }
 
-/** Сегодня в Минске, ГГГГ-ММ-ДД */
-export const todayMinsk = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Minsk" }).format(new Date());
-
-/** Состояние оплаты: нет данных, оплачено, скоро закончится (≤ 5 дней), просрочено. */
-export function billingState(paidUntil: string | null, today = todayMinsk()): { kind: "none" | "ok" | "soon" | "overdue"; days: number } {
-  if (!paidUntil) return { kind: "none", days: 0 };
-  const days = Math.round((Date.parse(paidUntil) - Date.parse(today)) / 864e5);
-  return { kind: days < 0 ? "overdue" : days <= 5 ? "soon" : "ok", days };
-}
