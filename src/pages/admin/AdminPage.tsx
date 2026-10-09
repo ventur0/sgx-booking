@@ -169,6 +169,7 @@ function NewStudio() {
 
 function StudioCard({ s }: { s: StudioRow }) {
   const act = useAdminActions();
+  const me = useSession().data?.user.id;
   const [panel, setPanel] = useState<null | { kind: "add" | "delete" } | { kind: "password" | "email"; userId: string; email: string }>(null);
   const [confirmSlug, setConfirmSlug] = useState("");
   const [val, setVal] = useState({ email: "", password: makePassword() });
@@ -226,10 +227,11 @@ function StudioCard({ s }: { s: StudioRow }) {
                 if (confirm(`Убрать доступ ${o.email} к «${s.name}»? Записи студии останутся.`))
                   void run(() => act.removeOwner.mutateAsync({ tenantId: s.id, userId: o.userId }), "Доступ убран");
               }}>Убрать</button>
+              {o.userId !== me && (
               <button className="btn small ghost danger" onClick={() => {
                 if (confirm(`Удалить аккаунт ${o.email} навсегда?\n\nВойти с этой почтой станет невозможно, доступ пропадёт ко всем студиям этого владельца. Сами студии, записи и оплаты останутся.`))
                   void run(() => act.deleteUser.mutateAsync(o.userId), `Аккаунт ${o.email} удалён`);
-              }}>Удалить аккаунт</button>
+              }}>Удалить аккаунт</button>)}
             </div>
           </div>
         ))}
