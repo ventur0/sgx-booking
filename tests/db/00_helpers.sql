@@ -20,7 +20,8 @@ begin
   raise exception 'FAIL: % — ожидали ошибку «%», но запрос прошёл', msg, expected;
 end $$;
 
--- ближайший рабочий день студии не раньше чем через p_offset дней, где p_time попадает в окно
+-- ближайший полный рабочий день студии (закрытие как в самый длинный день недели) не раньше чем через p_offset дней,
+-- где p_time попадает в окно: тесты не зависят от того, на какой день недели их запустили
 create or replace function pg_temp.open_day(p_slug text, p_offset int, p_time time) returns date language plpgsql as $$
 declare t public.tenants; d date; w record; i int := 0;
 begin
@@ -28,7 +29,8 @@ begin
   d := (now() at time zone t.timezone)::date + p_offset;
   loop
     select * into w from public.day_window(t.id, d);
-    exit when found and p_time >= w.opens and p_time < w.closes;
+    exit when found and p_time >= w.opens and p_time < w.closes
+              and w.closes >= (select max(h.closes) from public.working_hours h where h.tenant_id = t.id);
     d := d + 1; i := i + 1;
     if i > 60 then raise exception 'нет рабочего дня'; end if;
   end loop;

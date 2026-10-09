@@ -83,14 +83,19 @@ begin
   perform pg_temp.ok(pg_temp.book('new-studio', 'example', d, '13:00', 'NEW-3') is not null, 'после возобновления запись снова работает');
   perform pg_temp.as_user('e0000000-0000-0000-0000-00000000000e');
   perform pg_temp.ok((select count(*) from public.bookings) = 0, 'после отзыва доступа владелец ничего не видит');
-  perform pg_temp.throws(format($q$select public.admin_delete_studio(%L, 'new-studio')$q$, v), 'forbidden', 'владелец не удаляет студии');
+  perform pg_temp.throws(format($q$select public.service_delete_studio(%L)$q$, v), 'permission denied', 'владелец не вызывает служебное удаление напрямую');
   perform pg_temp.as_admin();
 
   -- ---------- удаление ----------
   perform pg_temp.as_user('d0000000-0000-0000-0000-00000000000d');
-  perform pg_temp.throws(format($q$select public.admin_delete_studio(%L, 'graphite')$q$, v), 'confirm_mismatch', 'без верного адреса студия не удаляется');
-  perform public.admin_delete_studio(v, ' New-Studio ');
+  perform pg_temp.throws(format($q$select public.service_delete_studio(%L)$q$, v), 'permission denied', 'даже продавец удаляет только через функцию с подтверждением');
   perform pg_temp.as_admin();
+  perform pg_temp.ok(public.service_tenant_owner_emails(pg_temp.tid('graphite')) @> array['owner-graphite@test'], 'служебная функция знает почты владельцев');
+  perform pg_temp.ok(public.service_tenant_owner_emails(v) = '{}'::text[], 'у студии без владельцев список почт пуст');
+  execute 'set local role service_role';
+  perform public.service_delete_studio(v);
+  execute 'reset role';
+
   perform pg_temp.ok(not exists (select 1 from public.tenants where id = v), 'студия удалена');
   perform pg_temp.ok(not exists (select 1 from public.bookings where tenant_id = v) and not exists (select 1 from public.services where tenant_id = v)
                      and not exists (select 1 from public.resource_occupancies where tenant_id = v) and not exists (select 1 from public.payments where tenant_id = v), 'вместе со студией удалены её записи, занятость и оплаты');

@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import { useStudioCtx } from "../client/StudioLayout";
-import { changeOwnEmail, changeOwnPassword, useSession, useSettingsActions } from "../../data/owner";
+import { changeOwnEmail, changeOwnPassword, deleteOwnAccount, deleteOwnStudio, signOut, useSession, useSettingsActions } from "../../data/owner";
 import { ProfileSchema, type Profile } from "../../shared/business";
 import { moneyBYN, upcomingHolidays } from "../../shared/by";
 import { compressImage } from "../../lib/media";
@@ -400,7 +400,64 @@ function AccountForm() {
     <div className="stack">
       <EmailForm />
       <PasswordForm />
+      <DangerZone />
     </div>
+  );
+}
+
+/** Удаление студии или аккаунта самим владельцем — только с его текущим паролем. */
+function DangerZone() {
+  const { studio } = useStudioCtx();
+  const [mode, setMode] = useState<null | "studio" | "account">(null);
+  const [password, setPassword] = useState("");
+  const [state, setState] = useState<{ busy: boolean; err: string; done: string }>({ busy: false, err: "", done: "" });
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!password) return setState({ busy: false, err: "Введите текущий пароль", done: "" });
+    setState({ busy: true, err: "", done: "" });
+    try {
+      if (mode === "studio") {
+        await deleteOwnStudio(studio.tenant.id, password);
+        setState({ busy: false, err: "", done: "Студия удалена вместе со всеми записями. Можно закрыть эту страницу." });
+      } else {
+        await deleteOwnAccount(password);
+        alert("Аккаунт удалён. Сейчас вы выйдете из кабинета.");
+        await signOut();
+      }
+    } catch (x) {
+      setState({ busy: false, err: humanError(x), done: "" });
+    }
+  };
+  if (state.done) return <Notice kind="ok">{state.done}</Notice>;
+  return (
+    <section className="panel stack danger-zone">
+      <h2>Удаление</h2>
+      {!mode && (
+        <>
+          <p className="muted small">Если нужно только временно закрыть онлайн-запись, напишите администратору сервиса — студию можно приостановить без удаления.</p>
+          <div className="row">
+            <button type="button" className="btn small ghost danger" onClick={() => setMode("studio")}>Удалить студию</button>
+            <button type="button" className="btn small ghost danger" onClick={() => setMode("account")}>Удалить мой аккаунт</button>
+          </div>
+        </>
+      )}
+      {mode && (
+        <form className="stack" onSubmit={submit} noValidate>
+          <b>{mode === "studio" ? `Удалить «${studio.tenant.profile.name}» навсегда?` : "Удалить ваш аккаунт навсегда?"}</b>
+          <p className="muted small">
+            {mode === "studio"
+              ? "Сайт студии перестанет открываться. Удалятся все записи клиентов, оплаты, статистика, услуги, график и фото. Вернуть нельзя."
+              : "Войти с вашей почтой станет невозможно. Студия, записи и оплаты останутся — доступ к ним сможет выдать администратор сервиса."}
+          </p>
+          <Field id="dz-pw" label="Для подтверждения введите ваш пароль"><input className="input" id="dz-pw" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} /></Field>
+          {state.err && <p className="err" role="alert">{state.err}</p>}
+          <div className="row">
+            <button className="btn small danger-solid" disabled={state.busy || !password}>{state.busy ? "Удаляем…" : mode === "studio" ? "Удалить студию" : "Удалить аккаунт"}</button>
+            <button type="button" className="btn ghost small" onClick={() => { setMode(null); setPassword(""); setState({ busy: false, err: "", done: "" }); }}>Отмена</button>
+          </div>
+        </form>
+      )}
+    </section>
   );
 }
 

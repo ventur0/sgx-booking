@@ -170,8 +170,12 @@ function NewStudio() {
 function StudioCard({ s }: { s: StudioRow }) {
   const act = useAdminActions();
   const me = useSession().data?.user.id;
-  const [panel, setPanel] = useState<null | { kind: "add" | "delete" } | { kind: "password" | "email"; userId: string; email: string }>(null);
-  const [confirmSlug, setConfirmSlug] = useState("");
+  const [panel, setPanel] = useState<null | { kind: "add" | "delete" } | { kind: "password" | "email" | "deleteUser"; userId: string; email: string }>(null);
+  const [confirmText, setConfirmText] = useState("");
+  // подтверждение удаления студии: почта любого её владельца; если владельцев нет — адрес студии
+  const studioConfirmOk = s.owners.length
+    ? s.owners.some((o) => o.email.toLowerCase() === confirmText.trim().toLowerCase())
+    : confirmText.trim().toLowerCase() === s.slug;
   const [val, setVal] = useState({ email: "", password: makePassword() });
   const [msg, setMsg] = useState<{ kind: "ok" | "bad"; text: string } | null>(null);
   const [handoff, setHandoff] = useState<{ email: string; password: string | null } | null>(null);
@@ -211,7 +215,7 @@ function StudioCard({ s }: { s: StudioRow }) {
         <button className="btn small ghost" onClick={() => void run(() => act.setSuspended.mutateAsync({ tenantId: s.id, suspended: !s.suspended }), s.suspended ? "Запись возобновлена" : "Онлайн-запись приостановлена")}>
           {s.suspended ? "Возобновить" : "Приостановить"}
         </button>
-        <button className="btn small ghost danger" onClick={() => { open({ kind: "delete" }); setConfirmSlug(""); }}>Удалить</button>
+        <button className="btn small ghost danger" onClick={() => { open({ kind: "delete" }); setConfirmText(""); }}>Удалить</button>
       </div>
 
       <div className="stack">
@@ -228,10 +232,8 @@ function StudioCard({ s }: { s: StudioRow }) {
                   void run(() => act.removeOwner.mutateAsync({ tenantId: s.id, userId: o.userId }), "Доступ убран");
               }}>Убрать</button>
               {o.userId !== me && (
-              <button className="btn small ghost danger" onClick={() => {
-                if (confirm(`Удалить аккаунт ${o.email} навсегда?\n\nВойти с этой почтой станет невозможно, доступ пропадёт ко всем студиям этого владельца. Сами студии, записи и оплаты останутся.`))
-                  void run(() => act.deleteUser.mutateAsync(o.userId), `Аккаунт ${o.email} удалён`);
-              }}>Удалить аккаунт</button>)}
+                <button className="btn small ghost danger" onClick={() => { open({ kind: "deleteUser", userId: o.userId, email: o.email }); setConfirmText(""); }}>Удалить аккаунт</button>
+              )}
             </div>
           </div>
         ))}
@@ -279,15 +281,31 @@ function StudioCard({ s }: { s: StudioRow }) {
       {panel?.kind === "delete" && (
         <form className="stack panel danger-zone" noValidate onSubmit={(e) => {
           e.preventDefault();
-          void run(() => act.deleteStudio.mutateAsync({ tenantId: s.id, confirmSlug }), "Студия удалена");
+          void run(() => act.deleteStudio.mutateAsync({ tenantId: s.id, confirmEmail: confirmText.trim() }), "Студия удалена");
         }}>
           <b>Удалить «{s.name}» навсегда?</b>
-          <p className="muted small">Сайт перестанет открываться. Удалятся все записи клиентов, оплаты, статистика, услуги и график. Вернуть нельзя. Если нужно только временно закрыть запись — нажмите «Приостановить».</p>
-          <Field id={`del-${s.id}`} label={`Для подтверждения введите адрес студии: ${s.slug}`}>
-            <input className="input mono" id={`del-${s.id}`} autoComplete="off" value={confirmSlug} onChange={(e) => setConfirmSlug(e.target.value)} />
+          <p className="muted small">Сайт перестанет открываться. Удалятся все записи клиентов, оплаты, статистика, услуги, график и фото. Вернуть нельзя. Если нужно только временно закрыть запись — нажмите «Приостановить».</p>
+          <Field id={`del-${s.id}`} label={s.owners.length ? "Для подтверждения введите почту владельца студии" : `Владельцев нет — для подтверждения введите адрес студии: ${s.slug}`}>
+            <input className="input" id={`del-${s.id}`} type={s.owners.length ? "email" : "text"} autoComplete="off" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
           </Field>
           <div className="row">
-            <button className="btn small danger-solid" disabled={confirmSlug.trim().toLowerCase() !== s.slug || act.deleteStudio.isPending}>{act.deleteStudio.isPending ? "Удаляем…" : "Удалить навсегда"}</button>
+            <button className="btn small danger-solid" disabled={!studioConfirmOk || act.deleteStudio.isPending}>{act.deleteStudio.isPending ? "Удаляем…" : "Удалить навсегда"}</button>
+            <button type="button" className="btn ghost small" onClick={() => setPanel(null)}>Отмена</button>
+          </div>
+        </form>
+      )}
+      {panel?.kind === "deleteUser" && (
+        <form className="stack panel danger-zone" noValidate onSubmit={(e) => {
+          e.preventDefault();
+          void run(() => act.deleteUser.mutateAsync({ userId: panel.userId, confirmEmail: confirmText.trim() }), `Аккаунт ${panel.email} удалён`);
+        }}>
+          <b>Удалить аккаунт владельца навсегда?</b>
+          <p className="muted small">Войти с этой почтой станет невозможно, доступ пропадёт ко всем его студиям. Сами студии, записи и оплаты останутся — доступ можно выдать другому человеку.</p>
+          <Field id={`du-${s.id}`} label="Для подтверждения введите почту этого аккаунта">
+            <input className="input" id={`du-${s.id}`} type="email" autoComplete="off" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
+          </Field>
+          <div className="row">
+            <button className="btn small danger-solid" disabled={confirmText.trim().toLowerCase() !== panel.email.toLowerCase() || act.deleteUser.isPending}>{act.deleteUser.isPending ? "Удаляем…" : "Удалить аккаунт"}</button>
             <button type="button" className="btn ghost small" onClick={() => setPanel(null)}>Отмена</button>
           </div>
         </form>

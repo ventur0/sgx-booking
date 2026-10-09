@@ -1,5 +1,6 @@
 // Supabase Edge Function admin-users: аккаунты владельцев студий для панели продавца (/admin).
-// Вызывает продавец (строка в platform_admins); владелец студии может только сменить свою почту.
+// Вызывает продавец (строка в platform_admins). Владелец студии может сам: сменить почту, удалить свою студию,
+// удалить свой аккаунт — каждое действие подтверждается его текущим паролем.
 // Ключ service role задаёт платформа, в браузер он не попадает.
 //
 // Действия (POST JSON):
@@ -8,8 +9,14 @@
 //   { action: "purge_media", tenantId }                   — удалить фото уже удалённой студии из хранилища
 //   { action: "set_password", userId, password }          — задать владельцу новый пароль
 //   { action: "change_email", userId, email }             — сменить почту владельца (без письма-подтверждения)
-//   { action: "delete_user", userId }                     — удалить аккаунт владельца целиком (студии остаются)
-//   { action: "change_own_email", email, password }       — владелец сам меняет свою почту, подтверждая текущим паролем
+//   { action: "delete_user", userId, confirmEmail }       — удалить аккаунт владельца целиком (студии остаются);
+//     confirmEmail — почта этого аккаунта, которую продавец вписывает для подтверждения
+//   { action: "delete_studio", tenantId, confirmEmail }   — продавец удаляет студию; подтверждение — почта её владельца
+//     (если владельцев нет — адрес студии)
+//   владелец, с подтверждением текущим паролем:
+//   { action: "change_own_email", email, password }
+//   { action: "delete_own_studio", tenantId, password }   — удалить свою студию со всеми записями и фото
+//   { action: "delete_own_account", password }            — удалить свой аккаунт (студии остаются у продавца)
 //
 // Установка без командной строки: Supabase → Edge Functions → Deploy a new function → Via Editor,
 // имя admin-users, вставить этот файл, Deploy. В настройках функции выключить «Verify JWT» —
@@ -45,26 +52,65 @@ Deno.serve(async (req) => {
     return fail("bad_request");
   }
 
-  // Своя почта: любой владелец студии. Письмо не нужно (встроенная почта Supabase не пишет
-  // посторонним адресам), поэтому подтверждаем личность текущим паролем.
-  if (body.action === "change_own_email") {
-    const { data: member } = await admin.from("tenant_members").select("tenant_id").eq("user_id", who.user.id).limit(1).maybeSingle();
-    const { data: isSeller } = await admin.from("platform_admins").select("user_id").eq("user_id", who.user.id).maybeSingle();
-    if (!member && !isSeller) return fail("forbidden", 403);
-    if (!isEmail(body.email) || typeof body.password !== "string" || !who.user.email) return fail("bad_request");
+  const me = who.user;
+  const { data: sellerRow } = await admin.from("platform_admins").select("user_id").eq("user_id", me.id).maybeSingle();
+  const isSeller = !!sellerRow;
+
+  // Пароль вызывающего: письма не нужны (встроенная почта Supabase не пишет посторонним адресам),
+  // личность владельца подтверждаем его текущим паролем.
+  const passwordOk = async (password: unknown) => {
+    if (typeof password !== "string" || !password || !me.email) return false;
     const check = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, { auth: { persistSession: false, autoRefreshToken: false } });
-    const { error: pwErr } = await check.auth.signInWithPassword({ email: who.user.email, password: body.password });
-    if (pwErr) return fail("wrong_password", 403);
-    const mail = body.email.trim().toLowerCase();
-    if (mail === who.user.email.toLowerCase()) return reply({ ok: true });
-    const taken = (await admin.rpc("service_user_id_by_email", { p_email: mail })).data;
-    if (taken && taken !== who.user.id) return fail("email_taken", 409);
-    const { error } = await admin.auth.admin.updateUserById(who.user.id, { email: mail, email_confirm: true });
+    const { error } = await check.auth.signInWithPassword({ email: me.email, password });
+    return !error;
+  };
+  const isUuid = (v: unknown): v is string => typeof v === "string" && /^[0-9a-f-]{36}$/i.test(v);
+  const sameEmail = (a: unknown, b: string | undefined | null) => typeof a === "string" && !!b && a.trim().toLowerCase() === b.toLowerCase();
+
+  // Удаление студии: строки базы (service_delete_studio — каскадом записи, оплаты, услуги, график, доступы),
+  // затем её фото в хранилище.
+  const deleteStudio = async (tenantId: string) => {
+    const { error } = await admin.rpc("service_delete_studio", { p_tenant: tenantId });
+    if (error) return error.message;
+    const bucket = admin.storage.from("tenant-media");
+    for (let i = 0; i < 100; i++) {
+      const { data: files } = await bucket.list(`${tenantId}/owner`, { limit: 100 });
+      if (!files?.length) break;
+      await bucket.remove(files.map((f) => `${tenantId}/owner/${f.name}`));
+    }
+    return null;
+  };
+
+  if (body.action === "delete_own_studio") {
+    if (!isUuid(body.tenantId)) return fail("bad_request");
+    const { data: member } = await admin.from("tenant_members").select("tenant_id").eq("tenant_id", body.tenantId).eq("user_id", me.id).maybeSingle();
+    if (!member) return fail("forbidden", 403);
+    if (!(await passwordOk(body.password))) return fail("wrong_password", 403);
+    const err = await deleteStudio(body.tenantId);
+    return err ? fail(err, 500) : reply({ ok: true });
+  }
+
+  if (body.action === "delete_own_account") {
+    if (isSeller) return fail("cannot_delete_self"); // аккаунт продавца так не удаляется
+    if (!(await passwordOk(body.password))) return fail("wrong_password", 403);
+    const { error } = await admin.auth.admin.deleteUser(me.id);
     return error ? fail(error.message, 500) : reply({ ok: true });
   }
 
-  const { data: seller } = await admin.from("platform_admins").select("user_id").eq("user_id", who.user.id).maybeSingle();
-  if (!seller) return fail("forbidden", 403);
+  if (body.action === "change_own_email") {
+    const { data: member } = await admin.from("tenant_members").select("tenant_id").eq("user_id", me.id).limit(1).maybeSingle();
+    if (!member && !isSeller) return fail("forbidden", 403);
+    if (!isEmail(body.email) || !me.email) return fail("bad_request");
+    if (!(await passwordOk(body.password))) return fail("wrong_password", 403);
+    const mail = body.email.trim().toLowerCase();
+    if (mail === me.email.toLowerCase()) return reply({ ok: true });
+    const taken = (await admin.rpc("service_user_id_by_email", { p_email: mail })).data;
+    if (taken && taken !== me.id) return fail("email_taken", 409);
+    const { error } = await admin.auth.admin.updateUserById(me.id, { email: mail, email_confirm: true });
+    return error ? fail(error.message, 500) : reply({ ok: true });
+  }
+
+  if (!isSeller) return fail("forbidden", 403);
 
   // менять чужие аккаунты продавцов нельзя (свой — можно)
   const guardTarget = async (userId: unknown) => {
@@ -122,10 +168,24 @@ Deno.serve(async (req) => {
       }
       return reply({ removed });
     }
+    case "delete_studio": {
+      if (!isUuid(body.tenantId)) return fail("bad_request");
+      const { data: t } = await admin.from("tenants").select("slug").eq("id", body.tenantId).maybeSingle();
+      if (!t) return fail("tenant_not_found", 404);
+      const { data: owners } = await admin.rpc("service_tenant_owner_emails", { p_tenant: body.tenantId });
+      const emails = (owners ?? []) as string[];
+      const confirmed = emails.length ? emails.some((e) => sameEmail(body.confirmEmail, e)) : sameEmail(body.confirmEmail, t.slug);
+      if (!confirmed) return fail("confirm_mismatch");
+      const err = await deleteStudio(body.tenantId);
+      return err ? fail(err, 500) : reply({ ok: true });
+    }
     case "delete_user": {
       if (body.userId === who.user.id) return fail("cannot_delete_self");
       const bad = await guardTarget(body.userId);
       if (bad) return fail(bad, bad === "forbidden" ? 403 : 400);
+      const { data: target } = await admin.auth.admin.getUserById(body.userId as string);
+      if (!target?.user) return fail("not_found", 404);
+      if (!sameEmail(body.confirmEmail, target.user.email)) return fail("confirm_mismatch");
       // доступы к студиям удаляются вместе с аккаунтом (tenant_members … on delete cascade)
       const { error } = await admin.auth.admin.deleteUser(body.userId as string);
       return error ? fail(error.message, 500) : reply({ ok: true });

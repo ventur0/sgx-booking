@@ -43,6 +43,18 @@ export async function changeOwnEmail(email: string, password: string) {
   await supabase.auth.refreshSession(); // новая почта сразу видна в кабинете
 }
 
+/** Владелец удаляет свою студию (подтверждение — его пароль). Удаляются записи, оплаты, услуги, фото. */
+export async function deleteOwnStudio(tenantId: string, password: string) {
+  const { users } = await import("./admin");
+  await users<{ ok: true }>({ action: "delete_own_studio", tenantId, password });
+}
+
+/** Владелец удаляет свой аккаунт (подтверждение — его пароль); студия остаётся у продавца. */
+export async function deleteOwnAccount(password: string) {
+  const { users } = await import("./admin");
+  await users<{ ok: true }>({ action: "delete_own_account", password });
+}
+
 export async function signOut() {
   await supabase.auth.signOut();
   try {
