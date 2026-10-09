@@ -8,15 +8,14 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_PASSWORD: postgres
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
+      # PostgreSQL уже установлен в образе раннера: без скачивания Docker-образа (Docker Hub бывает недоступен)
+      - name: PostgreSQL
+        run: |
+          sudo systemctl start postgresql.service
+          until pg_isready -h localhost; do sleep 1; done
+          sudo -u postgres psql -q -c "alter user postgres password 'postgres'"
+          psql --version
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
