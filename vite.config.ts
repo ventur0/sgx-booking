@@ -24,9 +24,9 @@ export default defineConfig({
       name: "tenant-media-dev",
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          const m = req.url?.match(/^\/t\/([a-z0-9-]+)\/media\/([^?]+)/);
+          const m = req.url?.match(/^\/t\/(_default|[a-z0-9-]+)\/media\/([^?]+)/);
           if (!m) return next();
-          const file = resolve(root, "tenants", m[1], "images", decodeURIComponent(m[2]));
+          const file = resolve(root, "tenants", m[1] === "_default" ? "_template" : m[1], "images", decodeURIComponent(m[2]));
           if (!file.startsWith(resolve(root, "tenants")) || !existsSync(file)) return next();
           res.setHeader("Content-Type", file.endsWith(".svg") ? "image/svg+xml" : file.endsWith(".png") ? "image/png" : "image/jpeg");
           res.end(readFileSync(file));

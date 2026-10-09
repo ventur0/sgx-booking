@@ -148,11 +148,11 @@ function ServiceEdit({ s, onDone, act, sort }: { s?: { id: string; key: string; 
     if (!(dur >= 15 && dur <= 20160)) return setErr("Длительность от 15 минут до 14 суток (20160 мин)");
     setErr("");
     const posted = chosen.filter((id) => posts.some((p) => p.id === id));
-    act.saveService.mutate({ id: s?.id, key: s?.key ?? `s${Date.now().toString(36)}`, name: f.name.trim(), description: f.description.trim(), price, duration_min: dur, active: f.active, sort }, {
-      // все посты отмечены = «любой пост»: так новые посты тоже подхватят услугу
-      onSuccess: (id) => act.saveServicePosts.mutate({ serviceId: id, resourceIds: posted.length === posts.length ? [] : posted }, { onSuccess: onDone, onError: (x) => setErr(humanError(x)) }),
-      onError: (x) => setErr(humanError(x)),
-    });
+    // все посты отмечены = «любой пост»: так новые посты тоже подхватят услугу
+    act.saveService.mutate(
+      { id: s?.id, name: f.name.trim(), description: f.description.trim(), price, duration_min: dur, active: f.active, sort, resourceIds: posted.length === posts.length ? [] : posted },
+      { onSuccess: onDone, onError: (x) => setErr(humanError(x)) },
+    );
   };
   return (
     <form className="panel stack" onSubmit={submit} noValidate>
@@ -173,7 +173,7 @@ function ServiceEdit({ s, onDone, act, sort }: { s?: { id: string; key: string; 
       )}
       <label className="check"><input type="checkbox" checked={f.active} onChange={(e) => setF({ ...f, active: e.target.checked })} /> Показывать на сайте</label>
       {err && <p className="err" role="alert">{err}</p>}
-      <div className="row"><button className="btn primary" disabled={act.saveService.isPending || act.saveServicePosts.isPending}>Сохранить</button><button type="button" className="btn ghost" onClick={onDone}>Отмена</button></div>
+      <div className="row"><button className="btn primary" disabled={act.saveService.isPending}>Сохранить</button><button type="button" className="btn ghost" onClick={onDone}>Отмена</button></div>
     </form>
   );
 }

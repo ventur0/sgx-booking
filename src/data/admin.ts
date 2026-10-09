@@ -39,9 +39,9 @@ export async function users<T>(body: Record<string, unknown>): Promise<T> {
   if (error) {
     if (error instanceof FunctionsHttpError) {
       const res = error.context as Response;
-      if (res.status === 404) throw new Error("functions_missing");
-      const j = await res.json().catch(() => null);
-      throw new Error(j?.error ?? `http_${res.status}`);
+      const j = (await res.json().catch(() => null)) as { error?: string } | null;
+      if (!j?.error && res.status === 404) throw new Error("functions_missing");
+      throw Object.assign(new Error(j?.error ?? `http_${res.status}`), { details: j });
     }
     throw new Error(/Failed to send|fetch/i.test(error.message) ? "functions_missing" : error.message);
   }
@@ -59,14 +59,21 @@ export function useAdminActions() {
   return {
     createStudio: useMutation({ mutationFn: (a: { slug: string; name: string }) => rpc<string>("admin_create_studio", { p_slug: a.slug, p_name: a.name }), onSuccess: done }),
     createOwner: useMutation({
-      mutationFn: (a: { tenantId: string; email: string; password: string }) => users<{ userId: string; created: boolean }>({ action: "create_owner", ...a }),
+      mutationFn: (a: { tenantId: string; email: string; password: string; linkExisting?: boolean }) => users<{ userId: string; created: boolean }>({ action: "create_owner", ...a }),
       onSuccess: done,
     }),
     setPassword: useMutation({ mutationFn: (a: { userId: string; password: string }) => users<{ ok: true }>({ action: "set_password", ...a }) }),
     changeEmail: useMutation({ mutationFn: (a: { userId: string; email: string }) => users<{ ok: true }>({ action: "change_email", ...a }), onSuccess: done }),
     deleteUser: useMutation({ mutationFn: (userId: string) => users<{ ok: true }>({ action: "delete_user", userId }), onSuccess: done }),
     removeOwner: useMutation({ mutationFn: (a: { tenantId: string; userId: string }) => rpc<void>("admin_remove_owner", { p_tenant: a.tenantId, p_user: a.userId }), onSuccess: done }),
-    deleteStudio: useMutation({ mutationFn: (a: { tenantId: string; confirmSlug: string }) => rpc<void>("admin_delete_studio", { p_tenant: a.tenantId, p_confirm_slug: a.confirmSlug }), onSuccess: done }),
+    deleteStudio: useMutation({
+      mutationFn: async (a: { tenantId: string; confirmSlug: string }) => {
+        await rpc<void>("admin_delete_studio", { p_tenant: a.tenantId, p_confirm_slug: a.confirmSlug });
+        // фото студии из хранилища; если не получилось — студия всё равно удалена
+        await users({ action: "purge_media", tenantId: a.tenantId }).catch(() => undefined);
+      },
+      onSuccess: done,
+    }),
     setSuspended: useMutation({ mutationFn: (a: { tenantId: string; suspended: boolean }) => rpc<void>("admin_set_suspended", { p_tenant: a.tenantId, p_suspended: a.suspended }), onSuccess: done }),
   };
 }
@@ -93,4 +100,10 @@ export function slugify(name: string) {
     .replace(/^-+|-+$/g, "")
     .slice(0, 40)
     .replace(/-+$/g, "");
+}
+
+/** Аккаунт с этой почтой уже существует: какие студии у него есть (для подтверждения привязки). */
+export function existingAccount(e: unknown): string[] | null {
+  const d = (e as { details?: { error?: string; studios?: string[] } })?.details;
+  return d?.error === "user_exists" ? (d.studios ?? []) : null;
 }

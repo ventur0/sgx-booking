@@ -154,23 +154,15 @@ export function useSettingsActions(tenantId: string, slug: string) {
   };
   return {
     saveProfile: useMutation({ mutationFn: async (profile: Profile) => ok(await supabase.from("tenants").update({ profile }).eq("id", tenantId)), onSuccess: done }),
+    /** Услуга и её посты — одной транзакцией (owner_save_service). Пустой список постов = любой активный пост. */
     saveService: useMutation({
-      mutationFn: async (s: { id?: string; key: string; name: string; description: string; price: number; duration_min: number; active: boolean; sort: number }) =>
-        s.id
-          ? (ok(await supabase.from("services").update(s).eq("id", s.id)), s.id)
-          : await (async () => {
-              const r = await supabase.from("services").insert({ ...s, tenant_id: tenantId }).select("id").single();
-              if (r.error) throw r.error;
-              return (r.data as { id: string }).id;
-            })(),
-      onSuccess: done,
-    }),
-    /** Посты услуги: пустой список = любой активный пост */
-    saveServicePosts: useMutation({
-      mutationFn: async (a: { serviceId: string; resourceIds: string[] }) => {
-        ok(await supabase.from("service_resources").delete().eq("tenant_id", tenantId).eq("service_id", a.serviceId));
-        if (a.resourceIds.length)
-          ok(await supabase.from("service_resources").insert(a.resourceIds.map((r) => ({ tenant_id: tenantId, service_id: a.serviceId, resource_id: r }))));
+      mutationFn: async (a: { id?: string; name: string; description: string; price: number; duration_min: number; active: boolean; sort: number; resourceIds: string[] }) => {
+        const { data, error } = await supabase.rpc("owner_save_service", {
+          p_tenant: tenantId, p_id: a.id ?? null, p_name: a.name, p_description: a.description, p_price: a.price,
+          p_duration_min: a.duration_min, p_active: a.active, p_sort: a.sort, p_resource_ids: a.resourceIds,
+        });
+        if (error) throw error;
+        return data as string;
       },
       onSuccess: done,
     }),

@@ -106,7 +106,11 @@ if (!existsSync(join(DIST, "index.html")) || !existsSync(join(DIST, "sw.js"))) {
   console.error("Сначала vite build (нужны dist/index.html и dist/sw.js)");
   process.exit(1);
 }
-const template = readFileSync(join(DIST, "index.html"), "utf8");
+// Чистый шаблон сохраняем отдельно: dist/index.html ниже получает общие иконки, а повторный запуск
+// (например, `tsx scripts/build-shells.ts graphite`) должен снова найти метку <!--tenant-head-->.
+const TEMPLATE = join(DIST, ".shell-template.html");
+if (!existsSync(TEMPLATE)) copyFileSync(join(DIST, "index.html"), TEMPLATE);
+const template = readFileSync(TEMPLATE, "utf8");
 if (!template.includes("<!--tenant-head-->")) {
   console.error("В index.html нет метки <!--tenant-head-->");
   process.exit(1);

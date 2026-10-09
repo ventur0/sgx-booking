@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { SignOut } from "@phosphor-icons/react";
 import { signOut, useSession } from "../../data/owner";
-import { makePassword, slugify, useAdminActions, useIsPlatformAdmin, useStudios, type StudioRow } from "../../data/admin";
+import { existingAccount, makePassword, slugify, useAdminActions, useIsPlatformAdmin, useStudios, type StudioRow } from "../../data/admin";
 import { humanError } from "../../lib/errors";
 import { Empty, ErrorState, Field, Loading, Notice } from "../../components/ui/States";
 import { Login } from "../owner/OwnerPage";
@@ -54,6 +54,25 @@ export function AdminPage() {
   );
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Выдать доступ: новый аккаунт создаётся с временным паролем. Если аккаунт с этой почтой уже есть,
+ * продавец явно подтверждает привязку (пароль у такого аккаунта прежний — его знает только владелец).
+ */
+async function giveAccess(act: ReturnType<typeof useAdminActions>, a: { tenantId: string; email: string; password: string }) {
+  try {
+    return await act.createOwner.mutateAsync(a);
+  } catch (e) {
+    const studios = existingAccount(e);
+    if (!studios) throw e;
+    const list = studios.length ? `\nУ него уже есть студии: ${studios.join(", ")}.` : "";
+    if (!confirm(`Аккаунт ${a.email} уже существует.${list}\n\nПривязать его к этой студии? Пароль у аккаунта останется прежним — убедитесь, что почта принадлежит вашему покупателю.`))
+      throw new Error("cancelled");
+    return await act.createOwner.mutateAsync({ ...a, linkExisting: true });
+  }
+}
+
 const origin = () => location.origin;
 const siteUrl = (slug: string) => `${origin()}/s/${slug}/`;
 const ownerUrl = (slug: string) => `${origin()}/s/${slug}/owner`;
@@ -100,7 +119,7 @@ function NewStudio() {
     if (!f.name.trim()) return setErr("Укажите название студии");
     if (!/^[a-z0-9][a-z0-9-]{0,38}[a-z0-9]$/.test(slug)) return setErr(humanError({ message: "bad_slug" }));
     const email = f.email.trim();
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setErr("Проверьте почту владельца");
+    if (email && !EMAIL_RE.test(email)) return setErr("Проверьте почту владельца");
     let tenantId: string;
     try {
       tenantId = await act.createStudio.mutateAsync({ slug, name: f.name.trim() });
@@ -113,7 +132,7 @@ function NewStudio() {
       return setCreated(`Студия создана: ${siteUrl(slug)}. Доступ владельцу выдайте в её карточке ниже.`);
     }
     try {
-      const r = await act.createOwner.mutateAsync({ tenantId, email, password: f.password });
+      const r = await giveAccess(act, { tenantId, email, password: f.password });
       setDone({ slug, name: f.name.trim(), email, password: r.created ? f.password : null });
       setF({ name: "", slug: "", slugTouched: false, email: "", password: makePassword() });
     } catch (x) {
@@ -222,7 +241,8 @@ function StudioCard({ s }: { s: StudioRow }) {
           e.preventDefault();
           const email = val.email.trim();
           void run(async () => {
-            const r = await act.createOwner.mutateAsync({ tenantId: s.id, email, password: val.password });
+            if (!EMAIL_RE.test(email)) throw new Error("bad_email");
+            const r = await giveAccess(act, { tenantId: s.id, email, password: val.password });
             setHandoff({ email, password: r.created ? val.password : null });
           }, "Доступ выдан");
         }}>

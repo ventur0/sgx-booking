@@ -55,8 +55,11 @@ begin
   update public.services set price = 55, name = 'Мойка' where id = s;
   get diagnostics n = row_count;
   perform pg_temp.ok(n = 1, 'владелец меняет услугу');
-  insert into public.service_resources (tenant_id, service_id, resource_id) values (v, s, pg_temp.res('new-studio', 'post-1'));
-  perform pg_temp.ok(true, 'владелец привязывает услугу к посту');
+  perform pg_temp.ok(public.owner_save_service(v, s, 'Мойка', '', 55, 60, true, 0, array[pg_temp.res('new-studio', 'post-1')]) = s, 'владелец сохраняет услугу вместе с постами');
+  perform pg_temp.ok((select count(*) from public.service_resources where service_id = s) = 1, 'пост привязан к услуге');
+  perform pg_temp.ok(public.owner_save_service(v, null, 'Полировка', 'кузов', 120.5, 240, true, 1, null) is not null, 'новая услуга создаётся одной функцией');
+  perform pg_temp.throws(format($q$select public.owner_save_service(%L, null, 'X2', '', 1, 30, true, 0, array[%L]::uuid[])$q$, v, pg_temp.res('graphite', 'post-1')), 'foreign key', 'чужой пост к услуге не привязать');
+  perform pg_temp.throws(format($q$select public.owner_save_service(%L, %L, 'Чужая', '', 1, 30, true, 0, null)$q$, pg_temp.tid('graphite'), pg_temp.svc('graphite', 'wash')), 'forbidden', 'чужую услугу не изменить');
   perform pg_temp.throws(format($q$select public.owner_go_live(%L)$q$, v), 'not_ready_legal', 'без данных оператора ПД запуск запрещён');
   update public.tenants set profile = profile || jsonb_build_object('legal', jsonb_build_object('operator', 'ИП Тест', 'unp', '123456789', 'legalAddress', 'г. Минск, ул. Тест, 1', 'email', 'a@b.by', 'retentionDays', 365)) where id = v;
   perform pg_temp.throws(format($q$select public.owner_go_live(%L)$q$, v), 'not_ready_phone', 'с телефоном-заглушкой запуск запрещён');

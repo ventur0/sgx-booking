@@ -31,7 +31,11 @@ export function StudioLayout() {
   const studio = q.data;
   const style = { "--accent": studio.tenant.profile.accent } as CSSProperties;
   return (
-    <StudioCtx.Provider value={{ studio, openBooking: (serviceId) => setBooking({ open: true, serviceId }) }}>
+    <StudioCtx.Provider value={{
+      studio,
+      // приостановленная студия: шторку записи не открываем, показываем плашку с телефоном вверху
+      openBooking: (serviceId) => (studio.tenant.suspended ? window.scrollTo({ top: 0, behavior: "smooth" }) : setBooking({ open: true, serviceId })),
+    }}>
       <div style={style} className={isOwner ? "owner-shell" : "client-shell"}>
         {studio.tenant.mode === "preview" && !isOwner && (
           <div className="preview-bar" role="note">Образец студии: демонстрационные данные, уведомления не отправляются</div>

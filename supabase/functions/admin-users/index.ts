@@ -3,7 +3,9 @@
 // Ключ service role задаёт платформа, в браузер он не попадает.
 //
 // Действия (POST JSON):
-//   { action: "create_owner", tenantId, email, password } — создать аккаунт (или взять существующий) и выдать доступ к студии
+//   { action: "create_owner", tenantId, email, password, linkExisting? } — создать аккаунт и выдать доступ к студии;
+//     если аккаунт с этой почтой уже есть — 409 user_exists (со списком его студий), привязка только с linkExisting: true
+//   { action: "purge_media", tenantId }                   — удалить фото уже удалённой студии из хранилища
 //   { action: "set_password", userId, password }          — задать владельцу новый пароль
 //   { action: "change_email", userId, email }             — сменить почту владельца (без письма-подтверждения)
 //   { action: "delete_user", userId }                     — удалить аккаунт владельца целиком (студии остаются)
@@ -81,6 +83,11 @@ Deno.serve(async (req) => {
       const mail = email.trim().toLowerCase();
       let userId: string | null = (await admin.rpc("service_user_id_by_email", { p_email: mail })).data ?? null;
       let created = false;
+      if (userId && body.linkExisting !== true) {
+        const { data: rows } = await admin.from("tenant_members").select("tenants(slug)").eq("user_id", userId);
+        const studios = (rows ?? []).map((r) => (r as unknown as { tenants: { slug: string } | null }).tenants?.slug).filter(Boolean);
+        return reply({ error: "user_exists", studios }, 409);
+      }
       if (!userId) {
         if (!isPassword(password)) return fail("weak_password");
         const { data, error } = await admin.auth.admin.createUser({ email: mail, password, email_confirm: true });
@@ -98,6 +105,22 @@ Deno.serve(async (req) => {
       if (!isPassword(body.password)) return fail("weak_password");
       const { error } = await admin.auth.admin.updateUserById(body.userId as string, { password: body.password });
       return error ? fail(error.message, 500) : reply({ ok: true });
+    }
+    case "purge_media": {
+      if (typeof body.tenantId !== "string" || !/^[0-9a-f-]{36}$/.test(body.tenantId)) return fail("bad_request");
+      const { data: t } = await admin.from("tenants").select("id").eq("id", body.tenantId).maybeSingle();
+      if (t) return fail("tenant_exists", 409); // фото действующей студии не трогаем
+      const bucket = admin.storage.from("tenant-media");
+      let removed = 0;
+      for (;;) {
+        const { data: files, error } = await bucket.list(`${body.tenantId}/owner`, { limit: 100 });
+        if (error) return fail(error.message, 500);
+        if (!files?.length) break;
+        const { error: rmErr } = await bucket.remove(files.map((f) => `${body.tenantId}/owner/${f.name}`));
+        if (rmErr) return fail(rmErr.message, 500);
+        removed += files.length;
+      }
+      return reply({ removed });
     }
     case "delete_user": {
       if (body.userId === who.user.id) return fail("cannot_delete_self");

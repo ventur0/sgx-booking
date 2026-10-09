@@ -109,8 +109,8 @@ pnpm deploy                                  # wrangler pages deploy dist
 
 ## Панель продавца (/admin) — много покупателей без SQL
 
-1. Supabase → SQL Editor: выполнить `supabase/migrations/20261009100600_platform.sql`
-   (для уже настроенной базы) и сделать себя продавцом:
+1. Supabase → SQL Editor: выполнить по порядку `20261009100600_platform.sql`, `20261009100700_delete_studio.sql`
+   и `20261009100800_fixes.sql` из `supabase/migrations/` (для уже настроенной базы) и сделать себя продавцом:
    `insert into public.platform_admins select id from auth.users where email = 'ваша@почта';`
 2. Supabase → Edge Functions → Deploy a new function → Via Editor: имя `admin-users`,
    код из `supabase/functions/admin-users/index.ts`, Deploy. В деталях функции выключить «Verify JWT».
