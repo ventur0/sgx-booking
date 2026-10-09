@@ -55,13 +55,26 @@ export async function deleteOwnAccount(password: string) {
   await users<{ ok: true }>({ action: "delete_own_account", password });
 }
 
-export async function signOut() {
-  await supabase.auth.signOut();
+/**
+ * Выход: закрываем сессию, стираем её следы в браузере и перезагружаем страницу —
+ * так на экране гарантированно не остаётся данных кабинета, а показывается форма входа.
+ * Даже если сервер недоступен или аккаунт уже удалён, локальный выход всё равно происходит.
+ */
+export async function signOut(redirectTo?: string) {
   try {
+    const { error } = await supabase.auth.signOut();
+    if (error) await supabase.auth.signOut({ scope: "local" });
+  } catch {
+    /* сеть недоступна — чистим вручную ниже */
+  }
+  try {
+    for (const k of Object.keys(localStorage)) if (k.startsWith("sb-") && k.includes("auth")) localStorage.removeItem(k);
     sessionStorage.clear();
   } catch {
-    /* ignore */
+    /* хранилище недоступно (приватный режим) */
   }
+  if (redirectTo) window.location.replace(redirectTo);
+  else window.location.reload();
 }
 
 /** Членство подтверждается сервером (RLS на tenant_members), а не интерфейсом. */

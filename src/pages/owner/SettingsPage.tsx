@@ -420,8 +420,7 @@ function DangerZone() {
         await deleteOwnStudio(studio.tenant.id, password);
         // кабинет удалённой студии больше не нужен: выходим и сбрасываем кэш (иначе видны старые данные)
         alert("Студия удалена вместе со всеми записями. Сейчас вы выйдете из кабинета.");
-        await signOut();
-        window.location.replace(`/s/${studio.tenant.slug}/`); // покажет «Студия не найдена»
+        await signOut(`/s/${studio.tenant.slug}/`); // откроется страница «Студия не найдена»
       } else {
         await deleteOwnAccount(password);
         alert("Аккаунт удалён. Сейчас вы выйдете из кабинета.");
