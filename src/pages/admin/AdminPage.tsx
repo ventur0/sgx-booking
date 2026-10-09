@@ -150,7 +150,8 @@ function NewStudio() {
 
 function StudioCard({ s }: { s: StudioRow }) {
   const act = useAdminActions();
-  const [panel, setPanel] = useState<null | { kind: "add" } | { kind: "password" | "email"; userId: string; email: string }>(null);
+  const [panel, setPanel] = useState<null | { kind: "add" | "delete" } | { kind: "password" | "email"; userId: string; email: string }>(null);
+  const [confirmSlug, setConfirmSlug] = useState("");
   const [val, setVal] = useState({ email: "", password: makePassword() });
   const [msg, setMsg] = useState<{ kind: "ok" | "bad"; text: string } | null>(null);
   const [handoff, setHandoff] = useState<{ email: string; password: string | null } | null>(null);
@@ -190,6 +191,7 @@ function StudioCard({ s }: { s: StudioRow }) {
         <button className="btn small ghost" onClick={() => void run(() => act.setSuspended.mutateAsync({ tenantId: s.id, suspended: !s.suspended }), s.suspended ? "Запись возобновлена" : "Онлайн-запись приостановлена")}>
           {s.suspended ? "Возобновить" : "Приостановить"}
         </button>
+        <button className="btn small ghost danger" onClick={() => { open({ kind: "delete" }); setConfirmSlug(""); }}>Удалить</button>
       </div>
 
       <div className="stack">
@@ -246,6 +248,22 @@ function StudioCard({ s }: { s: StudioRow }) {
         }}>
           <Field id={`ce-${s.id}`} label={`Новая почта вместо ${panel.email}`}><input className="input" id={`ce-${s.id}`} type="email" value={val.email} onChange={(e) => setVal({ ...val, email: e.target.value })} /></Field>
           <div className="row"><button className="btn primary small" disabled={act.changeEmail.isPending}>Сменить почту</button><button type="button" className="btn ghost small" onClick={() => setPanel(null)}>Отмена</button></div>
+        </form>
+      )}
+      {panel?.kind === "delete" && (
+        <form className="stack panel danger-zone" noValidate onSubmit={(e) => {
+          e.preventDefault();
+          void run(() => act.deleteStudio.mutateAsync({ tenantId: s.id, confirmSlug }), "Студия удалена");
+        }}>
+          <b>Удалить «{s.name}» навсегда?</b>
+          <p className="muted small">Сайт перестанет открываться. Удалятся все записи клиентов, оплаты, статистика, услуги и график. Вернуть нельзя. Если нужно только временно закрыть запись — нажмите «Приостановить».</p>
+          <Field id={`del-${s.id}`} label={`Для подтверждения введите адрес студии: ${s.slug}`}>
+            <input className="input mono" id={`del-${s.id}`} autoComplete="off" value={confirmSlug} onChange={(e) => setConfirmSlug(e.target.value)} />
+          </Field>
+          <div className="row">
+            <button className="btn small danger-solid" disabled={confirmSlug.trim().toLowerCase() !== s.slug || act.deleteStudio.isPending}>{act.deleteStudio.isPending ? "Удаляем…" : "Удалить навсегда"}</button>
+            <button type="button" className="btn ghost small" onClick={() => setPanel(null)}>Отмена</button>
+          </div>
         </form>
       )}
       {msg && <Notice kind={msg.kind}>{msg.text}</Notice>}
