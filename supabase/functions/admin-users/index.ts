@@ -6,6 +6,7 @@
 //   { action: "create_owner", tenantId, email, password } — создать аккаунт (или взять существующий) и выдать доступ к студии
 //   { action: "set_password", userId, password }          — задать владельцу новый пароль
 //   { action: "change_email", userId, email }             — сменить почту владельца (без письма-подтверждения)
+//   { action: "delete_user", userId }                     — удалить аккаунт владельца целиком (студии остаются)
 //   { action: "change_own_email", email, password }       — владелец сам меняет свою почту, подтверждая текущим паролем
 //
 // Установка без командной строки: Supabase → Edge Functions → Deploy a new function → Via Editor,
@@ -96,6 +97,14 @@ Deno.serve(async (req) => {
       if (bad) return fail(bad, bad === "forbidden" ? 403 : 400);
       if (!isPassword(body.password)) return fail("weak_password");
       const { error } = await admin.auth.admin.updateUserById(body.userId as string, { password: body.password });
+      return error ? fail(error.message, 500) : reply({ ok: true });
+    }
+    case "delete_user": {
+      if (body.userId === who.user.id) return fail("cannot_delete_self");
+      const bad = await guardTarget(body.userId);
+      if (bad) return fail(bad, bad === "forbidden" ? 403 : 400);
+      // доступы к студиям удаляются вместе с аккаунтом (tenant_members … on delete cascade)
+      const { error } = await admin.auth.admin.deleteUser(body.userId as string);
       return error ? fail(error.message, 500) : reply({ ok: true });
     }
     case "change_email": {

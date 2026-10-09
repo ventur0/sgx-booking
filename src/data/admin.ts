@@ -64,6 +64,7 @@ export function useAdminActions() {
     }),
     setPassword: useMutation({ mutationFn: (a: { userId: string; password: string }) => users<{ ok: true }>({ action: "set_password", ...a }) }),
     changeEmail: useMutation({ mutationFn: (a: { userId: string; email: string }) => users<{ ok: true }>({ action: "change_email", ...a }), onSuccess: done }),
+    deleteUser: useMutation({ mutationFn: (userId: string) => users<{ ok: true }>({ action: "delete_user", userId }), onSuccess: done }),
     removeOwner: useMutation({ mutationFn: (a: { tenantId: string; userId: string }) => rpc<void>("admin_remove_owner", { p_tenant: a.tenantId, p_user: a.userId }), onSuccess: done }),
     deleteStudio: useMutation({ mutationFn: (a: { tenantId: string; confirmSlug: string }) => rpc<void>("admin_delete_studio", { p_tenant: a.tenantId, p_confirm_slug: a.confirmSlug }), onSuccess: done }),
     setSuspended: useMutation({ mutationFn: (a: { tenantId: string; suspended: boolean }) => rpc<void>("admin_set_suspended", { p_tenant: a.tenantId, p_suspended: a.suspended }), onSuccess: done }),

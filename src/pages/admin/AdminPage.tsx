@@ -207,6 +207,10 @@ function StudioCard({ s }: { s: StudioRow }) {
                 if (confirm(`Убрать доступ ${o.email} к «${s.name}»? Записи студии останутся.`))
                   void run(() => act.removeOwner.mutateAsync({ tenantId: s.id, userId: o.userId }), "Доступ убран");
               }}>Убрать</button>
+              <button className="btn small ghost danger" onClick={() => {
+                if (confirm(`Удалить аккаунт ${o.email} навсегда?\n\nВойти с этой почтой станет невозможно, доступ пропадёт ко всем студиям этого владельца. Сами студии, записи и оплаты останутся.`))
+                  void run(() => act.deleteUser.mutateAsync(o.userId), `Аккаунт ${o.email} удалён`);
+              }}>Удалить аккаунт</button>
             </div>
           </div>
         ))}
