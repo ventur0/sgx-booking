@@ -1486,6 +1486,13 @@ revoke all on function public.admin_list_studios() from public, anon, authentica
 grant execute on function public.admin_list_studios() to authenticated;
 
 
+-- ===== 20261009101400_revoke_push.sql =====
+-- =====================================================================
+-- 15. Push отключён: сохранять подписки больше нельзя (иначе копились бы задания, которые никто не отправит).
+-- =====================================================================
+revoke execute on function public.save_push_subscription(uuid, text, text, text, text) from anon, authenticated;
+
+
 -- ===== демо-студии (seed без локальных владельцев) =====
 -- СГЕНЕРИРОВАНО scripts/build-seed.ts из tenants/*/business.json. Не редактируйте вручную.
 -- Только демо-данные: студии в режиме preview, записи помечены is_demo.

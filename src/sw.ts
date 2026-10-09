@@ -59,7 +59,7 @@ registerRoute(
 // Свободное время — только из сети (устаревшее расписание опаснее, чем «нет связи»).
 registerRoute(({ url }) => url.pathname.endsWith("/rpc/get_availability"), new NetworkFirst({ cacheName: `sgx-${slug}-noop`, networkTimeoutSeconds: 8, plugins: [{ cacheWillUpdate: async () => null }] }), "POST");
 
-// Напоминание за сутки (отправляет Edge Function send-reminders).
+// Уведомления (Web Push) сейчас отключены; обработчик оставлен на случай, если их снова включат.
 self.addEventListener("push", (event) => {
   let data = { title: "Напоминание о записи", body: "", url: `/s/${slug}/my` };
   try {

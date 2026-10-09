@@ -8,8 +8,9 @@ declare d date := pg_temp.open_day('graphite', 7, '12:00'); b uuid; demo uuid; s
 begin
   -- preview: подписка есть, но задание помечено skipped
   demo := pg_temp.book('graphite', 'wash', d, '12:00', 'PRE');
-  set local role anon;
+  -- push отключён (миграция 101400): подписку сохраняет только сервер; для клиента функция закрыта
   st := public.save_push_subscription(demo, rpad('tok-PRE', 40, 'x'), 'https://push.example/pre', 'k', 'a');
+  perform pg_temp.throws(format($q$set local role anon; select public.save_push_subscription(%L, 'x', 'https://p', 'k', 'a')$q$, demo), 'permission denied', 'клиент больше не сохраняет push-подписки');
   reset role;
   perform pg_temp.ok(st = 'skipped', 'в режиме preview реальное уведомление не планируется');
   perform pg_temp.ok((select is_demo from public.bookings where id = demo), 'записи в preview помечены как demo');
@@ -24,10 +25,10 @@ begin
   perform pg_temp.ok(not (select is_demo from public.bookings where id = b), 'в live запись настоящая');
   perform pg_temp.ok(not exists (select 1 from public.notification_jobs where booking_id = b), 'без подписки задания нет (ICS остаётся единственным каналом)');
   tok := rpad('tok-LIVE', 40, 'x');
-  set local role anon;
+
   st := public.save_push_subscription(b, tok, 'https://push.example/live', 'p256', 'auth');
   st := public.save_push_subscription(b, tok, 'https://push.example/live', 'p256', 'auth');
-  reset role;
+
   perform pg_temp.ok(st = 'pending', 'после подписки задание pending');
   perform pg_temp.ok((select count(*) from public.notification_jobs where booking_id = b) = 1, 'повторная подписка не дублирует задание');
   perform pg_temp.ok((select run_at = b2.starts_at - interval '1 day' from public.notification_jobs j join public.bookings b2 on b2.id = j.booking_id where j.booking_id = b),

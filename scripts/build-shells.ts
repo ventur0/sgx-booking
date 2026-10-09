@@ -51,11 +51,6 @@ async function buildTenant(slug: string, template: string) {
   await iconFrom(logo, 512, 0.12, join(out, "maskable-512.png")); // безопасная зона maskable — 80%
   await iconFrom(logo, 180, 0.06, join(out, "apple-touch-icon.png"));
   await iconFrom(logo, 64, 0, join(out, "favicon.png"));
-  await iconFrom(logo, 192, 0, join(out, "icon-192.png"));
-  await iconFrom(logo, 512, 0, join(out, "icon-512.png"));
-  await iconFrom(logo, 512, 0.12, join(out, "maskable-512.png"));
-  // service worker для студий из панели: регистрируется с scope /s/<slug>/ (заголовок Service-Worker-Allowed ниже)
-  copyFileSync(join(DIST, "sw.js"), join(out, "sw.js"));
 
   const startupLinks: string[] = [];
   for (const s of STARTUP) {

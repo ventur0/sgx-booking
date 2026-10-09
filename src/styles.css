@@ -233,7 +233,6 @@
                   padding: 12px; border-radius: 12px; background: var(--surface-2); }
   .plain-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
   .admin { padding-bottom: 48px; }
-  .pill.warn { border-color: color-mix(in srgb, var(--warn) 50%, transparent); color: var(--warn); }
   .btn.danger { color: var(--bad); }
   .btn.danger-solid { background: var(--bad); color: #fff; border-color: var(--bad); }
   .danger-zone { border-color: color-mix(in srgb, var(--bad) 45%, transparent); }

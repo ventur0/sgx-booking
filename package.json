@@ -21,7 +21,7 @@
     "tenant:publish": "tsx --env-file=.env scripts/tenant-publish.ts",
     "tenant:verify": "tsx --env-file=.env scripts/tenant-verify.ts",
     "db:push": "supabase db push",
-    "functions:deploy": "supabase functions deploy send-reminders --no-verify-jwt",
+    "functions:deploy": "supabase functions deploy admin-users --no-verify-jwt",
     "deploy": "wrangler pages deploy dist --project-name ${CF_PAGES_PROJECT:-sgx-booking}",
     "cloud-sql": "tsx scripts/build-seed.ts && tsx scripts/build-cloud-sql.ts"
   },

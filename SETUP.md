@@ -55,42 +55,14 @@ pnpm db:push                                 # миграции из supabase/mi
 - `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` — в Cloudflare Pages (Environment variables) и в `.env`;
 - `SUPABASE_SERVICE_ROLE_KEY` — **только** в `.env` на вашем компьютере, для команд `tenant:*`.
 
-## 5. Напоминания за сутки (Web Push)
+## 5. Ежедневная очистка персональных данных
 
-```bash
-npx web-push generate-vapid-keys             # публичный ключ → VITE_VAPID_PUBLIC_KEY
-pnpm exec supabase secrets set \
-  VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=... VAPID_SUBJECT=mailto:you@mail.by \
-  PUBLIC_SITE_URL=https://<домен> CRON_SECRET=$(openssl rand -hex 24)
-pnpm functions:deploy
-```
-
-В SQL Editor включите расширения `pg_cron` и `pg_net` (Database → Extensions) и создайте задания
-(подставьте ref проекта и тот же CRON_SECRET):
+Напоминания через Web Push отключены: клиенту после записи предлагается событие календаря (.ics) с напоминанием
+за 24 часа. Нужно одно ежедневное задание — обезличивание данных клиентов старше срока хранения (Закон РБ № 99-З).
+В SQL Editor включите расширение `pg_cron` и выполните:
 
 ```sql
-select cron.schedule('sgx-send-reminders', '*/5 * * * *', $$
-  select net.http_post(
-    url := 'https://<ref>.supabase.co/functions/v1/send-reminders',
-    headers := jsonb_build_object('Authorization', 'Bearer <CRON_SECRET>', 'Content-Type', 'application/json'),
-    body := '{}'::jsonb);
-$$);
-
--- ежедневно: обезличивание персональных данных старше срока хранения (Закон РБ № 99-З)
-select cron.schedule('sgx-purge-personal-data', '15 3 * * *', $$ select public.purge_expired_personal_data(); $$);
-```
-
-Как это работает:
-- клиент нажимает «Включить напоминание» → подписка сохраняется → в `notification_jobs` появляется задание на «начало − 24 ч»;
-- перенос записи отменяет старое задание и создаёт новое (ключ дедупликации включает время), отмена — отменяет;
-- функция берёт задания через `claim_notification_jobs` (аренда + SKIP LOCKED), отправляет, отмечает `sent`
-  или возвращает с задержкой; после 5 попыток — `failed`;
-- студии в режиме preview и демо-записи получают задания со статусом `skipped` — реальных уведомлений нет;
-- на iPhone push работает только у приложения, добавленного на экран «Домой» (iOS 16.4+). В обычной вкладке
-  интерфейс прямо говорит об этом и предлагает .ics с напоминанием.
-
-## 6. Публикация на Cloudflare Pages
-
+select cron.schedule('sgx-purge-personal-data', '15 0 * * *', $$ select public.purge_expired_personal_data(); $$);
 ```bash
 pnpm build                                   # dist/ + dist/t/<slug>/ для каждой студии + _redirects/_headers
 pnpm exec wrangler login
@@ -98,7 +70,7 @@ pnpm deploy                                  # wrangler pages deploy dist
 ```
 
 Или подключите репозиторий в Cloudflare Pages: команда сборки `pnpm build`, каталог `dist`,
-переменные `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_VAPID_PUBLIC_KEY`, `DEFAULT_TENANT`.
+переменные `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `DEFAULT_TENANT`.
 
 Маршрутизация (`dist/_redirects`): `/s/<slug>/*` отдаёт оболочку `/t/<slug>/` с метаданными и манифестом этой студии.
 Статика студий лежит в `/t/`, потому что правила `_redirects` в Cloudflare Pages применяются и к существующим файлам.
