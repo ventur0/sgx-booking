@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { SignOut } from "@phosphor-icons/react";
 import { signOut, useSession } from "../../data/owner";
-import { existingAccount, makePassword, slugify, useAdminActions, useIsPlatformAdmin, useStudios, type StudioRow } from "../../data/admin";
+import { billingState, existingAccount, makePassword, slugify, todayMinsk, useAdminActions, useIsPlatformAdmin, useStudios, type StudioRow } from "../../data/admin";
+import { moneyBYN } from "../../shared/by";
 import { humanError } from "../../lib/errors";
 import { Empty, ErrorState, Field, Loading, Notice } from "../../components/ui/States";
 import { Login } from "../owner/OwnerPage";
@@ -46,6 +47,7 @@ export function AdminPage() {
       <NewStudio />
       <section className="stack">
         <h2>Студии{studios.data ? ` · ${studios.data.length}` : ""}</h2>
+        {studios.data && studios.data.length > 0 && <Summary rows={studios.data} />}
         {notice && <Notice kind="ok">{notice}</Notice>}
         {studios.isLoading && <Loading rows={3} />}
         {studios.error && <ErrorState error={studios.error} onRetry={() => studios.refetch()} />}
@@ -53,6 +55,23 @@ export function AdminPage() {
         {studios.data?.map((s) => <StudioCard key={s.id} s={s} onNotice={setNotice} />)}
       </section>
     </main>
+  );
+}
+
+/** Сводка для продавца: сколько студий работает, кто не заплатил, сколько денег в месяц. */
+function Summary({ rows }: { rows: StudioRow[] }) {
+  const today = todayMinsk();
+  const live = rows.filter((r) => r.mode === "live" && !r.suspended).length;
+  const overdue = rows.filter((r) => billingState(r.paidUntil, today).kind === "overdue");
+  const soon = rows.filter((r) => billingState(r.paidUntil, today).kind === "soon");
+  const monthly = rows.filter((r) => !r.suspended && billingState(r.paidUntil, today).kind !== "overdue").reduce((sum, r) => sum + (Number(r.monthlyPrice) || 0), 0);
+  return (
+    <div className="admin-summary">
+      <div><b>{live}</b><span>работают</span></div>
+      <div className={overdue.length ? "bad" : ""}><b>{overdue.length}</b><span>не оплатили</span></div>
+      <div className={soon.length ? "warn" : ""}><b>{soon.length}</b><span>оплата ≤ 5 дней</span></div>
+      <div><b>{moneyBYN(monthly)}</b><span>в месяц</span></div>
+    </div>
   );
 }
 
@@ -211,6 +230,8 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
           {s.suspended && <span className="pill bad">Приостановлена</span>}
         </div>
       </div>
+      <BillingRow s={s} />
+      <DomainRow s={s} />
       <p className="muted small">Записей за 30 дней: {s.bookings30}{s.lastBookingAt ? ` · последняя ${new Date(s.lastBookingAt).toLocaleDateString("ru-BY")}` : ""}</p>
       <div className="row">
         <a className="btn small ghost" href={siteUrl(s.slug)} target="_blank" rel="noreferrer">Сайт</a>
@@ -319,5 +340,90 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
       {msg && <Notice kind={msg.kind}>{msg.text}</Notice>}
       {handoff && <Handoff slug={s.slug} name={s.name} email={handoff.email} password={handoff.password} onClose={() => setHandoff(null)} />}
     </article>
+  );
+}
+
+const dateRu = (ymd: string) => new Date(`${ymd}T12:00:00`).toLocaleDateString("ru-BY", { day: "numeric", month: "long", year: "numeric" });
+
+/** Оплата покупателя: «оплачено до», кнопка «+1 месяц» (снимает приостановку), ручная правка. */
+function BillingRow({ s }: { s: StudioRow }) {
+  const act = useAdminActions();
+  const st = billingState(s.paidUntil);
+  const [edit, setEdit] = useState(false);
+  const [f, setF] = useState({ until: s.paidUntil ?? "", price: s.monthlyPrice != null ? String(s.monthlyPrice).replace(".", ",") : "", note: s.billingNote });
+  const [err, setErr] = useState("");
+  const price = () => (f.price.trim() ? Number(f.price.replace(",", ".").replace(/\s/g, "")) : null);
+  const label =
+    st.kind === "none" ? "Оплата не отмечена"
+    : st.kind === "overdue" ? `Не оплачено с ${dateRu(s.paidUntil!)} (${-st.days} дн.)`
+    : `Оплачено до ${dateRu(s.paidUntil!)}${st.kind === "soon" ? ` — осталось ${st.days} дн.` : ""}`;
+  const extend = () => {
+    setErr("");
+    act.setBilling.mutate({ tenantId: s.id, paidUntil: s.paidUntil, monthlyPrice: s.monthlyPrice, note: s.billingNote, extendMonths: 1 }, { onError: (x) => setErr(humanError(x)) });
+  };
+  const save = (e: FormEvent) => {
+    e.preventDefault();
+    const p = price();
+    if (p !== null && !(p >= 0)) return setErr("Цена — число, например 49,90");
+    setErr("");
+    act.setBilling.mutate({ tenantId: s.id, paidUntil: f.until || null, monthlyPrice: p, note: f.note.trim() }, { onSuccess: () => setEdit(false), onError: (x) => setErr(humanError(x)) });
+  };
+  return (
+    <div className="stack">
+      <div className="row between">
+        <span className={`pill ${st.kind === "overdue" ? "bad" : st.kind === "soon" ? "warn" : st.kind === "ok" ? "ok" : ""}`}>{label}</span>
+        <div className="row">
+          <button className="btn small" disabled={act.setBilling.isPending} onClick={extend} title="Продлить на месяц и снять приостановку">+1 месяц</button>
+          <button className="btn small ghost" onClick={() => { setF({ until: s.paidUntil ?? "", price: s.monthlyPrice != null ? String(s.monthlyPrice).replace(".", ",") : "", note: s.billingNote }); setEdit(!edit); }}>Оплата…</button>
+        </div>
+      </div>
+      {(s.monthlyPrice != null || s.billingNote) && !edit && (
+        <p className="muted small">{s.monthlyPrice != null ? `${moneyBYN(Number(s.monthlyPrice))} в месяц` : ""}{s.monthlyPrice != null && s.billingNote ? " · " : ""}{s.billingNote}</p>
+      )}
+      {edit && (
+        <form className="stack" onSubmit={save} noValidate>
+          <div className="fields">
+            <Field id={`bu-${s.id}`} label="Оплачено до"><input className="input mono" type="date" id={`bu-${s.id}`} value={f.until} onChange={(e) => setF({ ...f, until: e.target.value })} /></Field>
+            <Field id={`bp-${s.id}`} label="Цена в месяц, BYN"><input className="input mono" inputMode="decimal" id={`bp-${s.id}`} value={f.price} onChange={(e) => setF({ ...f, price: e.target.value })} /></Field>
+            <Field id={`bn-${s.id}`} label="Заметка (видите только вы)" full><input className="input" id={`bn-${s.id}`} maxLength={300} placeholder="Тариф, способ оплаты, контакт" value={f.note} onChange={(e) => setF({ ...f, note: e.target.value })} /></Field>
+          </div>
+          <div className="row"><button className="btn primary small" disabled={act.setBilling.isPending}>Сохранить</button><button type="button" className="btn ghost small" onClick={() => setEdit(false)}>Отмена</button></div>
+        </form>
+      )}
+      {err && <p className="err" role="alert">{err}</p>}
+    </div>
+  );
+}
+
+/** Собственный домен студии: продавец вписывает домен, покупатель (или вы) подключает его в Cloudflare. */
+function DomainRow({ s }: { s: StudioRow }) {
+  const act = useAdminActions();
+  const [edit, setEdit] = useState(false);
+  const [val, setVal] = useState(s.customDomain ?? "");
+  const [err, setErr] = useState("");
+  const save = (e: FormEvent) => {
+    e.preventDefault();
+    setErr("");
+    act.setDomain.mutate({ tenantId: s.id, domain: val }, { onSuccess: () => setEdit(false), onError: (x) => setErr(humanError(x)) });
+  };
+  return (
+    <div className="stack">
+      <div className="row between">
+        <span className="muted small">
+          Домен: {s.customDomain ? <a className="link mono" href={`https://${s.customDomain}/`} target="_blank" rel="noreferrer">{s.customDomain}</a> : "не подключён"}
+        </span>
+        <button className="btn small ghost" onClick={() => { setEdit(!edit); setVal(s.customDomain ?? ""); }}>{s.customDomain ? "Изменить домен" : "Свой домен…"}</button>
+      </div>
+      {edit && (
+        <form className="stack" onSubmit={save} noValidate>
+          <Field id={`dm-${s.id}`} label="Домен студии" hint="Например zapis.studio.by. Пусто — отключить">
+            <input className="input mono" id={`dm-${s.id}`} autoComplete="off" value={val} onChange={(e) => setVal(e.target.value)} />
+          </Field>
+          <p className="muted small">После сохранения добавьте этот домен в Cloudflare: Workers & Pages → sgx-booking → Custom domains → Set up a custom domain. Cloudflare покажет запись DNS (CNAME), которую нужно добавить у регистратора домена. Через 5–30 минут сайт студии откроется по этому адресу.</p>
+          <div className="row"><button className="btn primary small" disabled={act.setDomain.isPending}>Сохранить</button><button type="button" className="btn ghost small" onClick={() => setEdit(false)}>Отмена</button></div>
+        </form>
+      )}
+      {err && <p className="err" role="alert">{err}</p>}
+    </div>
   );
 }

@@ -6,6 +6,7 @@ import { MyDetailPage, MyListPage } from "./pages/client/MyPage";
 import { PrivacyPage } from "./pages/client/PrivacyPage";
 import { OwnerPage } from "./pages/owner/OwnerPage";
 import { AdminPage } from "./pages/admin/AdminPage";
+import { RootRedirect } from "./pages/RootRedirect";
 import { Empty } from "./components/ui/States";
 
 export function App() {
@@ -20,6 +21,7 @@ export function App() {
         <Route path="owner/*" element={<OwnerPage />} />
         <Route path="*" element={<Navigate to="." replace />} />
       </Route>
+      <Route path="/" element={<RootRedirect />} />
       <Route path="/admin/*" element={<AdminPage />} />
       <Route path="*" element={<main className="wrap pad-top"><Empty>Откройте ссылку студии вида /s/название/, которую вам прислали.</Empty></main>} />
     </Routes>

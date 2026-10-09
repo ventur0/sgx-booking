@@ -51,6 +51,11 @@ async function buildTenant(slug: string, template: string) {
   await iconFrom(logo, 512, 0.12, join(out, "maskable-512.png")); // безопасная зона maskable — 80%
   await iconFrom(logo, 180, 0.06, join(out, "apple-touch-icon.png"));
   await iconFrom(logo, 64, 0, join(out, "favicon.png"));
+  await iconFrom(logo, 192, 0, join(out, "icon-192.png"));
+  await iconFrom(logo, 512, 0, join(out, "icon-512.png"));
+  await iconFrom(logo, 512, 0.12, join(out, "maskable-512.png"));
+  // service worker для студий из панели: регистрируется с scope /s/<slug>/ (заголовок Service-Worker-Allowed ниже)
+  copyFileSync(join(DIST, "sw.js"), join(out, "sw.js"));
 
   const startupLinks: string[] = [];
   for (const s of STARTUP) {
@@ -123,6 +128,11 @@ if (!template.includes("<!--tenant-head-->")) {
   const logo = join(tenantDir("_template"), "images", "logo.svg");
   await iconFrom(logo, 180, 0.06, join(out, "apple-touch-icon.png"));
   await iconFrom(logo, 64, 0, join(out, "favicon.png"));
+  await iconFrom(logo, 192, 0, join(out, "icon-192.png"));
+  await iconFrom(logo, 512, 0, join(out, "icon-512.png"));
+  await iconFrom(logo, 512, 0.12, join(out, "maskable-512.png"));
+  // service worker для студий из панели: регистрируется с scope /s/<slug>/ (заголовок Service-Worker-Allowed ниже)
+  copyFileSync(join(DIST, "sw.js"), join(out, "sw.js"));
   const head = [
     `<meta name="theme-color" content="${BG}" />`,
     `<link rel="icon" type="image/png" href="/t/_default/favicon.png" />`,
@@ -146,8 +156,7 @@ writeFileSync(
   [
     "/s/:slug /s/:slug/ 301",
     "/s/:slug/* /t/:slug/ 200",
-    // корень сайта ведёт на студию по умолчанию (DEFAULT_TENANT или первая по алфавиту)
-    `/ /s/${process.env.DEFAULT_TENANT ?? listTenants()[0]}/ 302`,
+    // корень сайта решает само приложение: собственный домен студии → её страница, иначе студия по умолчанию
     "",
   ].join("\n"),
 );

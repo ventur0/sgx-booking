@@ -32,13 +32,13 @@ createRoot(document.getElementById("root")!).render(
  * У каждой студии свой service worker: файл /t/<slug>/sw.js (копия общего), scope /s/<slug>/
  * и свои имена кэшей. Установленное приложение одной студии не перехватывает страницы другой.
  */
-// Студии, созданные в панели продавца, живут только в базе: у них нет своей оболочки /t/<slug>/
-// (метки sgx-tenant), поэтому service worker регистрируем только для собранных оболочек.
+// У студий из конфигурации своя оболочка /t/<slug>/ (метка sgx-tenant); студии из панели продавца живут
+// только в базе и используют общую копию /t/_default/sw.js. Scope всегда /s/<slug>/, кэши — по студии.
 const m = location.pathname.match(/^\/s\/([a-z0-9-]+)\//);
 const built = document.querySelector('meta[name="sgx-tenant"]')?.getAttribute("content") === m?.[1];
-if (m && built && "serviceWorker" in navigator && import.meta.env.PROD) {
+if (m && "serviceWorker" in navigator && import.meta.env.PROD) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register(`/t/${m[1]}/sw.js`, { scope: `/s/${m[1]}/` }).catch(() => {
+    navigator.serviceWorker.register(`/t/${built ? m[1] : "_default"}/sw.js`, { scope: `/s/${m[1]}/` }).catch(() => {
       /* без service worker сайт работает как обычный */
     });
   });

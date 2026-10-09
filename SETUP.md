@@ -119,3 +119,20 @@ pnpm deploy                                  # wrangler pages deploy dist
 4. Владелец сам меняет всё в кабинете `/s/<адрес>/owner` → Настройки (услуги и посты, график,
    фото, данные ИП, пароль) и сам нажимает «Запуск». Продавец может приостановить студию,
    сменить владельцу пароль или почту, выдать или убрать доступ.
+
+## Учёт оплат и собственные домены (панель продавца)
+
+- Миграция `20261009101000_billing_domains.sql`. В карточке студии: «Оплачено до», «+1 месяц» (продлевает и снимает
+  приостановку), «Оплата…» (дата, цена в месяц, заметка). Сверху сводка: работают / не оплатили / в месяц.
+- «Свой домен…»: впишите домен (zapis.studio.by), затем Cloudflare → Workers & Pages → sgx-booking → Custom domains →
+  Set up a custom domain → добавьте показанную запись CNAME у регистратора. Корень домена откроет эту студию.
+
+## Напоминания (Web Push) без командной строки
+
+1. Ключи: VAPID-пара и CRON_SECRET (генерируются один раз, например `npx web-push generate-vapid-keys`).
+2. Supabase → Edge Functions → Secrets: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`, `PUBLIC_SITE_URL`, `CRON_SECRET`.
+3. Supabase → Edge Functions → Deploy a new function → Via Editor: `send-reminders`, код из
+   `supabase/functions/send-reminders/index.ts`; в деталях функции выключить «Verify JWT».
+4. SQL: `pg_cron` + `pg_net`, задание каждые 5 минут — POST на `/functions/v1/send-reminders` с `Authorization: Bearer <CRON_SECRET>`;
+   ежедневно `purge_expired_personal_data()`.
+5. Cloudflare: переменная `VITE_VAPID_PUBLIC_KEY` и пересборка. Напоминания идут только для студий в режиме live.
