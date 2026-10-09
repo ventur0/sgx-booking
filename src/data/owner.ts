@@ -30,6 +30,12 @@ export function useSession() {
   return useQuery({ queryKey: ["session"], queryFn: async () => (await supabase.auth.getSession()).data.session });
 }
 
+/** Смена пароля самим владельцем (письмо не нужно: пользователь уже вошёл). */
+export async function changeOwnPassword(password: string) {
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw error;
+}
+
 export async function signOut() {
   await supabase.auth.signOut();
   try {
@@ -143,7 +149,26 @@ export function useSettingsActions(tenantId: string, slug: string) {
     saveProfile: useMutation({ mutationFn: async (profile: Profile) => ok(await supabase.from("tenants").update({ profile }).eq("id", tenantId)), onSuccess: done }),
     saveService: useMutation({
       mutationFn: async (s: { id?: string; key: string; name: string; description: string; price: number; duration_min: number; active: boolean; sort: number }) =>
-        ok(s.id ? await supabase.from("services").update(s).eq("id", s.id) : await supabase.from("services").insert({ ...s, tenant_id: tenantId })),
+        s.id
+          ? (ok(await supabase.from("services").update(s).eq("id", s.id)), s.id)
+          : ok<{ id: string }>(await supabase.from("services").insert({ ...s, tenant_id: tenantId }).select("id").single()).id,
+      onSuccess: done,
+    }),
+    /** Посты услуги: пустой список = любой активный пост */
+    saveServicePosts: useMutation({
+      mutationFn: async (a: { serviceId: string; resourceIds: string[] }) => {
+        ok(await supabase.from("service_resources").delete().eq("tenant_id", tenantId).eq("service_id", a.serviceId));
+        if (a.resourceIds.length)
+          ok(await supabase.from("service_resources").insert(a.resourceIds.map((r) => ({ tenant_id: tenantId, service_id: a.serviceId, resource_id: r }))));
+      },
+      onSuccess: done,
+    }),
+    goLive: useMutation({
+      mutationFn: async () => {
+        const { data, error } = await supabase.rpc("owner_go_live", { p_tenant: tenantId });
+        if (error) throw error;
+        return data as number;
+      },
       onSuccess: done,
     }),
     saveResource: useMutation({

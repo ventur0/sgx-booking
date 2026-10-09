@@ -32,3 +32,7 @@ enable_confirmations = false
 
 [functions.send-reminders]
 verify_jwt = false
+
+[functions.admin-users]
+# JWT проверяет сама функция (auth.getUser + platform_admins)
+verify_jwt = false

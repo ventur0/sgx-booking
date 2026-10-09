@@ -36,6 +36,9 @@ export function StudioLayout() {
         {studio.tenant.mode === "preview" && !isOwner && (
           <div className="preview-bar" role="note">Образец студии: демонстрационные данные, уведомления не отправляются</div>
         )}
+        {studio.tenant.suspended && !isOwner && (
+          <div className="preview-bar" role="note">Онлайн-запись временно недоступна. Позвоните: {studio.tenant.profile.phone}</div>
+        )}
         <Outlet />
         {!isOwner && (
           <nav className="tabbar glass" aria-label="Навигация">

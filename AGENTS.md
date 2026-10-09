@@ -11,7 +11,10 @@
 5. anon не получает персональные данные, платежи, токены, outbox. Новые таблицы: `enable row level security`
    + явные GRANT. Новые функции: `revoke all … from public, anon, authenticated`, затем точечный grant.
 6. Статистику считает SQL (`owner_stats`). Полученные деньги ≠ ожидаемая стоимость.
-7. Студия в preview: только `is_demo` данные, уведомления `skipped`. live — через `tenant:publish --live`.
+7. Студия в preview: только `is_demo` данные, уведомления `skipped`. live — через `tenant:publish --live`
+   или кнопкой владельца «Запуск» (`owner_go_live`: нужны данные оператора ПД и настоящий телефон).
+9. Панель продавца `/admin`: права только у `platform_admins`. Аккаунты владельцев создаёт Edge Function
+   `admin-users` (service role остаётся на сервере). Студии из панели живут только в БД (оболочка `/t/_default/`).
 8. Service worker не кэширует ничего, что пришло с JWT владельца.
 
 ## Проверки перед коммитом
@@ -22,7 +25,7 @@ pnpm build && pnpm preview && pnpm test:e2e
 ```
 
 ## Где что лежит
-- `supabase/migrations/` — схема, функции, права (по порядку: core → bookings → functions → owner → security → pipeline)
+- `supabase/migrations/` — схема, функции, права (по порядку: core → bookings → functions → owner → security → pipeline → platform)
 - `tests/db/` — SQL-тесты и тест конкуренции
 - `scripts/` — конвейер `tenant:*`, `build-shells`, `build-seed`
 - `src/shared/` — схемы и чистые функции, общие для браузера и скриптов

@@ -223,6 +223,18 @@
   .plain { list-style: none; margin: 0; padding: 0; }
 }
 
+/* панель продавца и мелочи кабинета */
+@layer components {
+  .pill { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 8px; border-radius: 999px;
+          border: 1px solid var(--line-2); color: var(--muted); }
+  .pill.ok { border-color: color-mix(in srgb, var(--accent) 60%, transparent); color: var(--accent); }
+  .pill.bad { border-color: color-mix(in srgb, var(--bad) 50%, transparent); color: var(--bad); }
+  .handoff-text { white-space: pre-wrap; word-break: break-word; font-family: var(--f-mono); font-size: 13px; line-height: 1.5; margin: 0;
+                  padding: 12px; border-radius: 12px; background: var(--surface-2); }
+  .plain-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .admin { padding-bottom: 48px; }
+}
+
 @layer utilities {
   .stack { display: flex; flex-direction: column; gap: 12px; }
   .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; } .row.between { justify-content: space-between; } .wrap-gap { row-gap: 8px; }

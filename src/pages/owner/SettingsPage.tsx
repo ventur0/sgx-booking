@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import { useStudioCtx } from "../client/StudioLayout";
-import { useSettingsActions } from "../../data/owner";
+import { changeOwnPassword, useSession, useSettingsActions } from "../../data/owner";
 import { ProfileSchema, type Profile } from "../../shared/business";
 import { moneyBYN, upcomingHolidays } from "../../shared/by";
 import { compressImage } from "../../lib/media";
@@ -20,6 +20,8 @@ export function SettingsPage() {
         <NavLink to={`${base}/posts`}>Посты</NavLink>
         <NavLink to={`${base}/schedule`}>График</NavLink>
         <NavLink to={`${base}/photos`}>Фото</NavLink>
+        {studio.tenant.mode === "preview" && <NavLink to={`${base}/launch`}>Запуск</NavLink>}
+        <NavLink to={`${base}/account`}>Аккаунт</NavLink>
       </nav>
       <Routes>
         <Route index element={<ProfileForm />} />
@@ -27,6 +29,8 @@ export function SettingsPage() {
         <Route path="posts" element={<PostsForm />} />
         <Route path="schedule" element={<ScheduleForm />} />
         <Route path="photos" element={<PhotosForm />} />
+        <Route path="launch" element={<LaunchForm />} />
+        <Route path="account" element={<AccountForm />} />
       </Routes>
     </>
   );
@@ -130,6 +134,9 @@ function ServicesForm() {
 }
 
 function ServiceEdit({ s, onDone, act, sort }: { s?: { id: string; key: string; name: string; description: string; price: number; duration_min: number; active: boolean }; onDone: () => void; act: ReturnType<typeof useSettingsActions>; sort: number }) {
+  const { studio } = useStudioCtx();
+  const posts = studio.resources.filter((r) => r.active);
+  const [chosen, setChosen] = useState<string[]>(() => (s ? studio.serviceResources.filter((x) => x.service_id === s.id).map((x) => x.resource_id) : []));
   const [f, setF] = useState({ name: s?.name ?? "", description: s?.description ?? "", price: String(s?.price ?? "").replace(".", ","), minutes: String(s?.duration_min ?? 60), active: s?.active ?? true });
   const [err, setErr] = useState("");
   const submit = (e: FormEvent) => {
@@ -140,7 +147,12 @@ function ServiceEdit({ s, onDone, act, sort }: { s?: { id: string; key: string; 
     if (!(price >= 0) || Math.abs(price * 100 - Math.round(price * 100)) > 1e-6) return setErr("Цена: число, не больше двух знаков после запятой");
     if (!(dur >= 15 && dur <= 20160)) return setErr("Длительность от 15 минут до 14 суток (20160 мин)");
     setErr("");
-    act.saveService.mutate({ id: s?.id, key: s?.key ?? `s${Date.now().toString(36)}`, name: f.name.trim(), description: f.description.trim(), price, duration_min: dur, active: f.active, sort }, { onSuccess: onDone, onError: (x) => setErr(humanError(x)) });
+    const posted = chosen.filter((id) => posts.some((p) => p.id === id));
+    act.saveService.mutate({ id: s?.id, key: s?.key ?? `s${Date.now().toString(36)}`, name: f.name.trim(), description: f.description.trim(), price, duration_min: dur, active: f.active, sort }, {
+      // все посты отмечены = «любой пост»: так новые посты тоже подхватят услугу
+      onSuccess: (id) => act.saveServicePosts.mutate({ serviceId: id, resourceIds: posted.length === posts.length ? [] : posted }, { onSuccess: onDone, onError: (x) => setErr(humanError(x)) }),
+      onError: (x) => setErr(humanError(x)),
+    });
   };
   return (
     <form className="panel stack" onSubmit={submit} noValidate>
@@ -150,9 +162,18 @@ function ServiceEdit({ s, onDone, act, sort }: { s?: { id: string; key: string; 
         <Field id="sv-d" label="Длительность, мин" hint={Number(f.minutes) >= 15 ? durationLabel(Number(f.minutes)) : undefined}><input className="input mono" id="sv-d" inputMode="numeric" value={f.minutes} onChange={(e) => setF({ ...f, minutes: e.target.value.replace(/\D/g, "") })} /></Field>
         <Field id="sv-x" label="Что входит" full><input className="input" id="sv-x" value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} /></Field>
       </div>
+      {posts.length > 1 && (
+        <fieldset className="stack plain-fieldset">
+          <legend className="muted small">На каких постах делаем (ничего не отмечено — на любом)</legend>
+          {posts.map((p) => (
+            <label key={p.id} className="check"><input type="checkbox" checked={chosen.includes(p.id)}
+              onChange={(e) => setChosen(e.target.checked ? [...chosen, p.id] : chosen.filter((x) => x !== p.id))} /> {p.name}</label>
+          ))}
+        </fieldset>
+      )}
       <label className="check"><input type="checkbox" checked={f.active} onChange={(e) => setF({ ...f, active: e.target.checked })} /> Показывать на сайте</label>
       {err && <p className="err" role="alert">{err}</p>}
-      <div className="row"><button className="btn primary" disabled={act.saveService.isPending}>Сохранить</button><button type="button" className="btn ghost" onClick={onDone}>Отмена</button></div>
+      <div className="row"><button className="btn primary" disabled={act.saveService.isPending || act.saveServicePosts.isPending}>Сохранить</button><button type="button" className="btn ghost" onClick={onDone}>Отмена</button></div>
     </form>
   );
 }
@@ -336,5 +357,72 @@ function PhotosForm() {
       {err && <Notice kind="bad">{err}</Notice>}
       {ok && <Notice kind="ok">{ok}</Notice>}
     </div>
+  );
+}
+
+/* ------------------------------ запуск ------------------------------ */
+function LaunchForm() {
+  const { studio } = useStudioCtx();
+  const act = useSettingsActions(studio.tenant.id, studio.tenant.slug);
+  const p = studio.tenant.profile;
+  const base = `/s/${studio.tenant.slug}/owner/settings`;
+  const checks = [
+    { ok: !!p.legal, text: "Данные оператора персональных данных (ИП или организация, УНП)", to: base },
+    { ok: !/000-?00-?00/.test(p.phone), text: "Настоящий телефон студии", to: base },
+    { ok: !/Укажите адрес/.test(p.address), text: "Адрес студии", to: base },
+    { ok: studio.services.some((s) => s.active && !s.name.includes("(пример)")), text: "Свои услуги и цены", to: `${base}/services` },
+    { ok: !(p.media?.hero ?? "").includes("/_default/"), text: "Своё главное фото (можно позже)", to: `${base}/photos`, optional: true },
+  ];
+  const ready = checks.every((c) => c.ok || c.optional);
+  if (studio.tenant.mode === "live") return <Notice kind="ok">Студия работает: клиенты записываются, уведомления отправляются.</Notice>;
+  return (
+    <section className="panel stack"><h2>Запуск приёма записей</h2>
+      <p className="muted small">Сейчас студия в режиме образца: записи помечаются как демо и уведомления не отправляются. После запуска демо-записи удалятся, а новые записи станут настоящими.</p>
+      <ul className="plain stack">
+        {checks.map((c) => (
+          <li key={c.text} className="row between">
+            <span>{c.ok ? "✓" : c.optional ? "○" : "✗"} {c.text}</span>
+            {!c.ok && <NavLink className="link" to={c.to}>Заполнить</NavLink>}
+          </li>
+        ))}
+      </ul>
+      <Result error={act.goLive.error} ok={act.goLive.isSuccess} okText="Готово! Студия принимает настоящие записи." />
+      <button className="btn primary block" disabled={!ready || act.goLive.isPending} onClick={() => act.goLive.mutate()}>
+        {act.goLive.isPending ? "Запускаем…" : ready ? "Запустить приём записей" : "Сначала заполните пункты выше"}
+      </button>
+    </section>
+  );
+}
+
+/* ------------------------------ аккаунт ------------------------------ */
+function AccountForm() {
+  const session = useSession();
+  const [pw, setPw] = useState({ a: "", b: "" });
+  const [state, setState] = useState<{ busy: boolean; err: string; ok: boolean }>({ busy: false, err: "", ok: false });
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (pw.a.length < 8) return setState({ busy: false, err: "Пароль — не короче 8 символов", ok: false });
+    if (pw.a !== pw.b) return setState({ busy: false, err: "Пароли не совпадают", ok: false });
+    setState({ busy: true, err: "", ok: false });
+    try {
+      await changeOwnPassword(pw.a);
+      setPw({ a: "", b: "" });
+      setState({ busy: false, err: "", ok: true });
+    } catch (x) {
+      setState({ busy: false, err: humanError(x), ok: false });
+    }
+  };
+  return (
+    <form className="panel stack" onSubmit={submit} noValidate>
+      <h2>Аккаунт</h2>
+      <p className="muted small">Вы вошли как <b>{session.data?.user.email}</b>. Сменить почту для входа может администратор сервиса.</p>
+      <div className="fields">
+        <Field id="pw-a" label="Новый пароль" hint="Не короче 8 символов"><input className="input" id="pw-a" type="password" autoComplete="new-password" value={pw.a} onChange={(e) => setPw({ ...pw, a: e.target.value })} /></Field>
+        <Field id="pw-b" label="Повторите пароль"><input className="input" id="pw-b" type="password" autoComplete="new-password" value={pw.b} onChange={(e) => setPw({ ...pw, b: e.target.value })} /></Field>
+      </div>
+      {state.err && <p className="err" role="alert">{state.err}</p>}
+      {state.ok && <Notice kind="ok">Пароль изменён. В следующий раз входите с новым паролем.</Notice>}
+      <button className="btn primary" disabled={state.busy || !pw.a}>{state.busy ? "Сохраняем…" : "Сменить пароль"}</button>
+    </form>
   );
 }

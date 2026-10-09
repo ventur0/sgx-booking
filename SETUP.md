@@ -106,3 +106,16 @@ pnpm deploy                                  # wrangler pages deploy dist
 ## 7. Новая студия
 
 См. [CLONE-IN-6-MINUTES.md](CLONE-IN-6-MINUTES.md).
+
+## Панель продавца (/admin) — много покупателей без SQL
+
+1. Supabase → SQL Editor: выполнить `supabase/migrations/20261009100600_platform.sql`
+   (для уже настроенной базы) и сделать себя продавцом:
+   `insert into public.platform_admins select id from auth.users where email = 'ваша@почта';`
+2. Supabase → Edge Functions → Deploy a new function → Via Editor: имя `admin-users`,
+   код из `supabase/functions/admin-users/index.ts`, Deploy. В деталях функции выключить «Verify JWT».
+3. Открыть `https://<сайт>/admin`, войти. «Новая студия» создаёт заготовку и аккаунт владельца;
+   кнопка «Скопировать» даёт текст для покупателя (ссылки, логин, временный пароль).
+4. Владелец сам меняет всё в кабинете `/s/<адрес>/owner` → Настройки (услуги и посты, график,
+   фото, данные ИП, пароль) и сам нажимает «Запуск». Продавец может приостановить студию,
+   сменить владельцу пароль или почту, выдать или убрать доступ.

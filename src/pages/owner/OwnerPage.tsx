@@ -46,7 +46,8 @@ export function OwnerPage() {
     <div className="owner">
       <main className="wrap pad-top owner-main">
         {head}
-        {tenant.mode === "preview" && <Notice kind="info">Студия в режиме образца: записи помечены как демо, уведомления клиентам не отправляются.</Notice>}
+        {tenant.mode === "preview" && <Notice kind="info">Студия в режиме образца: записи помечены как демо, уведомления клиентам не отправляются. <Link className="link" to={`${base}/settings/launch`}>Как запустить →</Link></Notice>}
+        {tenant.suspended && <Notice kind="warn">Онлайн-запись приостановлена администратором сервиса. Сайт открывается, но новые записи не принимаются.</Notice>}
         <Routes>
           <Route index element={<AgendaPage />} />
           <Route path="blocks" element={<BlocksPage />} />
@@ -64,7 +65,7 @@ export function OwnerPage() {
   );
 }
 
-function Login() {
+export function Login({ title = "Вход для владельца" }: { title?: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -78,7 +79,7 @@ function Login() {
   };
   return (
     <form className="panel login" onSubmit={submit} noValidate>
-      <h2>Вход для владельца</h2>
+      <h2>{title}</h2>
       <Field id="l-email" label="Почта"><input className="input" id="l-email" type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
       <Field id="l-pass" label="Пароль"><input className="input" id="l-pass" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} /></Field>
       {err && <p className="err" role="alert">{err}</p>}

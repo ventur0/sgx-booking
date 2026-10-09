@@ -111,6 +111,23 @@ if (!template.includes("<!--tenant-head-->")) {
   console.error("В index.html нет метки <!--tenant-head-->");
   process.exit(1);
 }
+// Общая оболочка для студий из панели продавца (есть только в базе): картинки-заготовки и иконки.
+{
+  const out = join(DIST, "t", "_default");
+  mkdirSync(out, { recursive: true });
+  cpSync(join(tenantDir("_template"), "images"), join(out, "media"), { recursive: true });
+  const logo = join(tenantDir("_template"), "images", "logo.svg");
+  await iconFrom(logo, 180, 0.06, join(out, "apple-touch-icon.png"));
+  await iconFrom(logo, 64, 0, join(out, "favicon.png"));
+  const head = [
+    `<meta name="theme-color" content="${BG}" />`,
+    `<link rel="icon" type="image/png" href="/t/_default/favicon.png" />`,
+    `<link rel="apple-touch-icon" href="/t/_default/apple-touch-icon.png" />`,
+  ].join("\n    ");
+  writeFileSync(join(DIST, "index.html"), template.replace("<!--tenant-head-->", head));
+  console.log("✓ /t/_default/ — оболочка студий из панели продавца");
+}
+
 const only = process.argv[2];
 const slugs = only ? [only] : listTenants();
 for (const slug of slugs) {
