@@ -1,0 +1,53 @@
+{
+  "name": "sgx-autoservice",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "pnpm@10.12.1",
+  "engines": { "node": ">=20.11" },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build && tsx scripts/build-tenants.ts",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "tenant:new": "tsx scripts/tenant-new.ts",
+    "tenant:check": "tsx scripts/tenant-check.ts",
+    "tenant:publish": "tsx --env-file=.env scripts/tenant-publish.ts",
+    "tenant:smoke": "tsx --env-file=.env scripts/tenant-smoke.ts",
+    "db:push": "supabase db push",
+    "functions:deploy": "supabase functions deploy send-reminders",
+    "deploy": "pnpm tenant:check && vercel deploy --prod"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.7",
+    "@supabase/supabase-js": "^2.50.0",
+    "@tanstack/react-query": "^5.80.7",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.2",
+    "zod": "^3.25.64"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.53.0",
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.5.2",
+    "supabase": "^2.26.9",
+    "tsx": "^4.20.3",
+    "typescript": "~5.8.3",
+    "vercel": "^44.2.0",
+    "vite": "^6.3.5",
+    "vite-plugin-pwa": "^1.0.0",
+    "vitest": "^3.2.3",
+    "workbox-core": "^7.3.0",
+    "workbox-expiration": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0"
+  }
+}
