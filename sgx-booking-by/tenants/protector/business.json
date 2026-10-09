@@ -1,0 +1,163 @@
+{
+  "slug": "protector",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@protector.example"
+  },
+  "profile": {
+    "name": "Шинный двор «Протектор»",
+    "shortName": "Протектор",
+    "kind": "Шиномонтаж · Брест",
+    "tagline": "Переобуем за 40 минут. Балансировка, ремонт проколов, хранение",
+    "description": "Три подъёмника и запись по минутам: приезжаете к своему времени и не стоите в очереди. Колёса до R22, низкий профиль и Run Flat.",
+    "address": "г. Брест, ул. Пример, 7",
+    "phone": "+375 33 000-00-00",
+    "accent": "#FF8A3D",
+    "cards": [
+      {
+        "title": "40 минут",
+        "text": "Средняя сезонная замена для легковой машины."
+      },
+      {
+        "title": "До R22",
+        "text": "Низкий профиль, Run Flat, внедорожники."
+      },
+      {
+        "title": "Хранение",
+        "text": "Сезонное хранение шин и дисков в тёплом складе."
+      }
+    ],
+    "booking": {
+      "bufferMin": 5,
+      "stepMin": 15,
+      "leadMin": 30,
+      "cancelHours": 1,
+      "horizonDays": 14
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "lift-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "lift-2",
+      "name": "Подъёмник 2"
+    },
+    {
+      "key": "lift-3",
+      "name": "Подъёмник 3 (грузовые)"
+    }
+  ],
+  "services": [
+    {
+      "key": "tires-small",
+      "name": "Сезонная замена R13–R16",
+      "description": "Снятие, монтаж, балансировка 4 колёс",
+      "price": 35,
+      "durationMin": 45,
+      "resources": [
+        "lift-1",
+        "lift-2"
+      ]
+    },
+    {
+      "key": "tires-big",
+      "name": "Сезонная замена R17–R22",
+      "description": "Снятие, монтаж, балансировка 4 колёс",
+      "price": 55,
+      "durationMin": 60
+    },
+    {
+      "key": "balance",
+      "name": "Балансировка 4 колёс",
+      "description": "",
+      "price": 20,
+      "durationMin": 30
+    },
+    {
+      "key": "repair",
+      "name": "Ремонт прокола",
+      "description": "Жгут или грибок, одно колесо",
+      "price": 15,
+      "durationMin": 30
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "17:00"
+    },
+    "sun": {
+      "opens": "09:00",
+      "closes": "15:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Балансировка на стенде"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Монтаж низкого профиля R20"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Сезонное хранение"
+    }
+  ],
+  "demo": {
+    "bookings": [
+      {
+        "service": "tires-small",
+        "resource": "lift-1",
+        "dayOffset": 1,
+        "time": "08:00",
+        "name": "Демо: Виктор",
+        "phone": "+375 29 000-00-11",
+        "car": "Renault Logan",
+        "status": "new"
+      },
+      {
+        "service": "tires-big",
+        "resource": "lift-3",
+        "dayOffset": 1,
+        "time": "08:00",
+        "name": "Демо: Наталья",
+        "phone": "+375 25 000-00-12",
+        "car": "Kia Sportage",
+        "status": "new"
+      }
+    ]
+  }
+}

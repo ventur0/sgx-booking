@@ -1,0 +1,120 @@
+{
+  "slug": "template",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@example.com"
+  },
+  "profile": {
+    "name": "Название студии",
+    "shortName": "Студия",
+    "kind": "Детейлинг · Город",
+    "tagline": "Коротко: что вы делаете и чем отличаетесь",
+    "description": "Два-три предложения: опыт, оборудование, гарантия.",
+    "address": "г. Минск, улица, дом",
+    "phone": "+375 29 000-00-00",
+    "accent": "#4690FF",
+    "cards": [
+      {
+        "title": "Карточка 1",
+        "text": "Чем вы полезны клиенту"
+      },
+      {
+        "title": "Карточка 2",
+        "text": "Гарантия или условия"
+      },
+      {
+        "title": "Карточка 3",
+        "text": "Оплата, парковка, ожидание"
+      }
+    ],
+    "booking": {
+      "bufferMin": 15,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 4,
+      "horizonDays": 30
+    },
+    "legal": {
+      "operator": "ИП Фамилия Имя Отчество",
+      "unp": "000000000",
+      "legalAddress": "г. Минск, улица, дом, офис",
+      "email": "privacy@example.com",
+      "retentionDays": 365
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    }
+  ],
+  "services": [
+    {
+      "key": "wash",
+      "name": "Комплексная мойка",
+      "description": "",
+      "price": 40,
+      "durationMin": 60
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "",
+      "price": 400,
+      "durationMin": 600
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "sat": {
+      "opens": "10:00",
+      "closes": "18:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Пример работы"
+    }
+  ],
+  "demo": {
+    "bookings": [
+      {
+        "service": "wash",
+        "dayOffset": 1,
+        "time": "10:00",
+        "name": "Демо: Клиент",
+        "phone": "+375 29 000-00-09",
+        "car": "Демо-автомобиль",
+        "status": "new"
+      }
+    ]
+  }
+}

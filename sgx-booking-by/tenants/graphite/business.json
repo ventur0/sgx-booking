@@ -1,0 +1,184 @@
+{
+  "slug": "graphite",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@graphite.example"
+  },
+  "profile": {
+    "name": "GRAPHITE Detailing",
+    "shortName": "GRAPHITE",
+    "kind": "Детейлинг-студия · Минск",
+    "tagline": "Полировка, керамика и плёнка. Два поста, тёплый бокс, фотоотчёт",
+    "description": "Работаем с кузовом и салоном так, как с собственной машиной: свет для поиска дефектов, замеры толщины ЛКП, фотоотчёт до и после. Свободное время видно сразу.",
+    "address": "г. Минск, ул. Тимирязева, 65Б, бокс 12",
+    "phone": "+375 29 000-00-00",
+    "accent": "#4690FF",
+    "cards": [
+      {
+        "title": "Гарантия 2 года",
+        "text": "На керамику и плёнку. Фотоотчёт до и после в мессенджер."
+      },
+      {
+        "title": "Один пост — одна машина",
+        "text": "Никакой очереди в общем зале: ваш автомобиль на своём посту."
+      },
+      {
+        "title": "Оплата по факту",
+        "text": "Наличными, картой или через ЕРИП после приёмки работы."
+      }
+    ],
+    "booking": {
+      "bufferMin": 15,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 4,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2 (плёнка)"
+    }
+  ],
+  "services": [
+    {
+      "key": "wash",
+      "name": "Детейлинг-мойка",
+      "description": "Двухфазная мойка, диски, арки, сушка",
+      "price": 45.5,
+      "durationMin": 90
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Сиденья, потолок, ковры, пластик",
+      "price": 250,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Двухэтапная, убираем голограммы и мелкие царапины",
+      "price": 450,
+      "durationMin": 600
+    },
+    {
+      "key": "ceramic",
+      "name": "Керамическое покрытие",
+      "description": "Подготовка, полировка, 2 слоя керамики. Машина у нас двое суток",
+      "price": 900,
+      "durationMin": 2880
+    },
+    {
+      "key": "ppf",
+      "name": "Плёнка на зоны риска",
+      "description": "Капот, фары, бампер, зеркала. Только пост 2",
+      "price": 1200,
+      "durationMin": 2880,
+      "resources": [
+        "post-2"
+      ]
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "sat": {
+      "opens": "10:00",
+      "closes": "18:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Керамика на чёрном седане"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Полировка капота: до и после"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Химчистка светлого салона"
+    },
+    {
+      "key": "w4",
+      "image": "images/work-4.svg",
+      "caption": "Плёнка на фары и бампер"
+    }
+  ],
+  "demo": {
+    "bookings": [
+      {
+        "service": "wash",
+        "resource": "post-1",
+        "dayOffset": 1,
+        "time": "10:00",
+        "name": "Демо: Андрей",
+        "phone": "+375 29 000-00-01",
+        "car": "Geely Coolray, белый",
+        "status": "accepted"
+      },
+      {
+        "service": "ceramic",
+        "resource": "post-2",
+        "dayOffset": 2,
+        "time": "09:00",
+        "name": "Демо: Ольга",
+        "phone": "+375 33 000-00-02",
+        "car": "Volkswagen Tiguan",
+        "status": "new"
+      },
+      {
+        "service": "interior",
+        "resource": "post-1",
+        "dayOffset": -1,
+        "time": "11:00",
+        "name": "Демо: Сергей",
+        "phone": "+375 44 000-00-03",
+        "car": "Toyota Camry",
+        "status": "done",
+        "payments": [
+          {
+            "kind": "pay",
+            "amount": 250,
+            "method": "card"
+          }
+        ]
+      }
+    ]
+  }
+}

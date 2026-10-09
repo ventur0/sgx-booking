@@ -1,0 +1,34 @@
+# Минимальная конфигурация для `supabase start` / `supabase db reset` (локально).
+project_id = "sgx-booking"
+
+[api]
+port = 54321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+
+[db]
+port = 54322
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[realtime]
+enabled = true
+
+[storage]
+enabled = true
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+# Публичной регистрации нет: владельцев создаёт tenant:publish через service role
+enable_signup = false
+
+[auth.email]
+enable_signup = false
+enable_confirmations = false
+
+[functions.send-reminders]
+verify_jwt = false
