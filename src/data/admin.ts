@@ -67,7 +67,7 @@ export function useAdminActions() {
     /** Подтверждение — почта удаляемого аккаунта, вписанная продавцом вручную. */
     deleteUser: useMutation({ mutationFn: (a: { userId: string; confirmEmail: string }) => users<{ ok: true }>({ action: "delete_user", ...a }), onSuccess: done }),
     removeOwner: useMutation({ mutationFn: (a: { tenantId: string; userId: string }) => rpc<void>("admin_remove_owner", { p_tenant: a.tenantId, p_user: a.userId }), onSuccess: done }),
-    /** Подтверждение — почта владельца студии (если владельцев нет — адрес студии). Фото удаляются вместе со студией. */
+    /** Подтверждение — почта владельца студии (если владельцев нет — почта продавца). Фото удаляются вместе со студией. */
     deleteStudio: useMutation({
       mutationFn: (a: { tenantId: string; confirmEmail: string }) => users<{ ok: true }>({ action: "delete_studio", ...a }),
       onSuccess: done,

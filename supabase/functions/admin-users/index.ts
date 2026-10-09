@@ -58,11 +58,15 @@ Deno.serve(async (req) => {
 
   // Пароль вызывающего: письма не нужны (встроенная почта Supabase не пишет посторонним адресам),
   // личность владельца подтверждаем его текущим паролем.
-  const passwordOk = async (password: unknown) => {
-    if (typeof password !== "string" || !password || !me.email) return false;
+  // Результат: null — пароль верный; иначе код ошибки. Неверный пароль отличаем от сбоя Auth (лимиты, капча),
+  // а созданную проверкой сессию сразу отзываем.
+  const checkPassword = async (password: unknown): Promise<string | null> => {
+    if (typeof password !== "string" || !password || !me.email) return "wrong_password";
     const check = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, { auth: { persistSession: false, autoRefreshToken: false } });
-    const { error } = await check.auth.signInWithPassword({ email: me.email, password });
-    return !error;
+    const { data, error } = await check.auth.signInWithPassword({ email: me.email, password });
+    if (error) return error.code === "invalid_credentials" || error.status === 400 ? "wrong_password" : "auth_unavailable";
+    if (data.session) await admin.auth.admin.signOut(data.session.access_token, "local").catch(() => undefined);
+    return null;
   };
   const isUuid = (v: unknown): v is string => typeof v === "string" && /^[0-9a-f-]{36}$/i.test(v);
   const sameEmail = (a: unknown, b: string | undefined | null) => typeof a === "string" && !!b && a.trim().toLowerCase() === b.toLowerCase();
@@ -72,11 +76,15 @@ Deno.serve(async (req) => {
   const deleteStudio = async (tenantId: string) => {
     const { error } = await admin.rpc("service_delete_studio", { p_tenant: tenantId });
     if (error) return error.message;
+    // фото владельца (owner/) и картинки конвейера (config/); сбой хранилища не возвращает студию, но фото останутся
     const bucket = admin.storage.from("tenant-media");
-    for (let i = 0; i < 100; i++) {
-      const { data: files } = await bucket.list(`${tenantId}/owner`, { limit: 100 });
-      if (!files?.length) break;
-      await bucket.remove(files.map((f) => `${tenantId}/owner/${f.name}`));
+    for (const dir of [`${tenantId}/owner`, `${tenantId}/config`]) {
+      for (let i = 0; i < 50; i++) {
+        const { data: files, error } = await bucket.list(dir, { limit: 100 });
+        if (error || !files?.length) break;
+        const { error: rmErr } = await bucket.remove(files.map((f) => `${dir}/${f.name}`));
+        if (rmErr) break;
+      }
     }
     return null;
   };
@@ -85,14 +93,16 @@ Deno.serve(async (req) => {
     if (!isUuid(body.tenantId)) return fail("bad_request");
     const { data: member } = await admin.from("tenant_members").select("tenant_id").eq("tenant_id", body.tenantId).eq("user_id", me.id).maybeSingle();
     if (!member) return fail("forbidden", 403);
-    if (!(await passwordOk(body.password))) return fail("wrong_password", 403);
+    const pw = await checkPassword(body.password);
+    if (pw) return fail(pw, pw === "wrong_password" ? 403 : 503);
     const err = await deleteStudio(body.tenantId);
     return err ? fail(err, 500) : reply({ ok: true });
   }
 
   if (body.action === "delete_own_account") {
     if (isSeller) return fail("cannot_delete_self"); // аккаунт продавца так не удаляется
-    if (!(await passwordOk(body.password))) return fail("wrong_password", 403);
+    const pw = await checkPassword(body.password);
+    if (pw) return fail(pw, pw === "wrong_password" ? 403 : 503);
     const { error } = await admin.auth.admin.deleteUser(me.id);
     return error ? fail(error.message, 500) : reply({ ok: true });
   }
@@ -101,7 +111,8 @@ Deno.serve(async (req) => {
     const { data: member } = await admin.from("tenant_members").select("tenant_id").eq("user_id", me.id).limit(1).maybeSingle();
     if (!member && !isSeller) return fail("forbidden", 403);
     if (!isEmail(body.email) || !me.email) return fail("bad_request");
-    if (!(await passwordOk(body.password))) return fail("wrong_password", 403);
+    const pw = await checkPassword(body.password);
+    if (pw) return fail(pw, pw === "wrong_password" ? 403 : 503);
     const mail = body.email.trim().toLowerCase();
     if (mail === me.email.toLowerCase()) return reply({ ok: true });
     const taken = (await admin.rpc("service_user_id_by_email", { p_email: mail })).data;

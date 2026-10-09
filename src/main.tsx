@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App } from "./App";
+import { errorCode } from "./lib/errors";
 // Шрифты лежат вместе с сайтом: не загружаются с серверов Google и работают без сети.
 import "@fontsource/unbounded/500.css";
 import "@fontsource/unbounded/600.css";
@@ -12,7 +13,10 @@ import "@fontsource/manrope/700.css";
 import "@fontsource/jetbrains-mono/500.css";
 import "./styles.css";
 
-const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } } });
+// Повторяем только сетевые сбои: «студия не найдена», «нет прав» и т. п. показываем сразу.
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: (count, error) => count < 1 && errorCode(error) === null, refetchOnWindowFocus: false } },
+});
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

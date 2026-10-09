@@ -25,7 +25,8 @@ export function StudioLayout() {
     if (q.data) document.title = `${q.data.tenant.profile.name} — онлайн-запись`;
   }, [q.data]);
 
-  if (q.isLoading) return <main className="wrap pad-top"><Loading label="Загружаем студию" rows={4} /></main>;
+  // isPending, а не isLoading: пока повтор запроса приостановлен (вкладка в фоне, нет сети), показываем загрузку, а не пустую ошибку
+  if (q.isPending) return <main className="wrap pad-top"><Loading label="Загружаем студию" rows={4} /></main>;
   if (q.error || !q.data) return <main className="wrap pad-top"><ErrorState error={q.error} onRetry={() => q.refetch()} /></main>;
 
   const studio = q.data;

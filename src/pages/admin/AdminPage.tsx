@@ -14,6 +14,7 @@ export function AdminPage() {
   const session = useSession();
   const admin = useIsPlatformAdmin(session.data?.user.id);
   const studios = useStudios(admin.data === true);
+  const [notice, setNotice] = useState("");
 
   useEffect(() => {
     document.title = "Панель продавца";
@@ -45,10 +46,11 @@ export function AdminPage() {
       <NewStudio />
       <section className="stack">
         <h2>Студии{studios.data ? ` · ${studios.data.length}` : ""}</h2>
+        {notice && <Notice kind="ok">{notice}</Notice>}
         {studios.isLoading && <Loading rows={3} />}
         {studios.error && <ErrorState error={studios.error} onRetry={() => studios.refetch()} />}
         {studios.data?.length === 0 && <Empty>Студий пока нет.</Empty>}
-        {studios.data?.map((s) => <StudioCard key={s.id} s={s} />)}
+        {studios.data?.map((s) => <StudioCard key={s.id} s={s} onNotice={setNotice} />)}
       </section>
     </main>
   );
@@ -167,7 +169,7 @@ function NewStudio() {
   );
 }
 
-function StudioCard({ s }: { s: StudioRow }) {
+function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) => void }) {
   const act = useAdminActions();
   const me = useSession().data?.user.id;
   const [panel, setPanel] = useState<null | { kind: "add" | "delete" } | { kind: "password" | "email" | "deleteUser"; userId: string; email: string }>(null);
@@ -282,7 +284,10 @@ function StudioCard({ s }: { s: StudioRow }) {
       {panel?.kind === "delete" && (
         <form className="stack panel danger-zone" noValidate onSubmit={(e) => {
           e.preventDefault();
-          void run(() => act.deleteStudio.mutateAsync({ tenantId: s.id, confirmEmail: confirmText.trim() }), "Студия удалена");
+          void run(async () => {
+            await act.deleteStudio.mutateAsync({ tenantId: s.id, confirmEmail: confirmText.trim() });
+            onNotice(`Студия «${s.name}» удалена`); // карточка исчезнет из списка — сообщение показываем над ним
+          }, "Студия удалена");
         }}>
           <b>Удалить «{s.name}» навсегда?</b>
           <p className="muted small">Сайт перестанет открываться. Удалятся все записи клиентов, оплаты, статистика, услуги, график и фото. Вернуть нельзя. Если нужно только временно закрыть запись — нажмите «Приостановить».</p>

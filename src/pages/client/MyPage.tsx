@@ -50,7 +50,7 @@ function MyCard({ r, compact, onForget }: { r: MyRef; compact?: boolean; onForge
   const cancel = useCancelMyBooking();
   const [confirm, setConfirm] = useState(false);
 
-  if (q.isLoading) return <article className="bk"><Loading rows={2} /></article>;
+  if (q.isPending) return <article className="bk"><Loading rows={2} /></article>;
   if (q.error) {
     const gone = String((q.error as Error).message).includes("not_found");
     return (
