@@ -36,6 +36,13 @@ export async function changeOwnPassword(password: string) {
   if (error) throw error;
 }
 
+/** Смена своей почты: через Edge Function admin-users, с подтверждением текущим паролем. */
+export async function changeOwnEmail(email: string, password: string) {
+  const { users } = await import("./admin");
+  await users<{ ok: true }>({ action: "change_own_email", email, password });
+  await supabase.auth.refreshSession(); // новая почта сразу видна в кабинете
+}
+
 export async function signOut() {
   await supabase.auth.signOut();
   try {

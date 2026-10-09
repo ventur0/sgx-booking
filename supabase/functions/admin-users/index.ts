@@ -1,10 +1,12 @@
 // Supabase Edge Function admin-users: аккаунты владельцев студий для панели продавца (/admin).
-// Вызывает только продавец (строка в platform_admins). Ключ service role задаёт платформа, в браузер он не попадает.
+// Вызывает продавец (строка в platform_admins); владелец студии может только сменить свою почту.
+// Ключ service role задаёт платформа, в браузер он не попадает.
 //
 // Действия (POST JSON):
 //   { action: "create_owner", tenantId, email, password } — создать аккаунт (или взять существующий) и выдать доступ к студии
 //   { action: "set_password", userId, password }          — задать владельцу новый пароль
 //   { action: "change_email", userId, email }             — сменить почту владельца (без письма-подтверждения)
+//   { action: "change_own_email", email, password }       — владелец сам меняет свою почту, подтверждая текущим паролем
 //
 // Установка без командной строки: Supabase → Edge Functions → Deploy a new function → Via Editor,
 // имя admin-users, вставить этот файл, Deploy. В настройках функции выключить «Verify JWT» —
@@ -33,15 +35,33 @@ Deno.serve(async (req) => {
   const jwt = (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
   const { data: who, error: whoErr } = await admin.auth.getUser(jwt);
   if (whoErr || !who.user) return fail("forbidden", 401);
-  const { data: seller } = await admin.from("platform_admins").select("user_id").eq("user_id", who.user.id).maybeSingle();
-  if (!seller) return fail("forbidden", 403);
-
   let body: Record<string, unknown>;
   try {
     body = await req.json();
   } catch {
     return fail("bad_request");
   }
+
+  // Своя почта: любой владелец студии. Письмо не нужно (встроенная почта Supabase не пишет
+  // посторонним адресам), поэтому подтверждаем личность текущим паролем.
+  if (body.action === "change_own_email") {
+    const { data: member } = await admin.from("tenant_members").select("tenant_id").eq("user_id", who.user.id).limit(1).maybeSingle();
+    const { data: isSeller } = await admin.from("platform_admins").select("user_id").eq("user_id", who.user.id).maybeSingle();
+    if (!member && !isSeller) return fail("forbidden", 403);
+    if (!isEmail(body.email) || typeof body.password !== "string" || !who.user.email) return fail("bad_request");
+    const check = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, { auth: { persistSession: false, autoRefreshToken: false } });
+    const { error: pwErr } = await check.auth.signInWithPassword({ email: who.user.email, password: body.password });
+    if (pwErr) return fail("wrong_password", 403);
+    const mail = body.email.trim().toLowerCase();
+    if (mail === who.user.email.toLowerCase()) return reply({ ok: true });
+    const taken = (await admin.rpc("service_user_id_by_email", { p_email: mail })).data;
+    if (taken && taken !== who.user.id) return fail("email_taken", 409);
+    const { error } = await admin.auth.admin.updateUserById(who.user.id, { email: mail, email_confirm: true });
+    return error ? fail(error.message, 500) : reply({ ok: true });
+  }
+
+  const { data: seller } = await admin.from("platform_admins").select("user_id").eq("user_id", who.user.id).maybeSingle();
+  if (!seller) return fail("forbidden", 403);
 
   // менять чужие аккаунты продавцов нельзя (свой — можно)
   const guardTarget = async (userId: unknown) => {

@@ -33,6 +33,7 @@ const MESSAGES: Record<string, string> = {
   bad_name: "Укажите название студии.",
   slug_taken: "Такой адрес уже занят. Придумайте другой.",
   weak_password: "Пароль — не короче 8 символов.",
+  wrong_password: "Текущий пароль указан неверно.",
   email_taken: "Эта почта уже занята другим аккаунтом.",
   functions_missing: "Функция admin-users не установлена в Supabase. См. инструкцию «Панель продавца».",
   "should be different from the old password": "Новый пароль совпадает со старым.",

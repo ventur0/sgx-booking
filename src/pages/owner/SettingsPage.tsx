@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import { useStudioCtx } from "../client/StudioLayout";
-import { changeOwnPassword, useSession, useSettingsActions } from "../../data/owner";
+import { changeOwnEmail, changeOwnPassword, useSession, useSettingsActions } from "../../data/owner";
 import { ProfileSchema, type Profile } from "../../shared/business";
 import { moneyBYN, upcomingHolidays } from "../../shared/by";
 import { compressImage } from "../../lib/media";
@@ -396,7 +396,49 @@ function LaunchForm() {
 
 /* ------------------------------ аккаунт ------------------------------ */
 function AccountForm() {
+  return (
+    <div className="stack">
+      <EmailForm />
+      <PasswordForm />
+    </div>
+  );
+}
+
+function EmailForm() {
   const session = useSession();
+  const current = session.data?.user.email ?? "";
+  const [f, setF] = useState({ email: "", password: "" });
+  const [state, setState] = useState<{ busy: boolean; err: string; ok: string }>({ busy: false, err: "", ok: "" });
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    const email = f.email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setState({ busy: false, err: "Проверьте новую почту", ok: "" });
+    if (!f.password) return setState({ busy: false, err: "Введите текущий пароль — так мы убедимся, что это вы", ok: "" });
+    setState({ busy: true, err: "", ok: "" });
+    try {
+      await changeOwnEmail(email, f.password);
+      setF({ email: "", password: "" });
+      setState({ busy: false, err: "", ok: `Готово. Теперь входите с почтой ${email.toLowerCase()} и прежним паролем.` });
+    } catch (x) {
+      setState({ busy: false, err: humanError(x), ok: "" });
+    }
+  };
+  return (
+    <form className="panel stack" onSubmit={submit} noValidate>
+      <h2>Почта для входа</h2>
+      <p className="muted small">Сейчас: <b>{current}</b>. Письмо-подтверждение не нужно: достаточно текущего пароля.</p>
+      <div className="fields">
+        <Field id="em-new" label="Новая почта"><input className="input" id="em-new" type="email" autoComplete="email" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} /></Field>
+        <Field id="em-pw" label="Текущий пароль"><input className="input" id="em-pw" type="password" autoComplete="current-password" value={f.password} onChange={(e) => setF({ ...f, password: e.target.value })} /></Field>
+      </div>
+      {state.err && <p className="err" role="alert">{state.err}</p>}
+      {state.ok && <Notice kind="ok">{state.ok}</Notice>}
+      <button className="btn primary" disabled={state.busy || !f.email}>{state.busy ? "Сохраняем…" : "Сменить почту"}</button>
+    </form>
+  );
+}
+
+function PasswordForm() {
   const [pw, setPw] = useState({ a: "", b: "" });
   const [state, setState] = useState<{ busy: boolean; err: string; ok: boolean }>({ busy: false, err: "", ok: false });
   const submit = async (e: FormEvent) => {
@@ -414,8 +456,7 @@ function AccountForm() {
   };
   return (
     <form className="panel stack" onSubmit={submit} noValidate>
-      <h2>Аккаунт</h2>
-      <p className="muted small">Вы вошли как <b>{session.data?.user.email}</b>. Сменить почту для входа может администратор сервиса.</p>
+      <h2>Пароль</h2>
       <div className="fields">
         <Field id="pw-a" label="Новый пароль" hint="Не короче 8 символов"><input className="input" id="pw-a" type="password" autoComplete="new-password" value={pw.a} onChange={(e) => setPw({ ...pw, a: e.target.value })} /></Field>
         <Field id="pw-b" label="Повторите пароль"><input className="input" id="pw-b" type="password" autoComplete="new-password" value={pw.b} onChange={(e) => setPw({ ...pw, b: e.target.value })} /></Field>

@@ -34,7 +34,7 @@ export function useStudios(enabled: boolean) {
 }
 
 /** Вызов Edge Function admin-users; ошибки сервера приходят как { error: "код" }. */
-async function users<T>(body: Record<string, unknown>): Promise<T> {
+export async function users<T>(body: Record<string, unknown>): Promise<T> {
   const { data, error } = await supabase.functions.invoke("admin-users", { body });
   if (error) {
     if (error instanceof FunctionsHttpError) {
