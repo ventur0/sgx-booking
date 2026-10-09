@@ -9,26 +9,24 @@ const root = import.meta.dirname;
 export default defineConfig({
   plugins: [
     react(),
-    // Манифест у каждой студии свой (dist/s/<slug>/manifest.webmanifest, scripts/build-tenants.ts),
-    // поэтому плагин собирает только service worker.
+    // Только service worker: манифесты, иконки и оболочки студий генерирует scripts/build-shells.ts.
     VitePWA({
       strategies: "injectManifest",
       srcDir: "src",
       filename: "sw.ts",
       injectRegister: false,
       manifest: false,
-      injectManifest: { globPatterns: ["**/*.{js,css,html,woff2}"] },
+      injectManifest: { globPatterns: ["assets/**/*.{js,css,woff2}"] },
       devOptions: { enabled: false },
     }),
     {
-      // В режиме разработки отдаём фото студий из tenants/<slug>/photos по адресу /s/<slug>/photos.
-      // В сборке их копирует scripts/build-tenants.ts.
-      name: "tenant-photos-dev",
+      // Разработка: /t/<slug>/media/* берём из tenants/<slug>/images (в сборке их копирует build-shells).
+      name: "tenant-media-dev",
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          const m = req.url?.match(/^\/s\/([a-z0-9-]+)\/(photos\/[^?]+)/);
+          const m = req.url?.match(/^\/t\/([a-z0-9-]+)\/media\/([^?]+)/);
           if (!m) return next();
-          const file = resolve(root, "tenants", m[1], decodeURIComponent(m[2]));
+          const file = resolve(root, "tenants", m[1], "images", decodeURIComponent(m[2]));
           if (!file.startsWith(resolve(root, "tenants")) || !existsSync(file)) return next();
           res.setHeader("Content-Type", file.endsWith(".svg") ? "image/svg+xml" : file.endsWith(".png") ? "image/png" : "image/jpeg");
           res.end(readFileSync(file));
@@ -36,8 +34,5 @@ export default defineConfig({
       },
     },
   ],
-  test: {
-    include: ["tests/**/*.test.ts"],
-    environment: "node",
-  },
+  test: { include: ["tests/unit/**/*.test.ts"], environment: "node" },
 });

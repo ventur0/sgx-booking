@@ -22,7 +22,7 @@ language sql immutable as $$ select coalesce((t.profile -> 'booking' ->> k)::int
 -- Окно приёма на день: исключение важнее обычного графика. Пусто = закрыто.
 create or replace function public.day_window(p_tenant uuid, p_day date)
 returns table (opens time, closes time)
-language plpgsql stable security definer set search_path = public as $$
+language plpgsql stable security definer set search_path = public, extensions as $$
 declare e schedule_exceptions;
 begin
   select * into e from schedule_exceptions where tenant_id = p_tenant and day = p_day;
@@ -37,7 +37,7 @@ end $$;
 -- Ресурсы, подходящие для услуги, в порядке предпочтения
 create or replace function public.eligible_resources(p_tenant uuid, p_service uuid)
 returns setof uuid
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = public, extensions as $$
   select r.id from resources r
    where r.tenant_id = p_tenant and r.active
      and (not exists (select 1 from service_resources sr where sr.service_id = p_service)
@@ -55,7 +55,7 @@ $$;
 create or replace function public.resolve_interval(
   t public.tenants, p_day date, p_time time, p_duration integer, p_source text,
   out starts_at timestamptz, out ends_at timestamptz
-) language plpgsql stable security definer set search_path = public as $$
+) language plpgsql stable security definer set search_path = public, extensions as $$
 declare w record; step int := public.rule_int(t, 'stepMin', 30);
         lead int := public.rule_int(t, 'leadMin', 60);
         horizon int := public.rule_int(t, 'horizonDays', 30);
@@ -81,7 +81,7 @@ begin
 end $$;
 
 create or replace function public.token_hash(p_token text) returns bytea
-language plpgsql immutable as $$
+language plpgsql immutable set search_path = public, extensions as $$
 begin
   if p_token is null or char_length(p_token) < 32 or char_length(p_token) > 128 then
     raise exception 'bad_token' using errcode = 'P0001';
@@ -94,7 +94,7 @@ end $$;
 -- ---------------------------------------------------------------------
 create or replace function public.get_availability(p_slug text, p_service_id uuid, p_from date, p_days integer default 14)
 returns table (day date, closed boolean, slot_time time, starts_at timestamptz, free boolean)
-language plpgsql stable security definer set search_path = public as $$
+language plpgsql stable security definer set search_path = public, extensions as $$
 declare t tenants; s services; d date; w record; tm time; st timestamptz; per tstzrange;
         step int; lead int; horizon int; buf int; local_today date; free_any boolean;
 begin
@@ -132,7 +132,7 @@ end $$;
 -- Внутреннее: постановка/перенос/отмена напоминаний (outbox)
 -- ---------------------------------------------------------------------
 create or replace function public.sync_reminder(p_booking uuid) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare b bookings; t tenants; key text;
 begin
   select * into b from bookings where id = p_booking;
@@ -159,7 +159,7 @@ create or replace function public.create_booking(
   p_idempotency_key uuid, p_access_token text,
   p_consent boolean, p_consent_version text
 ) returns uuid
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare t tenants; s services; b bookings; h bytea; phone text; iv record; r uuid; bid uuid; ip text := public.request_ip();
 begin
   select * into t from tenants where slug = p_slug;
@@ -217,7 +217,7 @@ end $$;
 -- Доступ клиента к своей записи по токену
 -- ---------------------------------------------------------------------
 create or replace function public.booking_by_token(p_booking uuid, p_token text) returns public.bookings
-language plpgsql stable security definer set search_path = public as $$
+language plpgsql stable security definer set search_path = public, extensions as $$
 declare b bookings;
 begin
   select * into b from bookings where id = p_booking and access_token_hash = public.token_hash(p_token);
@@ -226,7 +226,7 @@ begin
 end $$;
 
 create or replace function public.get_my_booking(p_booking uuid, p_token text) returns jsonb
-language plpgsql stable security definer set search_path = public as $$
+language plpgsql stable security definer set search_path = public, extensions as $$
 declare b bookings; t tenants; res text; cancel_h int; job text;
 begin
   b := public.booking_by_token(p_booking, p_token);
@@ -244,7 +244,7 @@ begin
 end $$;
 
 create or replace function public.cancel_booking_internal(p_booking uuid, p_by text) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 begin
   update bookings set status = 'cancelled', cancelled_by = p_by, cancelled_at = now() where id = p_booking;
   delete from resource_occupancies where booking_id = p_booking; -- время сразу освобождается
@@ -252,7 +252,7 @@ begin
 end $$;
 
 create or replace function public.cancel_my_booking(p_booking uuid, p_token text) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare b bookings; t tenants;
 begin
   b := public.booking_by_token(p_booking, p_token);
@@ -266,7 +266,7 @@ begin
 end $$;
 
 create or replace function public.save_push_subscription(p_booking uuid, p_token text, p_endpoint text, p_p256dh text, p_auth text) returns text
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare b bookings; st text;
 begin
   b := public.booking_by_token(p_booking, p_token);

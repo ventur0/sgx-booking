@@ -4,7 +4,7 @@
 
 -- Ближайший рабочий день от смещения, в который время попадает в окно приёма
 create or replace function public.admin_open_day(p_tenant uuid, p_offset integer, p_time time) returns date
-language plpgsql stable security definer set search_path = public as $$
+language plpgsql stable security definer set search_path = public, extensions as $$
 declare tz text; d date; i int := 0; w record;
 begin
   select timezone into tz from tenants where id = p_tenant;
@@ -26,7 +26,7 @@ create or replace function public.admin_insert_demo_booking(
   p_tenant uuid, p_label text, p_service_key text, p_resource_key text, p_day_offset integer, p_time time,
   p_name text, p_phone text, p_car text, p_status text, p_payments jsonb default '[]'
 ) returns uuid
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare t tenants; s services; r uuid; d date; st timestamptz; bid uuid; p jsonb; v_key uuid := md5(p_tenant || ':' || p_label)::uuid;
 begin
   select * into t from tenants where id = p_tenant;
@@ -62,7 +62,7 @@ end $$;
 
 -- Перевод в live: удаляет демо-данные и включает режим. Записи клиентов не трогает.
 create or replace function public.admin_go_live(p_tenant uuid) returns integer
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare n int;
 begin
   delete from bookings where tenant_id = p_tenant and is_demo;

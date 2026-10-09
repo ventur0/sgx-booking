@@ -5,7 +5,7 @@
 -- =====================================================================
 
 create or replace function public.require_member(p_tenant uuid) returns void
-language plpgsql stable security definer set search_path = public as $$
+language plpgsql stable security definer set search_path = public, extensions as $$
 begin
   if auth.uid() is null or not public.is_member(p_tenant) then
     raise exception 'forbidden' using errcode = '42501';
@@ -16,7 +16,7 @@ create or replace function public.owner_create_booking(
   p_tenant uuid, p_service_id uuid, p_day date, p_time time,
   p_name text, p_phone text, p_car text, p_idempotency_key uuid, p_resource_id uuid default null
 ) returns uuid
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare t tenants; s services; b bookings; iv record; r uuid; bid uuid; phone text;
 begin
   perform public.require_member(p_tenant);
@@ -53,7 +53,7 @@ end $$;
   Если свободного ресурса нет — исключение, и исходная запись остаётся как была.
 */
 create or replace function public.owner_move_booking(p_booking uuid, p_day date, p_time time, p_resource_id uuid default null) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare b bookings; t tenants; iv record; r uuid; dur int; per tstzrange;
 begin
   select * into b from bookings where id = p_booking for update;
@@ -81,7 +81,7 @@ begin
 end $$;
 
 create or replace function public.owner_set_status(p_booking uuid, p_status text) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare b bookings;
 begin
   select * into b from bookings where id = p_booking for update;
@@ -102,7 +102,7 @@ begin
 end $$;
 
 create or replace function public.owner_add_payment(p_booking uuid, p_kind text, p_amount numeric, p_method text default 'cash') returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare b bookings; paid numeric;
 begin
   select * into b from bookings where id = p_booking for update;
@@ -121,7 +121,7 @@ end $$;
 
 -- Блокировка поста (ремонт, закрытие части дня). Пересечение с записью или другой блокировкой запрещено.
 create or replace function public.owner_block_resource(p_resource_id uuid, p_from timestamptz, p_to timestamptz, p_note text default '') returns uuid
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare res resources; oid uuid;
 begin
   select * into res from resources where id = p_resource_id;
@@ -139,7 +139,7 @@ begin
 end $$;
 
 create or replace function public.owner_unblock(p_occupancy uuid) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare o resource_occupancies;
 begin
   select * into o from resource_occupancies where id = p_occupancy and kind = 'block';
@@ -156,7 +156,7 @@ end $$;
   expected   — ожидаемая стоимость ещё не выполненных записей периода (это НЕ выручка).
 */
 create or replace function public.owner_stats(p_tenant uuid, p_from date, p_to date) returns jsonb
-language plpgsql stable security definer set search_path = public as $$
+language plpgsql stable security definer set search_path = public, extensions as $$
 declare t tenants; f timestamptz; u timestamptz; res jsonb;
 begin
   perform public.require_member(p_tenant);
@@ -181,7 +181,7 @@ end $$;
 -- Персональные данные (Закон РБ № 99-З): удаление по просьбе и по сроку
 -- ---------------------------------------------------------------------
 create or replace function public.anonymize_booking_internal(p_booking uuid) returns void
-language sql security definer set search_path = public as $$
+language sql security definer set search_path = public, extensions as $$
   update bookings set client_name = 'Обезличено', client_phone = '+375000000000', client_car = 'Обезличено',
          access_token_hash = digest(gen_random_uuid()::text, 'sha256'), anonymized_at = now()
    where id = p_booking and anonymized_at is null;
@@ -190,7 +190,7 @@ language sql security definer set search_path = public as $$
 $$;
 
 create or replace function public.owner_anonymize_booking(p_booking uuid) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare b bookings;
 begin
   select * into b from bookings where id = p_booking;
@@ -201,7 +201,7 @@ begin
 end $$;
 
 create or replace function public.purge_expired_personal_data() returns integer
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare r record; n int := 0;
 begin
   for r in
@@ -221,7 +221,7 @@ end $$;
 create or replace function public.claim_notification_jobs(p_limit integer default 20, p_lease_seconds integer default 120)
 returns table (job_id uuid, booking_id uuid, tenant_slug text, tenant_name text, timezone text,
                service_name text, starts_at timestamptz, address text, endpoint text, p256dh text, auth text)
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 begin
   return query
   with due as (
@@ -246,7 +246,7 @@ begin
 end $$;
 
 create or replace function public.complete_notification_job(p_job uuid, p_status text, p_error text default null) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 begin
   if p_status not in ('sent', 'failed', 'pending') then raise exception 'bad_status' using errcode = 'P0001'; end if;
   update notification_jobs

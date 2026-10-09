@@ -3,8 +3,9 @@
 --    Один Supabase-проект на все студии; tenant_id во всех зависимых таблицах,
 --    составные внешние ключи (tenant_id, id) не дают связать данные разных студий.
 -- =====================================================================
-create extension if not exists btree_gist;
-create extension if not exists pgcrypto;
+create schema if not exists extensions;
+create extension if not exists btree_gist with schema extensions;
+create extension if not exists pgcrypto with schema extensions;
 
 -- ---------------------------------------------------------------------
 -- Студии
@@ -112,7 +113,7 @@ create table public.works (
 -- Членство и общие проверки
 -- ---------------------------------------------------------------------
 create or replace function public.is_member(p_tenant uuid) returns boolean
-language sql stable security definer set search_path = public as $$
+language sql stable security definer set search_path = public, extensions as $$
   select exists (select 1 from tenant_members where tenant_id = p_tenant and user_id = auth.uid());
 $$;
 
@@ -121,7 +122,7 @@ language plpgsql as $$ begin new.updated_at := now(); return new; end $$;
 create trigger tenants_touch before update on public.tenants for each row execute function public.touch_updated_at();
 
 create or replace function public.tenants_guard() returns trigger
-language plpgsql set search_path = public as $$
+language plpgsql set search_path = public, extensions as $$
 begin
   if not exists (select 1 from pg_timezone_names where name = new.timezone) then
     raise exception 'config_invalid: неизвестный часовой пояс' using errcode = '22023';

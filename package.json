@@ -1,26 +1,34 @@
 {
-  "name": "sgx-autoservice",
+  "name": "sgx-booking-by",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "packageManager": "pnpm@10.12.1",
-  "engines": { "node": ">=20.11" },
+  "engines": {
+    "node": ">=20.11"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && tsx scripts/build-tenants.ts",
-    "preview": "vite preview",
+    "build": "vite build && tsx scripts/build-shells.ts",
+    "preview": "wrangler pages dev dist --port 4173",
     "typecheck": "tsc -b",
     "test": "vitest run",
+    "test:db": "bash tests/db/run.sh",
     "test:e2e": "playwright test",
+    "seed:build": "tsx scripts/build-seed.ts",
     "tenant:new": "tsx scripts/tenant-new.ts",
-    "tenant:check": "tsx scripts/tenant-check.ts",
+    "tenant:validate": "tsx scripts/tenant-validate.ts",
     "tenant:publish": "tsx --env-file=.env scripts/tenant-publish.ts",
-    "tenant:smoke": "tsx --env-file=.env scripts/tenant-smoke.ts",
+    "tenant:verify": "tsx --env-file=.env scripts/tenant-verify.ts",
     "db:push": "supabase db push",
-    "functions:deploy": "supabase functions deploy send-reminders",
-    "deploy": "pnpm tenant:check && vercel deploy --prod"
+    "functions:deploy": "supabase functions deploy send-reminders --no-verify-jwt",
+    "deploy": "wrangler pages deploy dist --project-name ${CF_PAGES_PROJECT:-sgx-booking}",
+    "cloud-sql": "tsx scripts/build-seed.ts && tsx scripts/build-cloud-sql.ts"
   },
   "dependencies": {
+    "@fontsource/jetbrains-mono": "^5.2.6",
+    "@fontsource/manrope": "^5.2.6",
+    "@fontsource/unbounded": "^5.2.6",
     "@phosphor-icons/react": "^2.1.7",
     "@supabase/supabase-js": "^2.50.0",
     "@tanstack/react-query": "^5.80.7",
@@ -37,10 +45,10 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.2",
+    "sharp": "^0.34.2",
     "supabase": "^2.26.9",
     "tsx": "^4.20.3",
     "typescript": "~5.8.3",
-    "vercel": "^44.2.0",
     "vite": "^6.3.5",
     "vite-plugin-pwa": "^1.0.0",
     "vitest": "^3.2.3",
@@ -48,6 +56,15 @@
     "workbox-expiration": "^7.3.0",
     "workbox-precaching": "^7.3.0",
     "workbox-routing": "^7.3.0",
-    "workbox-strategies": "^7.3.0"
+    "workbox-strategies": "^7.3.0",
+    "wrangler": "^4.20.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "supabase",
+      "esbuild",
+      "workerd"
+    ]
   }
 }

@@ -119,7 +119,7 @@ create table public.rate_counters (
 );
 
 create or replace function public.hit_rate_limit(p_key text, p_limit integer, p_window interval) returns void
-language plpgsql security definer set search_path = public as $$
+language plpgsql security definer set search_path = public, extensions as $$
 declare w timestamptz := to_timestamp(floor(extract(epoch from now()) / extract(epoch from p_window)) * extract(epoch from p_window));
         c integer;
 begin

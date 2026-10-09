@@ -1,0 +1,46 @@
+# Проверки на каждый push: типы, unit-тесты, SQL-тесты на PostgreSQL 16, сборка сайта.
+# Публикацию делает Cloudflare Pages, подключённый к этому репозиторию.
+name: CI
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Установка зависимостей
+        run: pnpm install --no-frozen-lockfile
+      - name: Проверка типов
+        id: typecheck
+        continue-on-error: true
+        run: pnpm typecheck
+      - name: Unit-тесты
+        run: pnpm test
+      - name: SQL-тесты (миграции, seed, RLS, конкуренция)
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: pnpm test:db
+      - name: Сборка сайта и оболочек студий
+        env:
+          VITE_SUPABASE_URL: https://example.supabase.co
+          VITE_SUPABASE_ANON_KEY: ci-placeholder
+        run: pnpm build && ls dist dist/t/*
+      - name: Итог проверки типов
+        if: steps.typecheck.outcome == 'failure'
+        run: |
+          echo "Проверка типов не прошла — см. шаг «Проверка типов»"
+          exit 1

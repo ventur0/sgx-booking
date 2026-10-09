@@ -20,7 +20,7 @@ begin
   perform pg_temp.ok((select count(*) from public.bookings where idempotency_key = md5('A1')::uuid) = 1, 'копия не создана');
   perform pg_temp.throws(format($q$select public.create_booking('graphite', %L, %L, '10:00', 'Злоумышленник', '+375291112233', 'Car', %L, %L, true, 'x')$q$,
            pg_temp.svc('graphite', 'wash'), d, md5('A1')::uuid, rpad('другой-токен', 40, 'y')), 'idempotency_conflict', 'чужой токен с тем же ключом не получает доступ');
-  perform pg_temp.ok((select access_token_hash = digest(rpad('tok-A1', 40, 'x'), 'sha256') from public.bookings where id = b1), 'в базе хранится только sha256 токена');
+  perform pg_temp.ok((select access_token_hash = extensions.digest(rpad('tok-A1', 40, 'x'), 'sha256') from public.bookings where id = b1), 'в базе хранится только sha256 токена');
   perform pg_temp.ok((select resource_id = r1 from public.bookings where id = b1), 'занят первый подходящий пост');
   perform pg_temp.ok((select price = 45.50 and service_name = 'Детейлинг-мойка' from public.bookings where id = b1), 'цена и название взяты сервером из услуги');
 
