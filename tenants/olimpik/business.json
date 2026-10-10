@@ -1,0 +1,149 @@
+{
+  "slug": "olimpik",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@olimpik.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Олимпик Детейлинг",
+    "shortName": "Олимпик",
+    "kind": "Детейлинг · Минск, Заводской район",
+    "tagline": "Мойка паром, химчистка и полировка. Тёплый бокс на два автомобиля",
+    "description": "Бережная мойка паром и бесконтактная мойка, химчистка салона, мойка двигателя и днища, полировка кузова. Пока машина в работе — зал ожидания и Wi-Fi. Демо-версия сайта для студии: цены и длительность примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, ул. Жилуновича, 7/7-1, 1 этаж",
+    "phone": "+375 29 314-57-77",
+    "accent": "#D9A83A",
+    "cards": [
+      {
+        "title": "Мойка паром",
+        "text": "Деликатно для кузова и салона, без лишней химии."
+      },
+      {
+        "title": "Два поста",
+        "text": "В боксе одновременно не больше двух машин — без очереди."
+      },
+      {
+        "title": "Зал ожидания",
+        "text": "Wi-Fi и кофе, пока идёт работа."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Кузов, салон, коврики, стёкла",
+      "price": 100,
+      "durationMin": 90
+    },
+    {
+      "key": "steam",
+      "name": "Мойка паром",
+      "description": "Кузов и диски паром, сушка",
+      "price": 60,
+      "durationMin": 60
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Сиденья, потолок, ковры, пластик",
+      "price": 280,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Восстановительная, двухэтапная",
+      "price": 450,
+      "durationMin": 480
+    },
+    {
+      "key": "engine",
+      "name": "Мойка двигателя",
+      "description": "Паром, с консервацией",
+      "price": 40,
+      "durationMin": 45
+    },
+    {
+      "key": "underbody",
+      "name": "Мойка днища",
+      "description": "Арки, днище, пороги",
+      "price": 35,
+      "durationMin": 30
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "10:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "10:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "10:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "10:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "10:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "10:00",
+      "closes": "20:00"
+    },
+    "sun": {
+      "opens": "10:00",
+      "closes": "20:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Полировка: глубокий блеск"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Химчистка салона"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Мойка паром"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

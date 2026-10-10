@@ -1,0 +1,146 @@
+{
+  "slug": "cleanart",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@cleanart.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "КлинАрт",
+    "shortName": "КлинАрт",
+    "kind": "Автомойка · центр Минска",
+    "tagline": "Автомойка в центре, на Ленина, 27. Каждый день с 9 до 22",
+    "description": "Бесконтактная и комплексная мойка, химчистка салона, полировка. До шести машин одновременно и зал ожидания с Wi-Fi. Демо-версия сайта для студии: цены и длительность примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, ул. Ленина, 27",
+    "phone": "+375 44 788-55-00",
+    "accent": "#FF5C8A",
+    "cards": [
+      {
+        "title": "В центре",
+        "text": "Ленина, 27 — рядом с работой и делами."
+      },
+      {
+        "title": "До 6 машин",
+        "text": "Принимаем одновременно, без долгого ожидания."
+      },
+      {
+        "title": "Wi-Fi",
+        "text": "Зал ожидания, пока моем машину."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    },
+    {
+      "key": "post-3",
+      "name": "Пост 3"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Кузов, салон, коврики, стёкла",
+      "price": 45,
+      "durationMin": 60
+    },
+    {
+      "key": "touchless",
+      "name": "Бесконтактная мойка",
+      "description": "Кузов и диски",
+      "price": 25,
+      "durationMin": 30
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Сиденья, ковры, пластик",
+      "price": 230,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Восстановительная",
+      "price": 400,
+      "durationMin": 480
+    },
+    {
+      "key": "engine",
+      "name": "Мойка двигателя",
+      "description": "С консервацией",
+      "price": 35,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "22:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "22:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "22:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "22:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "22:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "22:00"
+    },
+    "sun": {
+      "opens": "09:00",
+      "closes": "22:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Пена на кузове"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Диски"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Блеск после полировки"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

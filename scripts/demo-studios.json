@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "olimpik",
+    "accent": "#D9A83A",
+    "body": "#2B2F36",
+    "scene": "studio",
+    "mark": "OD",
+    "works": [
+      "polish",
+      "interior",
+      "foam"
+    ]
+  },
+  {
+    "slug": "rd-detailing",
+    "accent": "#E5484D",
+    "body": "#1E2229",
+    "scene": "hex",
+    "mark": "RD",
+    "works": [
+      "polish",
+      "film",
+      "wheel"
+    ]
+  },
+  {
+    "slug": "nero",
+    "accent": "#2EC4B6",
+    "body": "#1B1F25",
+    "scene": "hex",
+    "mark": "N",
+    "works": [
+      "polish",
+      "interior",
+      "film"
+    ]
+  },
+  {
+    "slug": "detailing-room",
+    "accent": "#3CC98A",
+    "body": "#22272E",
+    "scene": "wash",
+    "mark": "DR",
+    "works": [
+      "foam",
+      "interior",
+      "wheel"
+    ]
+  },
+  {
+    "slug": "moyka-trostenetskaya",
+    "accent": "#F59E0B",
+    "body": "#262A30",
+    "scene": "wash",
+    "mark": "T8",
+    "works": [
+      "foam",
+      "polish",
+      "interior"
+    ]
+  },
+  {
+    "slug": "cleanart",
+    "accent": "#FF5C8A",
+    "body": "#1F232A",
+    "scene": "wash",
+    "mark": "CA",
+    "works": [
+      "foam",
+      "wheel",
+      "polish"
+    ]
+  }
+]

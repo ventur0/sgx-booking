@@ -1,0 +1,135 @@
+{
+  "slug": "nero",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@nero.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Nero Detailing",
+    "shortName": "Nero",
+    "kind": "Детейлинг-студия · Минск",
+    "tagline": "Детейлинг на Семашко: керамика, полировка, химчистка",
+    "description": "Детейлинг-студия с автоматическими воротами и удобным заездом. Полировка, керамика, химчистка, защита фар. Демо-версия сайта для студии: цены и длительность примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, ул. Семашко, 25а",
+    "phone": "+375 29 180-16-01",
+    "accent": "#2EC4B6",
+    "cards": [
+      {
+        "title": "Керамика",
+        "text": "Защита блеска до 2 лет."
+      },
+      {
+        "title": "Удобный заезд",
+        "text": "Автоматические ворота, доступный вход."
+      },
+      {
+        "title": "Оплата на месте",
+        "text": "Наличными после приёмки работы."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    }
+  ],
+  "services": [
+    {
+      "key": "wash",
+      "name": "Детейлинг-мойка",
+      "description": "Двухфазная мойка, диски, сушка",
+      "price": 60,
+      "durationMin": 90
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Полная, с сушкой",
+      "price": 260,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Двухэтапная",
+      "price": 420,
+      "durationMin": 480
+    },
+    {
+      "key": "ceramic",
+      "name": "Керамическое покрытие",
+      "description": "Подготовка, полировка, керамика",
+      "price": 800,
+      "durationMin": 1440
+    },
+    {
+      "key": "lights",
+      "name": "Плёнка на фары",
+      "description": "Полиуретан, обе фары",
+      "price": 150,
+      "durationMin": 120
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Полировка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Химчистка салона"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Защита фар"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

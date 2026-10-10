@@ -91,6 +91,8 @@ export const BusinessSchema = z
       .default([]),
     works: z.array(z.object({ key, image: imagePath, caption: z.string().trim().min(1).max(120) })).max(40),
     demo: z.object({ bookings: z.array(DemoBookingSchema).default([]) }).default({ bookings: [] }),
+    /** Демо-сайт для показа студии (не для поисковиков): оболочка получает robots noindex. */
+    noindex: z.boolean().default(false),
   })
   .superRefine((b, ctx) => {
     const dupes = (arr: { key: string }[], label: string) => {

@@ -1,0 +1,146 @@
+{
+  "slug": "moyka-trostenetskaya",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@moyka-trostenetskaya.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Автомойка на Тростенецкой",
+    "shortName": "Мойка Т8",
+    "kind": "Автомойка и детейлинг · Минск",
+    "tagline": "Бесконтактная мойка, химчистка и полировка. Работаем с 8:00 до 22:00",
+    "description": "Большая мойка на Тростенецкой, 8: несколько постов, зал ожидания, кофе и чай с собой. Мойка двигателя, химчистка, полировка. Демо-версия сайта для студии: цены и длительность примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, Тростенецкая ул., 8",
+    "phone": "+375 17 242-18-45",
+    "accent": "#F59E0B",
+    "cards": [
+      {
+        "title": "8:00–22:00",
+        "text": "Каждый день, удобно до и после работы."
+      },
+      {
+        "title": "Без очереди",
+        "text": "Несколько постов, точное время по записи."
+      },
+      {
+        "title": "Кафе",
+        "text": "Кофе и чай с собой, пока моем машину."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    },
+    {
+      "key": "post-3",
+      "name": "Пост 3"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Кузов, салон, коврики, стёкла",
+      "price": 54,
+      "durationMin": 60
+    },
+    {
+      "key": "touchless",
+      "name": "Бесконтактная мойка",
+      "description": "Кузов и диски",
+      "price": 30,
+      "durationMin": 30
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Полная",
+      "price": 240,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Восстановительная",
+      "price": 380,
+      "durationMin": 480
+    },
+    {
+      "key": "engine",
+      "name": "Мойка двигателя",
+      "description": "С консервацией",
+      "price": 40,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "sat": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "sun": {
+      "opens": "08:00",
+      "closes": "22:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Бесконтактная мойка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Полировка"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Химчистка"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

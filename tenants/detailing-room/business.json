@@ -1,0 +1,131 @@
+{
+  "slug": "detailing-room",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@detailing-room.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Detailing room",
+    "shortName": "Det. room",
+    "kind": "Автомойка · ЖК «Вершина», Минск",
+    "tagline": "Автомойка у дома на паркинге ЖК «Вершина»",
+    "description": "Мойка прямо на паркинге жилого комплекса: оставили машину — забрали чистой. Воскресенье — только по предварительной записи. Демо-версия сайта для студии: цены и длительность примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, ул. Маршала Лосика, 59, паркинг ЖК «Вершина»",
+    "phone": "+375 44 589-05-50",
+    "accent": "#3CC98A",
+    "cards": [
+      {
+        "title": "Рядом с домом",
+        "text": "Паркинг ЖК «Вершина», не нужно ехать через город."
+      },
+      {
+        "title": "Один пост",
+        "text": "Ваша машина в работе одна, без очереди."
+      },
+      {
+        "title": "Воскресенье",
+        "text": "Принимаем по записи."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Кузов, салон, коврики",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "express",
+      "name": "Экспресс-мойка кузова",
+      "description": "Бесконтактная, сушка",
+      "price": 30,
+      "durationMin": 30
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Сиденья, ковры, пластик",
+      "price": 220,
+      "durationMin": 300
+    },
+    {
+      "key": "engine",
+      "name": "Мойка двигателя",
+      "description": "С консервацией",
+      "price": 35,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": {
+      "opens": "09:00",
+      "closes": "20:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Пена на кузове"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Чистый салон"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Диски после мойки"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

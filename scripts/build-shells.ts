@@ -86,6 +86,7 @@ async function buildTenant(slug: string, template: string) {
     `<title>${esc(b.profile.name)} — онлайн-запись</title>`,
     `<meta name="description" content="${esc(b.profile.tagline)}" />`,
     `<meta name="sgx-tenant" content="${slug}" />`,
+    ...(b.noindex ? [`<meta name="robots" content="noindex, nofollow" />`] : []),
     `<meta name="theme-color" content="${BG}" />`,
     `<meta name="apple-mobile-web-app-title" content="${esc(manifest.short_name)}" />`,
     `<meta property="og:title" content="${esc(b.profile.name)}" />`,
