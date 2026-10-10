@@ -58,7 +58,7 @@
    встали поверх без конфликтов. Нижняя шторка — свой компонент `Sheet` (Back, фокус, Esc, клавиатура, safe area).
    Следующий шаг: `pnpm dlx shadcn@latest init`, установить Astryx командами из плана, заменить `Sheet` на одну
    выбранную ветку Drawer.
-4. **Cloudflare Pages вместо Vercel.** Новое задание требует Cloudflare. Правила `_redirects` в Pages применяются
+4. **Vercel и Cloudflare Pages.** 10 октября основным хостингом стал Vercel (готовый вывод `.vercel/output` из `scripts/build-vercel.ts`, маршруты проверяет `scripts/check-vercel-routes.ts` в CI; Realtime на Vercel — напрямую к Supabase, плюс обновление раз в минуту). Cloudflare остаётся запасным. Раньше было выбрано Cloudflare по заданию. Правила `_redirects` в Pages применяются
    и к существующим файлам, поэтому статика студий лежит в `/t/<slug>/`, а `/s/<slug>/*` переписывается на неё.
    Service worker `/t/<slug>/sw.js` регистрируется со scope `/s/<slug>/` благодаря заголовку `Service-Worker-Allowed`.
 5. **Многодневные работы** задаются длительностью в минутах (2 суток = 2880) и занимают пост непрерывно, через ночь и выходные.

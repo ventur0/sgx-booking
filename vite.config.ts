@@ -7,8 +7,12 @@ import { resolve } from "node:path";
 const root = import.meta.dirname;
 
 export default defineConfig({
-  // студия по умолчанию для корня сайта (переменная DEFAULT_TENANT в Cloudflare)
-  define: { __DEFAULT_TENANT__: JSON.stringify(process.env.DEFAULT_TENANT ?? "graphite") },
+  // студия по умолчанию для корня сайта (переменная DEFAULT_TENANT в Vercel/Cloudflare)
+  // Vercel не проксирует WebSocket: в его сборке (переменная VERCEL=1) Realtime идёт напрямую к Supabase
+  define: {
+    __DEFAULT_TENANT__: JSON.stringify(process.env.DEFAULT_TENANT ?? "graphite"),
+    __REALTIME_VIA_PROXY__: JSON.stringify(!process.env.VERCEL),
+  },
   plugins: [
     react(),
     // Только service worker: манифесты, иконки и оболочки студий генерирует scripts/build-shells.ts.

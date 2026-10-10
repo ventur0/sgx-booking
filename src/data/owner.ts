@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { storagePublicUrl, supabase } from "../lib/supabase";
+import { realtime, storagePublicUrl, supabase } from "../lib/supabase";
 import type { Profile } from "../shared/business";
 
 export type BookingStatus = "new" | "accepted" | "ready" | "done" | "cancelled";
@@ -95,13 +95,13 @@ export function useOwnerBookings(tenantId: string, fromIso: string, toIso: strin
   const qc = useQueryClient();
   useEffect(() => {
     const refresh = () => qc.invalidateQueries({ queryKey: ["owner", tenantId] });
-    const ch = supabase
+    const ch = realtime
       .channel(`owner-${tenantId}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "bookings", filter: `tenant_id=eq.${tenantId}` }, refresh)
       .on("postgres_changes", { event: "*", schema: "public", table: "payments", filter: `tenant_id=eq.${tenantId}` }, refresh)
       .on("postgres_changes", { event: "*", schema: "public", table: "resource_occupancies", filter: `tenant_id=eq.${tenantId}` }, refresh)
       .subscribe();
-    return () => void supabase.removeChannel(ch);
+    return () => void realtime.removeChannel(ch);
   }, [tenantId, qc]);
   return useQuery({
     queryKey: ["owner", tenantId, "bookings", fromIso, toIso],
@@ -110,6 +110,8 @@ export function useOwnerBookings(tenantId: string, fromIso: string, toIso: strin
       if (error) throw error;
       return (data as OwnerBooking[]).map((b) => ({ ...b, price: Number(b.price), payments: b.payments.map((p) => ({ ...p, amount: Number(p.amount) })) }));
     },
+    // запасной вариант, если Realtime в сети недоступен: новые записи появятся не позже чем через минуту
+    refetchInterval: 60_000,
   });
 }
 

@@ -1,5 +1,5 @@
 # Проверки на каждый push: типы, unit-тесты, SQL-тесты на PostgreSQL 16, сборка сайта.
-# Публикацию делает Cloudflare Pages, подключённый к этому репозиторию.
+# Публикацию делают Vercel и Cloudflare Pages, подключённые к этому репозиторию.
 name: CI
 on:
   push:
@@ -38,6 +38,12 @@ jobs:
           VITE_SUPABASE_URL: https://example.supabase.co
           VITE_SUPABASE_ANON_KEY: ci-placeholder
         run: pnpm build && ls dist dist/t/*
+      - name: Сборка для Vercel и проверка маршрутов
+        env:
+          VERCEL: "1"
+          VITE_SUPABASE_URL: https://example.supabase.co
+          VITE_SUPABASE_ANON_KEY: ci-placeholder
+        run: pnpm build:vercel && pnpm exec tsx scripts/check-vercel-routes.ts
       - name: Итог проверки типов
         if: steps.typecheck.outcome == 'failure'
         run: |

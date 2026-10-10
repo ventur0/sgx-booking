@@ -10,7 +10,7 @@
 | 1–3 | Заполнить `tenants/polish-gomel/business.json`: посты, услуги с ценами в BYN и длительностью в минутах, часы приёма, три карточки | редактор |
 | 3–4 | Положить фото: `images/hero.jpg` (от 1600 px), `images/logo.png` (квадрат от 512 px), работы `images/work-*.jpg` и прописать пути | — |
 | 4–5 | Проверить | `pnpm tenant:validate polish-gomel` |
-| 5–6 | Опубликовать образец и собрать оболочку | `pnpm tenant:publish polish-gomel && pnpm build && pnpm deploy && pnpm tenant:verify polish-gomel` |
+| 5–6 | Опубликовать образец и собрать оболочку | `pnpm tenant:publish polish-gomel && git add tenants/polish-gomel && git commit -m "Студия polish-gomel" && git push`, через 1–2 минуты `pnpm tenant:verify polish-gomel` (Vercel публикует push сам) |
 
 `tenant:publish` напечатает ссылку для клиентов, ссылку в кабинет и временный пароль владельца.
 Новая студия открывается как **образец (preview)**: на сайте плашка «Образец», записи помечены как демо,

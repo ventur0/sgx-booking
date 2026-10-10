@@ -1,14 +1,14 @@
 # SETUP: локальный запуск, Supabase, напоминания и публикация
 
 Стек: React 19, TypeScript strict, Vite, React Router, TanStack Query, Zod, Supabase (Postgres/Auth/Storage/Edge Functions),
-vite-plugin-pwa (injectManifest). Сайт статический, публикуется на Cloudflare Pages. Отдельного Node-бэкенда нет.
+vite-plugin-pwa (injectManifest). Сайт статический, публикуется на Vercel (запасной вариант — Cloudflare Pages). Отдельного Node-бэкенда нет.
 ИИ-функций в этой версии нет.
 
 ## 1. Что нужно
 
 - Node.js 20.11+ и pnpm 10 (`npm i -g pnpm`)
 - Docker (для локального Supabase) или проект на supabase.com в регионе **Frankfurt (eu-central-1)**
-- Аккаунт Cloudflare (Pages) — для публикации
+- Аккаунт Vercel — для публикации (Cloudflare Pages — по желанию, как запасной)
 - `psql` — для SQL-тестов
 
 ## 2. Локальный запуск
@@ -52,7 +52,7 @@ pnpm db:push                                 # миграции из supabase/mi
 Владельцев создаёт только `tenant:publish` через service role.
 
 Ключи:
-- `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` — в Cloudflare Pages (Environment variables) и в `.env`;
+- `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` — публичные, лежат в `.env.production` (хостинг может переопределить) и в `.env`;
 - `SUPABASE_SERVICE_ROLE_KEY` — **только** в `.env` на вашем компьютере, для команд `tenant:*`.
 
 ## 5. Ежедневная очистка персональных данных
@@ -63,6 +63,30 @@ pnpm db:push                                 # миграции из supabase/mi
 
 ```sql
 select cron.schedule('sgx-purge-personal-data', '15 0 * * *', $$ select public.purge_expired_personal_data(); $$);
+```
+
+## 6. Публикация
+
+### Vercel (основной хостинг)
+
+Один раз: vercel.com → **Add New → Project → Import** репозитория `sgx-booking` → **Deploy**.
+Ничего настраивать не нужно: команды установки и сборки заданы в `vercel.json`, публичные адреса Supabase —
+в `.env.production`. Дальше каждый push в `main` публикуется сам.
+
+Переменные в Vercel (Settings → Environment Variables) нужны, только если меняете проект Supabase
+(`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`) или студию для корня сайта (`DEFAULT_TENANT`, по умолчанию `graphite`).
+
+Как устроено: `pnpm build:vercel` = `pnpm build` + `scripts/build-vercel.ts`, который собирает готовый вывод
+`.vercel/output/` (Build Output API): статика из `dist/` и `config.json` с маршрутами —
+`/s/<slug>/*` → оболочка `/t/<slug>/`, студии только из БД → общая оболочка, `/sb/*` → Supabase проекта.
+Realtime (WebSocket) Vercel не проксирует, поэтому в сборке для Vercel кабинет подключает его напрямую
+к `*.supabase.co`, а при недоступности обновляет записи раз в минуту.
+Проверка маршрутов без Vercel: `pnpm build:vercel && pnpm exec tsx scripts/check-vercel-routes.ts` (выполняется в CI).
+
+Из командной строки: `pnpm deploy:vercel` (спросит вход в Vercel при первом запуске).
+
+### Cloudflare Pages (запасной, прежние ссылки `*.pages.dev`)
+
 ```bash
 pnpm build                                   # dist/ + dist/t/<slug>/ для каждой студии + _redirects/_headers
 pnpm exec wrangler login
