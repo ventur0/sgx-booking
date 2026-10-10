@@ -1,0 +1,73 @@
+# Проверка опубликованных студий по сети: оболочки и манифесты на Vercel, переадресация со старых
+# ссылок Cloudflare, база (профиль, услуги, свободное время, закрытые для anon таблицы).
+# Запуск вручную (Actions → Verify live → Run workflow). Отчёт кладётся в ветку reports (reports/verify.md).
+name: Verify live
+on:
+  workflow_dispatch:
+    inputs:
+      site:
+        description: Адрес сайта
+        default: https://sgx-booking-ten.vercel.app
+      old_site:
+        description: Старый адрес (должен переадресовывать)
+        default: https://sgx-booking.pages.dev
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --no-frozen-lockfile
+      - name: Проверка всех студий
+        env:
+          SITE: ${{ inputs.site }}
+          OLD_SITE: ${{ inputs.old_site }}
+        run: |
+          set +e
+          set -a; . ./.env.production; set +a
+          mkdir -p out
+          R=out/verify.md
+          echo "# Проверка $(date -u '+%Y-%m-%d %H:%M UTC')" > $R
+          echo "Сайт: $SITE · старый адрес: $OLD_SITE" >> $R
+          fail=0; total=0
+          # общие адреса
+          for p in / /admin /admin/ /s/neizvestnaya-studiya/; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' -L "$SITE$p")
+            [ "$code" = 200 ] && echo "- ✓ $p → $code" >> $R || { echo "- ✗ $p → $code" >> $R; fail=$((fail+1)); }
+          done
+          for d in tenants/*/; do
+            s=$(basename "$d"); case "$s" in _*) continue;; esac
+            [ -f "$d/business.json" ] || continue
+            total=$((total+1))
+            out=$(pnpm exec tsx scripts/tenant-verify.ts "$s" --url "$SITE" 2>&1); rc=$?
+            loc=$(curl -s -o /dev/null -w '%{redirect_url}' "$OLD_SITE/s/$s/")
+            echo "" >> $R
+            if [ $rc = 0 ] && [ "$loc" = "$SITE/s/$s/" ]; then
+              echo "## ✓ $s" >> $R
+              echo "$out" | grep -E "^Режим|Все проверки" | sed 's/^/- /' >> $R
+            else
+              fail=$((fail+1))
+              echo "## ✗ $s" >> $R
+              echo "$out" | grep -E "^✗|^Режим|Не прошло|Error|error" | sed 's/^/- /' >> $R
+              [ "$loc" = "$SITE/s/$s/" ] || echo "- ✗ переадресация со старого адреса: «$loc»" >> $R
+            fi
+          done
+          echo "" >> $R
+          echo "**Итог: студий $total, с ошибками $fail**" >> $R
+          cat $R >> "$GITHUB_STEP_SUMMARY"
+          cat $R
+      - name: Отчёт в ветку reports
+        if: always()
+        run: |
+          [ -f out/verify.md ] || exit 0
+          cd out
+          git init -q -b reports && git add verify.md
+          git -c user.name="github-actions" -c user.email="actions@github.com" commit -q -m "Отчёт проверки $(date -u +%F_%H%M)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" reports
