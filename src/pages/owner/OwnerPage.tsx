@@ -10,6 +10,7 @@ import { AgendaPage } from "./AgendaPage";
 import { BlocksPage } from "./BlocksPage";
 import { StatsPage } from "./StatsPage";
 import { SettingsPage } from "./SettingsPage";
+import { NewBookingAlerts } from "../../components/owner/NewBookingAlerts";
 
 /**
  * Кабинет /s/<slug>/owner/. Вход только по почте и паролю (Supabase Auth), регистрации нет:
@@ -46,6 +47,7 @@ export function OwnerPage() {
     <div className="owner">
       <main className="wrap pad-top owner-main">
         {head}
+        <NewBookingAlerts tenantId={tenant.id} tz={tenant.timezone} base={base} studioName={tenant.profile.name} />
         {tenant.mode === "preview" && <Notice kind="info">Студия в режиме образца: записи помечены как демо, уведомления клиентам не отправляются. <Link className="link" to={`${base}/settings/launch`}>Как запустить →</Link></Notice>}
         {tenant.suspended && <Notice kind="warn">Онлайн-запись приостановлена администратором сервиса. Сайт открывается, но новые записи не принимаются.</Notice>}
         <Routes>

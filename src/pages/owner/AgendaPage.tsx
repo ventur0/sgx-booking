@@ -1,4 +1,5 @@
-import { useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Plus } from "@phosphor-icons/react";
 import { useStudioCtx } from "../client/StudioLayout";
 import { useOwnerActions, useOwnerBookings, type BookingStatus, type OwnerBooking } from "../../data/owner";
@@ -22,6 +23,16 @@ export function AgendaPage() {
   const [date, setDate] = useState(today);
   const [openId, setOpenId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
+  // переход из уведомления о новой записи: ?d=ГГГГ-ММ-ДД&b=<id> — открываем этот день и карточку записи
+  const [params, setParams] = useSearchParams();
+  useEffect(() => {
+    const d = params.get("d"), b = params.get("b");
+    if (!d || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return;
+    setView("day");
+    setDate(d);
+    if (b) setOpenId(b);
+    setParams({}, { replace: true });
+  }, [params, setParams]);
 
   const days = useMemo(() => (view === "day" ? [date] : Array.from({ length: 7 }, (_, i) => addDays(weekStart(date), i))), [view, date]);
   const fromIso = dayStart(days[0], tz).toISOString();
