@@ -173,12 +173,10 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
   const act = useAdminActions();
   const me = useSession().data?.user.id;
   const [panel, setPanel] = useState<null | { kind: "add" | "delete" } | { kind: "password" | "email" | "deleteUser"; userId: string; email: string }>(null);
-  const [confirmText, setConfirmText] = useState("");
   const myEmail = useSession().data?.user.email ?? "";
-  // подтверждение удаления студии: почта любого её владельца; если владельцев нет — ваша почта продавца
-  const studioConfirmOk = s.owners.length
-    ? s.owners.some((o) => o.email.toLowerCase() === confirmText.trim().toLowerCase())
-    : !!myEmail && confirmText.trim().toLowerCase() === myEmail.toLowerCase();
+  // Удаление подтверждается кнопкой «Да, удалить». Сервер дополнительно сверяет почту владельца
+  // (или вашу, если владельцев нет) — её подставляем сами, вводить не нужно.
+  const studioConfirmEmail = s.owners[0]?.email ?? myEmail;
   const [val, setVal] = useState({ email: "", password: makePassword() });
   const [msg, setMsg] = useState<{ kind: "ok" | "bad"; text: string } | null>(null);
   const [handoff, setHandoff] = useState<{ email: string; password: string | null } | null>(null);
@@ -218,7 +216,7 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
         <button className="btn small ghost" onClick={() => void run(() => act.setSuspended.mutateAsync({ tenantId: s.id, suspended: !s.suspended }), s.suspended ? "Запись возобновлена" : "Онлайн-запись приостановлена")}>
           {s.suspended ? "Возобновить" : "Приостановить"}
         </button>
-        <button className="btn small ghost danger" onClick={() => { open({ kind: "delete" }); setConfirmText(""); }}>Удалить</button>
+        <button className="btn small ghost danger" onClick={() => open({ kind: "delete" })}>Удалить</button>
       </div>
 
       <div className="stack">
@@ -235,7 +233,7 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
                   void run(() => act.removeOwner.mutateAsync({ tenantId: s.id, userId: o.userId }), "Доступ убран");
               }}>Убрать</button>
               {o.userId !== me && (
-                <button className="btn small ghost danger" onClick={() => { open({ kind: "deleteUser", userId: o.userId, email: o.email }); setConfirmText(""); }}>Удалить аккаунт</button>
+                <button className="btn small ghost danger" onClick={() => open({ kind: "deleteUser", userId: o.userId, email: o.email })}>Удалить аккаунт</button>
               )}
             </div>
           </div>
@@ -285,17 +283,14 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
         <form className="stack panel danger-zone" noValidate onSubmit={(e) => {
           e.preventDefault();
           void run(async () => {
-            await act.deleteStudio.mutateAsync({ tenantId: s.id, confirmEmail: confirmText.trim() });
+            await act.deleteStudio.mutateAsync({ tenantId: s.id, confirmEmail: studioConfirmEmail });
             onNotice(`Студия «${s.name}» удалена`); // карточка исчезнет из списка — сообщение показываем над ним
           }, "Студия удалена");
         }}>
-          <b>Удалить «{s.name}» навсегда?</b>
-          <p className="muted small">Сайт перестанет открываться. Удалятся все записи клиентов, оплаты, статистика, услуги, график и фото. Вернуть нельзя. Если нужно только временно закрыть запись — нажмите «Приостановить».</p>
-          <Field id={`del-${s.id}`} label={s.owners.length ? "Для подтверждения введите почту владельца студии" : "Владельцев нет — для подтверждения введите вашу почту (почту продавца)"}>
-            <input className="input" id={`del-${s.id}`} type="email" autoComplete="off" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
-          </Field>
+          <b>Вы точно хотите удалить студию «{s.name}»?</b>
+          <p className="muted small">Сайт студии перестанет открываться. Удалятся все записи клиентов, оплаты, статистика, услуги, график и фото. Вернуть нельзя.</p>
           <div className="row">
-            <button className="btn small danger-solid" disabled={!studioConfirmOk || act.deleteStudio.isPending}>{act.deleteStudio.isPending ? "Удаляем…" : "Удалить навсегда"}</button>
+            <button className="btn small danger-solid" data-autofocus disabled={act.deleteStudio.isPending || !studioConfirmEmail}>{act.deleteStudio.isPending ? "Удаляем…" : "Да, удалить"}</button>
             <button type="button" className="btn ghost small" onClick={() => setPanel(null)}>Отмена</button>
           </div>
         </form>
@@ -303,15 +298,12 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
       {panel?.kind === "deleteUser" && (
         <form className="stack panel danger-zone" noValidate onSubmit={(e) => {
           e.preventDefault();
-          void run(() => act.deleteUser.mutateAsync({ userId: panel.userId, confirmEmail: confirmText.trim() }), `Аккаунт ${panel.email} удалён`);
+          void run(() => act.deleteUser.mutateAsync({ userId: panel.userId, confirmEmail: panel.email }), `Аккаунт ${panel.email} удалён`);
         }}>
-          <b>Удалить аккаунт владельца навсегда?</b>
+          <b>Вы точно хотите удалить аккаунт {panel.email}?</b>
           <p className="muted small">Войти с этой почтой станет невозможно, доступ пропадёт ко всем его студиям. Сами студии, записи и оплаты останутся — доступ можно выдать другому человеку.</p>
-          <Field id={`du-${s.id}`} label="Для подтверждения введите почту этого аккаунта">
-            <input className="input" id={`du-${s.id}`} type="email" autoComplete="off" value={confirmText} onChange={(e) => setConfirmText(e.target.value)} />
-          </Field>
           <div className="row">
-            <button className="btn small danger-solid" disabled={confirmText.trim().toLowerCase() !== panel.email.toLowerCase() || act.deleteUser.isPending}>{act.deleteUser.isPending ? "Удаляем…" : "Удалить аккаунт"}</button>
+            <button className="btn small danger-solid" data-autofocus disabled={act.deleteUser.isPending}>{act.deleteUser.isPending ? "Удаляем…" : "Да, удалить"}</button>
             <button type="button" className="btn ghost small" onClick={() => setPanel(null)}>Отмена</button>
           </div>
         </form>
