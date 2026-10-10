@@ -1,0 +1,56 @@
+# Публикация на Vercel при каждом push в main.
+# Нужен секрет репозитория VERCEL_TOKEN (Vercel → Account Settings → Tokens).
+# Проект и команда Vercel — переменные репозитория VERCEL_PROJECT и VERCEL_SCOPE (по умолчанию sgx-booking и krix20).
+# Пока секрета нет, задание пропускается и ничего не ломает.
+name: Deploy Vercel
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vercel
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_PROJECT: ${{ vars.VERCEL_PROJECT || 'sgx-booking' }}
+      VERCEL_SCOPE: ${{ vars.VERCEL_SCOPE || 'krix20' }}
+    steps:
+      - name: Есть ли ключ Vercel
+        id: token
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::notice::Секрет VERCEL_TOKEN не задан — публикация на Vercel пропущена"
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.token.outputs.ok == 'true'
+      - uses: pnpm/action-setup@v4
+        if: steps.token.outputs.ok == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.token.outputs.ok == 'true'
+        with:
+          node-version: 22
+      - name: Установка зависимостей
+        if: steps.token.outputs.ok == 'true'
+        run: pnpm install --no-frozen-lockfile
+      - name: Привязка к проекту Vercel
+        if: steps.token.outputs.ok == 'true'
+        run: pnpm dlx vercel@latest link --yes --project "$VERCEL_PROJECT" --scope "$VERCEL_SCOPE" --token "$VERCEL_TOKEN"
+      - name: Сборка для Vercel и проверка маршрутов
+        if: steps.token.outputs.ok == 'true'
+        env:
+          VERCEL: "1"
+        run: pnpm build:vercel && pnpm exec tsx scripts/check-vercel-routes.ts
+      - name: Публикация
+        if: steps.token.outputs.ok == 'true'
+        run: |
+          url=$(pnpm dlx vercel@latest deploy --prebuilt --prod --yes --scope "$VERCEL_SCOPE" --token "$VERCEL_TOKEN")
+          echo "Опубликовано: $url"
+          echo "### Vercel: $url" >> "$GITHUB_STEP_SUMMARY"

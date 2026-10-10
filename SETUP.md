@@ -85,6 +85,11 @@ Realtime (WebSocket) Vercel не проксирует, поэтому в сбо�
 
 Из командной строки: `pnpm deploy:vercel` (спросит вход в Vercel при первом запуске).
 
+Если проект Vercel создан под другим аккаунтом GitHub (Vercel не видит этот репозиторий), публикует GitHub Actions:
+`.github/workflows/deploy-vercel.yml` на каждый push в `main`. Нужен секрет репозитория `VERCEL_TOKEN`
+(Vercel → Account Settings → Tokens → Create). Проект и команда — переменные `VERCEL_PROJECT` и `VERCEL_SCOPE`
+(по умолчанию `sgx-booking` и `krix20`). Сейчас адрес на Vercel: https://sgx-booking-alpha.vercel.app
+
 ### Cloudflare Pages (запасной, прежние ссылки `*.pages.dev`)
 
 ```bash
