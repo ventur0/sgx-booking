@@ -8,6 +8,7 @@ import { compressImage } from "../../lib/media";
 import { dayLabel, durationLabel, todayIn, trimTime } from "../../lib/time";
 import { humanError } from "../../lib/errors";
 import { Empty, Field, Notice } from "../../components/ui/States";
+import { mediaUrl } from "../../lib/supabase";
 
 export function SettingsPage() {
   const { studio } = useStudioCtx();
@@ -312,9 +313,9 @@ function PhotosForm() {
   return (
     <div className="stack">
       <section className="panel stack"><h2>Главное фото и логотип</h2>
-        <div className="wedit"><img src={p.media?.hero} alt="Главное фото" />
+        <div className="wedit"><img src={mediaUrl(p.media?.hero)} alt="Главное фото" />
           <div className="stack"><b>Главное фото</b><label className="btn small file-btn">{busy === "hero" ? "Загружаем…" : "Заменить фото"}<input type="file" accept="image/*" disabled={!!busy} onChange={replaceMedia("hero")} /></label></div></div>
-        <div className="wedit"><img src={p.media?.logo} alt="Логотип" className="square" />
+        <div className="wedit"><img src={mediaUrl(p.media?.logo)} alt="Логотип" className="square" />
           <div className="stack"><b>Логотип</b><label className="btn small file-btn">{busy === "logo" ? "Загружаем…" : "Заменить логотип"}<input type="file" accept="image/*" disabled={!!busy} onChange={replaceMedia("logo")} /></label></div></div>
       </section>
 
@@ -323,7 +324,7 @@ function PhotosForm() {
         {studio.works.length === 0 && <Empty>Работ пока нет — добавьте первую ниже.</Empty>}
         {studio.works.map((w) => (
           <div key={w.id} className="wedit">
-            <img src={w.photo_url} alt={w.caption} />
+            <img src={mediaUrl(w.photo_url)} alt={w.caption} />
             <div className="stack">
               <label className="btn small file-btn">{busy === w.id ? "Загружаем…" : "Заменить эту фотографию"}
                 <input type="file" accept="image/*" disabled={!!busy} onChange={(e) => run(w.id, async () => {

@@ -176,4 +176,6 @@ writeFileSync(
     "",
   ].join("\n"),
 );
-console.log("✓ dist/_redirects, dist/_headers");
+// Pages Functions (functions/sb) запускаются только для /sb/* — прокси к Supabase; остальное — статика.
+writeFileSync(join(DIST, "_routes.json"), JSON.stringify({ version: 1, include: ["/sb/*"], exclude: [] }, null, 2) + "\n");
+console.log("✓ dist/_redirects, dist/_headers, dist/_routes.json");

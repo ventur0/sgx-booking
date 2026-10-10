@@ -5,6 +5,7 @@ import { useStudioCtx } from "./StudioLayout";
 import { Reveal } from "../../components/Reveal";
 import { durationLabel, dayLabel, todayIn, trimTime } from "../../lib/time";
 import { formatBYPhone, moneyBYN, normalizeBYPhone } from "../../shared/by";
+import { mediaUrl } from "../../lib/supabase";
 
 const WD = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 
@@ -32,9 +33,9 @@ export function HomePage() {
   return (
     <main className="wrap">
       <header className="hero">
-        <img className="hero-img" src={p.media?.hero} alt={`${p.name}: главное фото`} fetchPriority="high" />
+        <img className="hero-img" src={mediaUrl(p.media?.hero)} alt={`${p.name}: главное фото`} fetchPriority="high" />
         <div className="hero-top">
-          <div className="brand glass"><img src={p.media?.logo} alt="" /><b>{p.name}</b></div>
+          <div className="brand glass"><img src={mediaUrl(p.media?.logo)} alt="" /><b>{p.name}</b></div>
         </div>
         <div className="hero-body">
           <span className="kind">{p.kind}</span>
@@ -72,7 +73,7 @@ export function HomePage() {
           <h2>Наши работы</h2>
           <div className="works">
             {works.map((w) => (
-              <figure className="work" key={w.id}><img loading="lazy" src={w.photo_url} alt={w.caption} /><figcaption>{w.caption}</figcaption></figure>
+              <figure className="work" key={w.id}><img loading="lazy" src={mediaUrl(w.photo_url)} alt={w.caption} /><figcaption>{w.caption}</figcaption></figure>
             ))}
           </div>
         </Reveal>

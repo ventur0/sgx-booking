@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "../lib/supabase";
+import { storagePublicUrl, supabase } from "../lib/supabase";
 import type { Profile } from "../shared/business";
 
 export type BookingStatus = "new" | "accepted" | "ready" | "done" | "cancelled";
@@ -220,7 +220,7 @@ export function useSettingsActions(tenantId: string, slug: string) {
     upload: async (blob: Blob) => {
       const path = `${tenantId}/owner/${crypto.randomUUID()}.jpg`;
       ok(await supabase.storage.from("tenant-media").upload(path, blob, { contentType: "image/jpeg", cacheControl: "31536000" }));
-      return supabase.storage.from("tenant-media").getPublicUrl(path).data.publicUrl;
+      return storagePublicUrl("tenant-media", path);
     },
     removeUpload: async (url: string) => {
       const marker = "/tenant-media/";
