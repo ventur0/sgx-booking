@@ -1,0 +1,138 @@
+{
+  "slug": "shinomontazh-vitebsk",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@shinomontazh-vitebsk.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Шиномонтаж на Кутузова",
+    "shortName": "Шиномонтаж",
+    "kind": "Шиномонтаж · Витебск",
+    "tagline": "Шиномонтаж на Кутузова, 13 и выезд к клиенту",
+    "description": "Шиномонтаж, выездной шиномонтаж, оплата картой. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Витебск, ул. Кутузова, 13",
+    "phone": "+375 33 644-66-88",
+    "accent": "#1FB5C9",
+    "cards": [
+      {
+        "title": "Без очереди",
+        "text": "Приезжайте к своему времени."
+      },
+      {
+        "title": "Любые диски",
+        "text": "Штамповка и литьё."
+      },
+      {
+        "title": "Балансировка",
+        "text": "На точном стенде."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    }
+  ],
+  "services": [
+    {
+      "key": "tires-small",
+      "name": "Сезонная замена R13–R16",
+      "description": "Снятие, монтаж, балансировка 4 колёс",
+      "price": 35,
+      "durationMin": 45
+    },
+    {
+      "key": "tires-big",
+      "name": "Сезонная замена R17–R20",
+      "description": "Снятие, монтаж, балансировка 4 колёс",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "balance",
+      "name": "Балансировка 4 колёс",
+      "description": "",
+      "price": 20,
+      "durationMin": 30
+    },
+    {
+      "key": "repair",
+      "name": "Ремонт прокола",
+      "description": "Жгут или грибок",
+      "price": 15,
+      "durationMin": 30
+    },
+    {
+      "key": "mobile",
+      "name": "Выездной шиномонтаж",
+      "description": "Приедем к вам",
+      "price": 80,
+      "durationMin": 90
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": {
+      "opens": "09:00",
+      "closes": "20:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и диски"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Колёса и диски"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Мойка"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

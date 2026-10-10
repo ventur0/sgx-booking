@@ -1,0 +1,135 @@
+{
+  "slug": "restyling-gomel",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@restyling-gomel.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Restyling.by",
+    "shortName": "Restyling",
+    "kind": "Детейлинг и тюнинг · Гомель",
+    "tagline": "Бронеплёнка, керамика, тонировка и покраска дисков",
+    "description": "Оклейка салона и кузова, тонировка, бронеплёнка, полировка и керамика, покраска дисков, предпродажная подготовка. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Гомель, ул. Владимирова, 10Г",
+    "phone": "+375 29 322-66-88",
+    "accent": "#FF8A00",
+    "cards": [
+      {
+        "title": "Бронеплёнка",
+        "text": "Защита кузова от сколов."
+      },
+      {
+        "title": "Диски",
+        "text": "Порошковая покраска."
+      },
+      {
+        "title": "Мото",
+        "text": "Тюнинг и для мотоциклов."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2 (плёнка)"
+    }
+  ],
+  "services": [
+    {
+      "key": "ppf",
+      "name": "Бронеплёнка на зоны риска",
+      "description": "",
+      "price": 1000,
+      "durationMin": 2880,
+      "resources": [
+        "post-2"
+      ]
+    },
+    {
+      "key": "ceramic",
+      "name": "Полировка и керамика",
+      "description": "",
+      "price": 800,
+      "durationMin": 1440
+    },
+    {
+      "key": "tint",
+      "name": "Тонировка",
+      "description": "Задняя полусфера",
+      "price": 180,
+      "durationMin": 180
+    },
+    {
+      "key": "wheels",
+      "name": "Порошковая покраска дисков",
+      "description": "Комплект",
+      "price": 300,
+      "durationMin": 1440
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Плёнка и оптика"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Блеск кузова"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Колёса и диски"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

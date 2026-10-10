@@ -1,0 +1,149 @@
+{
+  "slug": "moyka-grishina",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@moyka-grishina.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Автомойка на Гришина",
+    "shortName": "Мойка",
+    "kind": "Автомойка и детейлинг · Могилёв",
+    "tagline": "Мойка, детейлинг и химчистка на Гришина, 90А",
+    "description": "Мойка, трёхфазная мойка, удаление битума и металлических вкраплений, кварцевое покрытие, химчистка. Демо-версия сайта для студии: цены взяты из карточки на картах и могли измениться, их владелец меняет в кабинете.",
+    "address": "г. Могилёв, ул. Гришина, 90А",
+    "phone": "+375 29 169-98-28",
+    "accent": "#2BB673",
+    "cards": [
+      {
+        "title": "Трёхфазная мойка",
+        "text": "Глубокая очистка кузова."
+      },
+      {
+        "title": "Детейлинг",
+        "text": "Битум, металл, кварц."
+      },
+      {
+        "title": "Оплата картой",
+        "text": "Без наличных."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "wash",
+      "name": "Мойка",
+      "description": "",
+      "price": 20,
+      "durationMin": 40
+    },
+    {
+      "key": "complex",
+      "name": "Комплекс",
+      "description": "",
+      "price": 30,
+      "durationMin": 60
+    },
+    {
+      "key": "full",
+      "name": "Полный комплекс",
+      "description": "",
+      "price": 80,
+      "durationMin": 120
+    },
+    {
+      "key": "three-phase",
+      "name": "Трёхфазная мойка",
+      "description": "",
+      "price": 35,
+      "durationMin": 60
+    },
+    {
+      "key": "bitumen",
+      "name": "Удаление битума",
+      "description": "",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "",
+      "price": 300,
+      "durationMin": 300
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sun": {
+      "opens": "08:00",
+      "closes": "20:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Мойка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Блеск кузова"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Салон после химчистки"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

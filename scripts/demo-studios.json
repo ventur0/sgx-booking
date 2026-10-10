@@ -190,5 +190,245 @@
       "polish",
       "interior"
     ]
+  },
+  {
+    "slug": "bip-service",
+    "accent": "#4F8CFF",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "BS",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "vvk-komplekt",
+    "accent": "#22C3A6",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "ВВК",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "vershina-tires",
+    "accent": "#F2994A",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "В",
+    "works": [
+      "wheel",
+      "wheel",
+      "foam"
+    ]
+  },
+  {
+    "slug": "ofs-service",
+    "accent": "#E25C9A",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "OFS",
+    "works": [
+      "wheel",
+      "polish",
+      "foam"
+    ]
+  },
+  {
+    "slug": "artline-motors",
+    "accent": "#7B8CFF",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "ALM",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "fortuna-auto",
+    "accent": "#D4AF37",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "FA",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "safari-service",
+    "accent": "#C8913A",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "S",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "chistaya-sovest",
+    "accent": "#3FB37F",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "ЧС",
+    "works": [
+      "wheel",
+      "polish",
+      "foam"
+    ]
+  },
+  {
+    "slug": "motorbob",
+    "accent": "#FF6B3D",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "МБ",
+    "works": [
+      "wheel",
+      "wheel",
+      "foam"
+    ]
+  },
+  {
+    "slug": "mehanika",
+    "accent": "#5AA9E6",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "M",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "shinka-pushkina",
+    "accent": "#FFC23D",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "70",
+    "works": [
+      "wheel",
+      "wheel",
+      "foam"
+    ]
+  },
+  {
+    "slug": "shinomontazh-vitebsk",
+    "accent": "#1FB5C9",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "K13",
+    "works": [
+      "wheel",
+      "wheel",
+      "foam"
+    ]
+  },
+  {
+    "slug": "bleskcar",
+    "accent": "#38BDF8",
+    "body": "#22262D",
+    "scene": "wash",
+    "mark": "BC",
+    "works": [
+      "foam",
+      "interior",
+      "polish"
+    ]
+  },
+  {
+    "slug": "chameleon",
+    "accent": "#7ED957",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "Х",
+    "works": [
+      "film",
+      "polish",
+      "interior"
+    ]
+  },
+  {
+    "slug": "agat-vitebsk",
+    "accent": "#9B6BFF",
+    "body": "#22262D",
+    "scene": "wash",
+    "mark": "A",
+    "works": [
+      "foam",
+      "interior",
+      "wheel"
+    ]
+  },
+  {
+    "slug": "centralnaya-brest",
+    "accent": "#F05454",
+    "body": "#22262D",
+    "scene": "wash",
+    "mark": "Ц",
+    "works": [
+      "foam",
+      "interior",
+      "wheel"
+    ]
+  },
+  {
+    "slug": "moyka-grishina",
+    "accent": "#2BB673",
+    "body": "#22262D",
+    "scene": "wash",
+    "mark": "90А",
+    "works": [
+      "foam",
+      "polish",
+      "interior"
+    ]
+  },
+  {
+    "slug": "restyling-gomel",
+    "accent": "#FF8A00",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "RS",
+    "works": [
+      "film",
+      "polish",
+      "wheel"
+    ]
+  },
+  {
+    "slug": "moonshine-gomel",
+    "accent": "#A3B8FF",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "MS",
+    "works": [
+      "polish",
+      "interior",
+      "film"
+    ]
+  },
+  {
+    "slug": "dtlpro-gomel",
+    "accent": "#00C2A8",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "DP",
+    "works": [
+      "film",
+      "polish",
+      "interior"
+    ]
   }
 ]

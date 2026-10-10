@@ -1,0 +1,139 @@
+{
+  "slug": "fortuna-auto",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@fortuna-auto.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Fortuna Auto",
+    "shortName": "Fortuna",
+    "kind": "Автосервис · Минск",
+    "tagline": "Автосервис с подбором запчастей на Севастопольской",
+    "description": "Легковой автосервис с подбором запчастей и индивидуальным подходом. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, ул. Севастопольская, 2а к1",
+    "phone": "+375 29 574-77-77",
+    "accent": "#D4AF37",
+    "cards": [
+      {
+        "title": "Диагностика",
+        "text": "Сканер и осмотр на подъёмнике."
+      },
+      {
+        "title": "Смета до ремонта",
+        "text": "Согласуем работы и цену заранее."
+      },
+      {
+        "title": "Запись на время",
+        "text": "Без ожидания в очереди."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "Сканер и чтение ошибок",
+      "price": 40,
+      "durationMin": 45
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "brakes",
+      "name": "Замена тормозных колодок",
+      "description": "Одна ось",
+      "price": 40,
+      "durationMin": 60
+    },
+    {
+      "key": "chassis",
+      "name": "Осмотр ходовой",
+      "description": "На подъёмнике, с отчётом",
+      "price": 25,
+      "durationMin": 60
+    },
+    {
+      "key": "alignment",
+      "name": "Развал-схождение",
+      "description": "",
+      "price": 45,
+      "durationMin": 60
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и диски"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Блеск кузова"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Плёнка и оптика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

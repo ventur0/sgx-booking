@@ -1,0 +1,124 @@
+{
+  "slug": "bleskcar",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@bleskcar.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "БлескCar",
+    "shortName": "БлескCar",
+    "kind": "Автомойка · д. Боровая",
+    "tagline": "Тёплая мойка, химчистка и полировка в Боровой",
+    "description": "Комплексная мойка, мойка самообслуживания и автомат, химчистка, полировка. Демо-версия сайта для студии: цены взяты из карточки на картах и могли измениться, их владелец меняет в кабинете.",
+    "address": "Минский р-н, д. Боровая, Боровлянский с/с, 52",
+    "phone": "+375 29 538-90-40",
+    "accent": "#38BDF8",
+    "cards": [
+      {
+        "title": "Тёплый бокс",
+        "text": "Мойка в любую погоду."
+      },
+      {
+        "title": "Запись на время",
+        "text": "Бокс ваш, без очереди."
+      },
+      {
+        "title": "От 35 BYN",
+        "text": "Комплексная мойка."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Бокс"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Кузов, салон, коврики",
+      "price": 35,
+      "durationMin": 60
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "",
+      "price": 250,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "",
+      "price": 400,
+      "durationMin": 480
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": {
+      "opens": "09:00",
+      "closes": "20:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Мойка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Салон после химчистки"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Блеск кузова"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

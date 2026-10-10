@@ -1,0 +1,135 @@
+{
+  "slug": "agat-vitebsk",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@agat-vitebsk.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Агат",
+    "shortName": "Агат",
+    "kind": "Автомойка и химчистка · Витебск",
+    "tagline": "Ручная мойка и комплекс «3 в 1» на Генерала Ивановского",
+    "description": "Ручная мойка и автохимчистка. Комплексы для легковых, кроссоверов и минивэнов. Демо-версия сайта для студии: цены взяты из карточки на картах и могли измениться, их владелец меняет в кабинете.",
+    "address": "г. Витебск, ул. Генерала Ивановского, 5",
+    "phone": "+375 29 164-60-43",
+    "accent": "#9B6BFF",
+    "cards": [
+      {
+        "title": "Ручная мойка",
+        "text": "Бережно для кузова."
+      },
+      {
+        "title": "Комплекс 3 в 1",
+        "text": "Кузов, салон, коврики."
+      },
+      {
+        "title": "Картой или наличными",
+        "text": "Как удобно."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплекс 3 в 1",
+      "description": "Легковые",
+      "price": 33,
+      "durationMin": 60
+    },
+    {
+      "key": "classy",
+      "name": "Комплекс «Классный»",
+      "description": "Легковые; кроссовер/минивэн — 60",
+      "price": 55,
+      "durationMin": 90
+    },
+    {
+      "key": "body",
+      "name": "Мойка кузова",
+      "description": "От 6 до 45 BYN",
+      "price": 6,
+      "durationMin": 20
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "",
+      "price": 280,
+      "durationMin": 300
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sun": {
+      "opens": "08:00",
+      "closes": "20:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Мойка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Салон после химчистки"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Колёса и диски"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

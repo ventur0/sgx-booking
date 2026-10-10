@@ -1,0 +1,142 @@
+{
+  "slug": "chistaya-sovest",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@chistaya-sovest.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Чистая совесть",
+    "shortName": "Совесть",
+    "kind": "Автосервис и шиномонтаж · Минск",
+    "tagline": "Автосервис и шиномонтаж на Петруся Бровки, 8Б",
+    "description": "Автосервис и шиномонтаж, замена колодок. Каждый день с 9 до 20. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, ул. Петруся Бровки, 8Б",
+    "phone": "+375 44 744-34-94",
+    "accent": "#3FB37F",
+    "cards": [
+      {
+        "title": "Диагностика",
+        "text": "Сканер и осмотр на подъёмнике."
+      },
+      {
+        "title": "Смета до ремонта",
+        "text": "Согласуем работы и цену заранее."
+      },
+      {
+        "title": "Запись на время",
+        "text": "Без ожидания в очереди."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "Сканер и чтение ошибок",
+      "price": 40,
+      "durationMin": 45
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "brakes",
+      "name": "Замена тормозных колодок",
+      "description": "Одна ось",
+      "price": 40,
+      "durationMin": 60
+    },
+    {
+      "key": "chassis",
+      "name": "Осмотр ходовой",
+      "description": "На подъёмнике, с отчётом",
+      "price": 25,
+      "durationMin": 60
+    },
+    {
+      "key": "tires",
+      "name": "Сезонная замена колёс",
+      "description": "R13–R18, с балансировкой",
+      "price": 40,
+      "durationMin": 45
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": {
+      "opens": "09:00",
+      "closes": "20:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и диски"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Блеск кузова"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Мойка"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

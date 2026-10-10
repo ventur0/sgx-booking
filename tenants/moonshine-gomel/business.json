@@ -1,0 +1,139 @@
+{
+  "slug": "moonshine-gomel",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@moonshine-gomel.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Муншайн",
+    "shortName": "Муншайн",
+    "kind": "Детейлинг · Гомель",
+    "tagline": "Детейлинг, химчистка и оклейка на Луначарского",
+    "description": "Детейлинг, автохимчистка, полировка кузова и стёкол, оклейка фар и кузова. Демо-версия сайта для студии: цены взяты из карточки на картах и могли измениться, их владелец меняет в кабинете.",
+    "address": "г. Гомель, 3-я ул. Луначарского, 21",
+    "phone": "+375 29 370-70-69",
+    "accent": "#A3B8FF",
+    "cards": [
+      {
+        "title": "Химчистка",
+        "text": "Детейлинг и экспресс за день."
+      },
+      {
+        "title": "Стёкла",
+        "text": "Шлифовка и полировка лобового."
+      },
+      {
+        "title": "Оклейка",
+        "text": "Фары, фонари, пакеты."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "polish",
+      "name": "Лёгкая полировка кузова",
+      "description": "",
+      "price": 600,
+      "durationMin": 480
+    },
+    {
+      "key": "detail-interior",
+      "name": "Детейлинг-химчистка",
+      "description": "",
+      "price": 500,
+      "durationMin": 600
+    },
+    {
+      "key": "express-interior",
+      "name": "Экспресс-химчистка",
+      "description": "Около 8 часов",
+      "price": 350,
+      "durationMin": 480
+    },
+    {
+      "key": "windshield",
+      "name": "Шлифовка и полировка лобового стекла",
+      "description": "",
+      "price": 350,
+      "durationMin": 300
+    },
+    {
+      "key": "lights",
+      "name": "Оклейка фар и фонарей",
+      "description": "",
+      "price": 200,
+      "durationMin": 180
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Блеск кузова"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Салон после химчистки"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Плёнка и оптика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}
