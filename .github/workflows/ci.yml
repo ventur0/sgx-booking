@@ -38,6 +38,15 @@ jobs:
           VITE_SUPABASE_URL: https://example.supabase.co
           VITE_SUPABASE_ANON_KEY: ci-placeholder
         run: pnpm build && ls dist dist/t/*
+      - name: Переадресация Cloudflare → Vercel
+        env:
+          CF_PAGES: "1"
+        run: |
+          pnpm exec tsx scripts/build-shells.ts >/dev/null
+          cat dist/_redirects
+          grep -qx "/s/\* https://sgx-booking-ten.vercel.app/s/:splat 301" dist/_redirects
+          grep -qx "/admin/\* https://sgx-booking-ten.vercel.app/admin/:splat 301" dist/_redirects
+          ! grep -q "^/t/" dist/_redirects
       - name: Сборка для Vercel и проверка маршрутов
         env:
           VERCEL: "1"

@@ -28,7 +28,8 @@ self.addEventListener("activate", (event) => {
 registerRoute(new NavigationRoute(async ({ request }) => {
   try {
     const res = await fetch(request);
-    if (res.ok) return res;
+    // переадресация на другой адрес сайта (старый адрес → новый) — отдаём браузеру, а не кэш
+    if (res.ok || res.type === "opaqueredirect") return res;
     throw new Error(String(res.status));
   } catch {
     const cached = await caches.match(SHELL, { cacheName: SHELL_CACHE });

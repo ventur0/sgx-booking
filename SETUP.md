@@ -90,7 +90,15 @@ Realtime (WebSocket) Vercel не проксирует, поэтому в сбо�
 (Vercel → Account Settings → Tokens → Create). Проект и команда — переменные `VERCEL_PROJECT` и `VERCEL_SCOPE`
 (по умолчанию `sgx-booking` и `krix20`). Сейчас адрес на Vercel: https://sgx-booking-alpha.vercel.app
 
-### Cloudflare Pages (запасной, прежние ссылки `*.pages.dev`)
+### Cloudflare Pages (только переадресация старых ссылок `*.pages.dev`)
+
+Сборка на Cloudflare (там задана переменная `CF_PAGES=1`) пишет в `dist/_redirects` переадресацию 301
+всех страниц (`/`, `/s/*`, `/admin*`) на тот же путь на Vercel (`REDIRECT_TO`, по умолчанию
+https://sgx-booking-ten.vercel.app). Статика и `/sb` на Cloudflare остаются, чтобы открытые ранее вкладки обновились.
+Чтобы Cloudflare снова работал как полноценный сайт, задайте в нём переменную `REDIRECT_TO=off`.
+Удалять проект в Cloudflare не нужно: без него старые ссылки перестанут открываться.
+
+Прежняя ручная публикация на Cloudflare:
 
 ```bash
 pnpm build                                   # dist/ + dist/t/<slug>/ для каждой студии + _redirects/_headers

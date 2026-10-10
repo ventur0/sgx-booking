@@ -147,15 +147,32 @@ for (const slug of slugs) {
 
 // Cloudflare Pages: глубокие ссылки студии отдают её оболочку. Правила _redirects применяются
 // и к существующим файлам, поэтому статика студий лежит в /t/, а не в /s/.
+//
+// Основной хостинг — Vercel. Сборка на Cloudflare Pages (переменная CF_PAGES=1) отправляет все страницы
+// на тот же адрес на Vercel (301), чтобы старые ссылки *.pages.dev продолжали работать.
+// Статика (/t/*, /assets/*) и прокси /sb (Functions) остаются: открытые ранее вкладки и service worker
+// обновятся, а не сломаются. Отключить: переменная REDIRECT_TO=off в Cloudflare.
+const redirectTo = (process.env.REDIRECT_TO ?? "https://sgx-booking-ten.vercel.app").replace(/\/+$/, "");
+const redirectAll = process.env.CF_PAGES === "1" && /^https:\/\//.test(redirectTo);
 writeFileSync(
   join(DIST, "_redirects"),
-  [
-    "/s/:slug /s/:slug/ 301",
-    "/s/:slug/* /t/:slug/ 200",
-    // корень сайта открывает студию по умолчанию (RootRedirect в приложении)
-    "",
-  ].join("\n"),
+  (redirectAll
+    ? [
+        `/ ${redirectTo}/ 301`,
+        `/s/* ${redirectTo}/s/:splat 301`,
+        `/admin ${redirectTo}/admin 301`,
+        `/admin/* ${redirectTo}/admin/:splat 301`,
+        "",
+      ]
+    : [
+        "/s/:slug /s/:slug/ 301",
+        "/s/:slug/* /t/:slug/ 200",
+        // корень сайта открывает студию по умолчанию (RootRedirect в приложении)
+        "",
+      ]
+  ).join("\n"),
 );
+if (redirectAll) console.log(`✓ Cloudflare: страницы переадресуются на ${redirectTo}`);
 writeFileSync(
   join(DIST, "_headers"),
   [

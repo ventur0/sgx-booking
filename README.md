@@ -8,6 +8,6 @@ PWA: клиент записывается по ссылке без регист
 - Владелец: `/s/<slug>/owner/` — записи на день и неделю, ручная запись, перенос, статусы, оплаты и возвраты,
   блокировки постов, итоги (заезды, выполненные, полученные деньги), настройки студии, услуги, посты, график, фото.
 - Демо: `graphite` (детейлинг, Минск) и `protector` (шиномонтаж, Брест).
-- Хостинг: Vercel (`vercel.json`, `pnpm build:vercel`); Cloudflare Pages — запасной, со старыми ссылками `*.pages.dev`.
+- Хостинг: Vercel — https://sgx-booking-ten.vercel.app (`vercel.json`, `pnpm build:vercel`). Cloudflare Pages только переадресует старые ссылки `*.pages.dev` на Vercel.
 
 Документы: [SETUP.md](SETUP.md) · [CLONE-IN-6-MINUTES.md](CLONE-IN-6-MINUTES.md) · [ACCEPTANCE.md](ACCEPTANCE.md) · [AGENTS.md](AGENTS.md)
