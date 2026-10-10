@@ -13,6 +13,35 @@
   <body>
     <div id="root"></div>
     <noscript>Для записи включите JavaScript или позвоните в студию.</noscript>
+    <script>
+      /* Страховка от «чёрного экрана»: если приложение не запустилось за 12 секунд или упало при старте,
+         показываем понятный текст, кнопку «Обновить» и причину (для скриншота продавцу). Обычный ES5-скрипт. */
+      (function () {
+        var errs = [];
+        function note(m) { if (errs.length < 5) errs.push(String(m).slice(0, 200)); setTimeout(check, 2500); }
+        window.addEventListener("error", function (e) {
+          var t = e && e.target;
+          if (t && t !== window && (t.src || t.href)) note("не загрузился файл: " + (t.src || t.href));
+          else note(e && e.message ? e.message : "ошибка");
+        }, true);
+        window.addEventListener("unhandledrejection", function (e) { note(e && e.reason && e.reason.message ? e.reason.message : "ошибка"); });
+        function check() {
+          var root = document.getElementById("root");
+          if (!root || root.childNodes.length || document.getElementById("boot-info")) return;
+          var box = document.createElement("div");
+          box.setAttribute("style", "font:16px/1.45 -apple-system,system-ui,sans-serif;color:#eee;background:#111;padding:28px 20px;max-width:520px;margin:0 auto");
+          box.innerHTML = "<h2 style='margin:0 0 12px;font-size:20px'>Страница не загрузилась</h2>" +
+            "<p style='margin:0 0 16px'>Проверьте интернет и нажмите «Обновить». Если не помогает — откройте ссылку в Safari или Chrome (не внутри мессенджера).</p>" +
+            "<button id='boot-reload' style='font:inherit;padding:12px 20px;border-radius:12px;border:0;background:#fff;color:#111'>Обновить</button>" +
+            "<p style='margin:20px 0 0;font-size:12px;opacity:.6;word-break:break-word' id='boot-info'></p>";
+          root.appendChild(box);
+          document.getElementById("boot-info").textContent = (errs.join(" · ") || "приложение не ответило") + " · " + navigator.userAgent;
+          document.getElementById("boot-reload").onclick = function () { location.reload(); };
+        }
+        window.__bootFail = check;
+        setTimeout(check, 12000);
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
