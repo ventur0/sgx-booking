@@ -1,0 +1,160 @@
+{
+  "slug": "avtomoyka-88",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@avtomoyka-88.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Автомойка 88",
+    "shortName": "Мойка 88",
+    "kind": "Автомойка · Витебск, круглосуточно",
+    "tagline": "Круглосуточная мойка на Ленинградской, 88",
+    "description": "Мойка легковых, микроавтобусов и грузовых, мойка двигателя, химчистка салона, антидождь и горячий воск. Работаем круглосуточно. Демо-версия сайта для студии: цены взяты из карточки на картах и могли измениться, их владелец меняет в кабинете.",
+    "address": "г. Витебск, Ленинградская ул., 88",
+    "phone": "+375 29 515-15-33",
+    "accent": "#0EA5E9",
+    "messengers": {
+      "viber": "+375297106902"
+    },
+    "cards": [
+      {
+        "title": "24/7",
+        "text": "Работаем круглосуточно."
+      },
+      {
+        "title": "Любой транспорт",
+        "text": "Легковые, микроавтобусы, грузовые."
+      },
+      {
+        "title": "Химчистка",
+        "text": "Салон, двери, потолок, багажник."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    },
+    {
+      "key": "post-3",
+      "name": "Пост 3"
+    },
+    {
+      "key": "post-4",
+      "name": "Пост 4"
+    }
+  ],
+  "services": [
+    {
+      "key": "car",
+      "name": "Мойка автомобиля",
+      "description": "Легковой",
+      "price": 20,
+      "durationMin": 40
+    },
+    {
+      "key": "van",
+      "name": "Мойка микроавтобуса",
+      "description": "",
+      "price": 30,
+      "durationMin": 60
+    },
+    {
+      "key": "engine",
+      "name": "Мойка двигателя",
+      "description": "",
+      "price": 35,
+      "durationMin": 40
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Полная",
+      "price": 350,
+      "durationMin": 300
+    },
+    {
+      "key": "rain",
+      "name": "Антидождь",
+      "description": "Стёкла",
+      "price": 15,
+      "durationMin": 15
+    },
+    {
+      "key": "wax",
+      "name": "Горячий воск",
+      "description": "",
+      "price": 5,
+      "durationMin": 15
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "tue": {
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "wed": {
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "thu": {
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "fri": {
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "sat": {
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "sun": {
+      "opens": "00:00",
+      "closes": "23:59"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Мойка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Химчистка"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Колёса"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

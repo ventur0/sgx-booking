@@ -70,5 +70,125 @@
       "wheel",
       "polish"
     ]
+  },
+  {
+    "slug": "fastclean",
+    "accent": "#00B4D8",
+    "body": "#22272E",
+    "scene": "wash",
+    "mark": "FC",
+    "works": [
+      "foam",
+      "interior",
+      "polish"
+    ]
+  },
+  {
+    "slug": "forum-wash",
+    "accent": "#7C9CFF",
+    "body": "#20242B",
+    "scene": "wash",
+    "mark": "F",
+    "works": [
+      "foam",
+      "wheel",
+      "interior"
+    ]
+  },
+  {
+    "slug": "shinka20",
+    "accent": "#FFB020",
+    "body": "#262A30",
+    "scene": "studio",
+    "mark": "20",
+    "works": [
+      "wheel",
+      "wheel",
+      "foam"
+    ]
+  },
+  {
+    "slug": "dsm-garage",
+    "accent": "#C084FC",
+    "body": "#1E2229",
+    "scene": "hex",
+    "mark": "DSM",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "lab888",
+    "accent": "#14B8A6",
+    "body": "#1E2229",
+    "scene": "hex",
+    "mark": "888",
+    "works": [
+      "polish",
+      "interior",
+      "foam"
+    ]
+  },
+  {
+    "slug": "samurai-gomel",
+    "accent": "#EA580C",
+    "body": "#1B1F25",
+    "scene": "hex",
+    "mark": "S",
+    "works": [
+      "polish",
+      "film",
+      "interior"
+    ]
+  },
+  {
+    "slug": "hdh-detailing",
+    "accent": "#60A5FA",
+    "body": "#1E2229",
+    "scene": "studio",
+    "mark": "HDH",
+    "works": [
+      "polish",
+      "interior",
+      "foam"
+    ]
+  },
+  {
+    "slug": "avtomoyka-88",
+    "accent": "#0EA5E9",
+    "body": "#262A30",
+    "scene": "wash",
+    "mark": "88",
+    "works": [
+      "foam",
+      "interior",
+      "wheel"
+    ]
+  },
+  {
+    "slug": "detailing-mogilev",
+    "accent": "#A78BFA",
+    "body": "#1B1F25",
+    "scene": "hex",
+    "mark": "DM",
+    "works": [
+      "film",
+      "interior",
+      "polish"
+    ]
+  },
+  {
+    "slug": "happy-car",
+    "accent": "#FACC15",
+    "body": "#262A30",
+    "scene": "wash",
+    "mark": "HC",
+    "works": [
+      "foam",
+      "polish",
+      "interior"
+    ]
   }
 ]

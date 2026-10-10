@@ -1,0 +1,154 @@
+{
+  "slug": "forum-wash",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@forum-wash.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Forum",
+    "shortName": "Forum",
+    "kind": "Автомойка · Минск, Ротмистрова",
+    "tagline": "Автомойка на Ротмистрова, 61а. Каждый день с 8 до 22",
+    "description": "Комплексная мойка от 25 рублей, химчистка салона, мойка двигателя и полировка. До четырёх машин одновременно, кофе с собой. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, ул. Ротмистрова, 61а",
+    "phone": "+375 44 500-02-22",
+    "accent": "#7C9CFF",
+    "messengers": {
+      "telegram": "Forum_wash",
+      "viber": "+375445000222"
+    },
+    "cards": [
+      {
+        "title": "От 25 рублей",
+        "text": "Комплексная мойка без переплат."
+      },
+      {
+        "title": "8:00–22:00",
+        "text": "Каждый день."
+      },
+      {
+        "title": "До 4 машин",
+        "text": "Без долгой очереди."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    },
+    {
+      "key": "post-3",
+      "name": "Пост 3"
+    },
+    {
+      "key": "post-4",
+      "name": "Пост 4"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Кузов, салон, коврики",
+      "price": 25,
+      "durationMin": 60
+    },
+    {
+      "key": "express",
+      "name": "Экспресс-мойка кузова",
+      "description": "Бесконтактная, сушка",
+      "price": 15,
+      "durationMin": 30
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Полная",
+      "price": 220,
+      "durationMin": 300
+    },
+    {
+      "key": "engine",
+      "name": "Мойка двигателя",
+      "description": "С консервацией",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Восстановительная",
+      "price": 380,
+      "durationMin": 480
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "sat": {
+      "opens": "08:00",
+      "closes": "22:00"
+    },
+    "sun": {
+      "opens": "08:00",
+      "closes": "22:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Пена"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Чистые диски"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Салон после химчистки"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

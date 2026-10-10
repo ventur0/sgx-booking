@@ -1,0 +1,154 @@
+{
+  "slug": "fastclean",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@fastclean.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "ФастКлин",
+    "shortName": "ФастКлин",
+    "kind": "Автомойка · Минск, Партизанский район",
+    "tagline": "Быстрая мойка на Бядули: четыре поста, кофе с собой",
+    "description": "Комплексная мойка, химчистка салона, мойка двигателя и днища, полировка кузова. До четырёх машин одновременно, зал ожидания и Wi-Fi. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, ул. Змитрока Бядули, 13 к6",
+    "phone": "+375 29 352-97-97",
+    "accent": "#00B4D8",
+    "messengers": {
+      "telegram": "+375291528080",
+      "viber": "+375291528080"
+    },
+    "cards": [
+      {
+        "title": "4 поста",
+        "text": "Принимаем до четырёх машин сразу."
+      },
+      {
+        "title": "Каждый день",
+        "text": "С 8:00 до 21:00 без выходных."
+      },
+      {
+        "title": "Кофе с собой",
+        "text": "Зал ожидания и Wi-Fi."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    },
+    {
+      "key": "post-3",
+      "name": "Пост 3"
+    },
+    {
+      "key": "post-4",
+      "name": "Пост 4"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Кузов, салон, коврики, стёкла",
+      "price": 35,
+      "durationMin": 60
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Сиденья, ковры, пластик",
+      "price": 230,
+      "durationMin": 300
+    },
+    {
+      "key": "engine",
+      "name": "Мойка двигателя",
+      "description": "С консервацией",
+      "price": 35,
+      "durationMin": 40
+    },
+    {
+      "key": "underbody",
+      "name": "Мойка днища",
+      "description": "Арки и днище",
+      "price": 30,
+      "durationMin": 30
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Восстановительная",
+      "price": 380,
+      "durationMin": 480
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    "sat": {
+      "opens": "08:00",
+      "closes": "21:00"
+    },
+    "sun": {
+      "opens": "08:00",
+      "closes": "21:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Пена на кузове"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Химчистка"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Блеск после полировки"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

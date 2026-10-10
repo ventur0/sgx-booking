@@ -34,6 +34,10 @@
       "leadMin": 60,
       "cancelHours": 3,
       "horizonDays": 30
+    },
+    "messengers": {
+      "telegram": "cleanart24",
+      "viber": "+375447885500"
     }
   },
   "images": {

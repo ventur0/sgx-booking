@@ -1,0 +1,143 @@
+{
+  "slug": "hdh-detailing",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@hdh-detailing.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Hdh Detailing",
+    "shortName": "Hdh",
+    "kind": "Детейлинг и мойка · Гродно",
+    "tagline": "Детейлинг на Титова: полировка, химчистка, бронирование",
+    "description": "Полировка кузова и стёкол, химчистка салона, ручная и комплексная мойка, бронирование автомобиля плёнкой. Две моечные зоны. Демо-версия сайта для студии: цены взяты из карточки на картах и могли измениться, их владелец меняет в кабинете.",
+    "address": "г. Гродно, ул. Титова, 30А",
+    "phone": "+375 29 550-02-27",
+    "accent": "#60A5FA",
+    "messengers": {
+      "telegram": "+375336834575",
+      "viber": "+375336834575"
+    },
+    "cards": [
+      {
+        "title": "Две зоны",
+        "text": "Мойка и детейлинг — без очереди."
+      },
+      {
+        "title": "Бронирование",
+        "text": "Защитная плёнка на кузов."
+      },
+      {
+        "title": "Ручная мойка",
+        "text": "Бережно для ЛКП."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Моечная зона 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Моечная зона 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Ручная, кузов и салон",
+      "price": 40,
+      "durationMin": 60
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "От 550 BYN",
+      "price": 550,
+      "durationMin": 480
+    },
+    {
+      "key": "detail-polish",
+      "name": "Детейлинг-полировка кузова",
+      "description": "Многоэтапная, от 850 BYN",
+      "price": 850,
+      "durationMin": 600
+    },
+    {
+      "key": "interior",
+      "name": "Детейлинг-химчистка салона",
+      "description": "От 350 BYN",
+      "price": 350,
+      "durationMin": 300
+    },
+    {
+      "key": "engine",
+      "name": "Мойка двигателя",
+      "description": "",
+      "price": 35,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Полировка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Химчистка"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Ручная мойка"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "slug": "samurai-gomel",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@samurai-gomel.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Samurai Detailing",
+    "shortName": "Samurai",
+    "kind": "Детейлинг · Гомель",
+    "tagline": "Коррекция ЛКП, керамика и антигравийная плёнка",
+    "description": "Химчистка салона, коррекция и полировка кузова, керамика, оклейка антигравийной плёнкой, реставрация фар, удаление вмятин без покраски. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Гомель, Железнодорожный район",
+    "phone": "+375 33 633-55-34",
+    "accent": "#EA580C",
+    "messengers": {
+      "telegram": "+375336335534",
+      "viber": "+375336335534"
+    },
+    "cards": [
+      {
+        "title": "Коррекция ЛКП",
+        "text": "Убираем голограммы и царапины."
+      },
+      {
+        "title": "Плёнка",
+        "text": "Антигравийная защита зон риска."
+      },
+      {
+        "title": "Сертификаты",
+        "text": "Подарочный сертификат на любую услугу."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2 (плёнка)"
+    }
+  ],
+  "services": [
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Полная",
+      "price": 400,
+      "durationMin": 300
+    },
+    {
+      "key": "correction",
+      "name": "Коррекция ЛКП",
+      "description": "От 300 BYN, точно после осмотра",
+      "price": 300,
+      "durationMin": 480
+    },
+    {
+      "key": "headlights",
+      "name": "Реставрация фар",
+      "description": "Шлифовка и полировка",
+      "price": 80,
+      "durationMin": 90
+    },
+    {
+      "key": "rain",
+      "name": "Антидождь",
+      "description": "Стёкла",
+      "price": 30,
+      "durationMin": 30
+    },
+    {
+      "key": "ceramic",
+      "name": "Керамическое покрытие",
+      "description": "Подготовка и нанесение",
+      "price": 700,
+      "durationMin": 1440
+    },
+    {
+      "key": "ppf",
+      "name": "Плёнка на зоны риска",
+      "description": "Капот, бампер, фары",
+      "price": 1000,
+      "durationMin": 2880,
+      "resources": [
+        "post-2"
+      ]
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Коррекция ЛКП"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Плёнка на фары"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Химчистка"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

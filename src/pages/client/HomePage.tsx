@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Copy, MapPin, Phone } from "@phosphor-icons/react";
+import { ChatCircleText, Copy, MapPin, Phone } from "@phosphor-icons/react";
 import { useStudioCtx } from "./StudioLayout";
 import { Reveal } from "../../components/Reveal";
 import { durationLabel, dayLabel, todayIn, trimTime } from "../../lib/time";
 import { formatBYPhone, moneyBYN, normalizeBYPhone } from "../../shared/by";
+import { messengerLinks } from "../../shared/business";
 
 const WD = ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 
@@ -91,6 +92,16 @@ export function HomePage() {
               <button className="btn small" onClick={copy}><Copy /> {copied === "ok" ? "Скопировано" : copied === "select" ? "Выделено — скопируйте" : "Скопировать"}</button>
               <a className="btn small ghost" href={`tel:${phone}`}><Phone weight="fill" /> Позвонить</a>
             </div>
+            {messengerLinks(p.messengers).length > 0 && (
+              <>
+                <span className="label">Написать</span>
+                <div className="row">
+                  {messengerLinks(p.messengers).map((m) => (
+                    <a key={m.kind} className="btn small" href={m.href} target="_blank" rel="noopener noreferrer"><ChatCircleText weight="fill" /> {m.label}</a>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
           <div className="panel">
             <span className="label">Время приёма машин · {tenant.timezone}</span>

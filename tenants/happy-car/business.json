@@ -1,0 +1,156 @@
+{
+  "slug": "happy-car",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@happy-car.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Happy Car",
+    "shortName": "Happy Car",
+    "kind": "Автомойка и детейлинг · Могилёв",
+    "tagline": "Мойка, детейлинг и тонировка. Открыто до 23:00",
+    "description": "Бесконтактная, ручная и комплексная мойка, мойка двигателя и днища, химчистка, полировка, защитный воск, тонировка и заправка кондиционера. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Могилёв, Витебский тупик, 2А",
+    "phone": "+375 29 199-99-65",
+    "accent": "#FACC15",
+    "messengers": {
+      "viber": "+375296166663"
+    },
+    "cards": [
+      {
+        "title": "До 23:00",
+        "text": "Удобно после работы."
+      },
+      {
+        "title": "Всё в одном месте",
+        "text": "Мойка, детейлинг, тонировка, кондиционер."
+      },
+      {
+        "title": "Защитный воск",
+        "text": "Блеск и защита после мойки."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    },
+    {
+      "key": "post-3",
+      "name": "Пост 3"
+    }
+  ],
+  "services": [
+    {
+      "key": "touchless",
+      "name": "Бесконтактная мойка кузова",
+      "description": "От 7 BYN",
+      "price": 10,
+      "durationMin": 20
+    },
+    {
+      "key": "complex",
+      "name": "Комплексная мойка",
+      "description": "Кузов и салон",
+      "price": 40,
+      "durationMin": 60
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Полная",
+      "price": 300,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "",
+      "price": 400,
+      "durationMin": 480
+    },
+    {
+      "key": "tint",
+      "name": "Тонировка",
+      "description": "Задняя полусфера",
+      "price": 180,
+      "durationMin": 180
+    },
+    {
+      "key": "ac",
+      "name": "Заправка кондиционера",
+      "description": "",
+      "price": 50,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "23:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "23:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "23:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "23:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "23:00"
+    },
+    "sat": {
+      "opens": "08:00",
+      "closes": "23:00"
+    },
+    "sun": {
+      "opens": "08:00",
+      "closes": "23:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Пена"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Полировка"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Химчистка"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

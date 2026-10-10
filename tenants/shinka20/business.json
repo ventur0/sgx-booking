@@ -1,0 +1,139 @@
+{
+  "slug": "shinka20",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@shinka20.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Шинка 20",
+    "shortName": "Шинка 20",
+    "kind": "Шиномонтаж · Минск, Первомайский район",
+    "tagline": "Шиномонтаж без очереди: каждый день с 9 до 21",
+    "description": "Сезонная замена колёс, балансировка, ремонт проколов. Приезжайте к своему времени — без ожидания в очереди. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Минск, 1-й Твёрдый пер., 11 к9",
+    "phone": "+375 29 583-54-22",
+    "accent": "#FFB020",
+    "messengers": {
+      "telegram": "+375295835422",
+      "viber": "+375295835422"
+    },
+    "cards": [
+      {
+        "title": "Без очереди",
+        "text": "Точное время по записи."
+      },
+      {
+        "title": "Каждый день",
+        "text": "С 9:00 до 21:00."
+      },
+      {
+        "title": "Любые диски",
+        "text": "Штамповка и литьё R13–R20."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "tires-small",
+      "name": "Сезонная замена R13–R16",
+      "description": "Снятие, монтаж, балансировка 4 колёс",
+      "price": 35,
+      "durationMin": 45
+    },
+    {
+      "key": "tires-big",
+      "name": "Сезонная замена R17–R20",
+      "description": "Снятие, монтаж, балансировка 4 колёс",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "balance",
+      "name": "Балансировка 4 колёс",
+      "description": "",
+      "price": 20,
+      "durationMin": 30
+    },
+    {
+      "key": "repair",
+      "name": "Ремонт прокола",
+      "description": "Жгут или грибок",
+      "price": 15,
+      "durationMin": 30
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "21:00"
+    },
+    "sun": {
+      "opens": "09:00",
+      "closes": "21:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Литые диски"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Балансировка"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Мойка колёс"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

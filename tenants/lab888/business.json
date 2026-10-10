@@ -1,0 +1,150 @@
+{
+  "slug": "lab888",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@lab888.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Lab 888",
+    "shortName": "Lab 888",
+    "kind": "Детейлинг и мойка · Брест",
+    "tagline": "Трёхфазная мойка, химчистка и полировка на Тимирязева",
+    "description": "Трёхфазная мойка с воском или кварцем, уборка и химчистка салона, полировка кузова и фар. Демо-версия сайта для студии: цены взяты из карточки на картах и могли измениться, их владелец меняет в кабинете.",
+    "address": "г. Брест, ул. Тимирязева, 1",
+    "phone": "+375 33 990-98-88",
+    "accent": "#14B8A6",
+    "messengers": {
+      "telegram": "Laboratory_888",
+      "viber": "+375339909888"
+    },
+    "cards": [
+      {
+        "title": "Трёхфазная мойка",
+        "text": "С воском или кварцевым покрытием."
+      },
+      {
+        "title": "Детейлинг",
+        "text": "Полировка кузова и фар, химчистка."
+      },
+      {
+        "title": "Прайс открыт",
+        "text": "Цены видны до записи."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Пост 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "wash-wax",
+      "name": "Трёхфазная мойка с воском",
+      "description": "",
+      "price": 40,
+      "durationMin": 60
+    },
+    {
+      "key": "wash-quartz",
+      "name": "Трёхфазная мойка с кварцем",
+      "description": "Защитное покрытие",
+      "price": 80,
+      "durationMin": 90
+    },
+    {
+      "key": "cleaning",
+      "name": "Уборка салона",
+      "description": "Пылесос, пластик, стёкла",
+      "price": 30,
+      "durationMin": 45
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона и багажника",
+      "description": "",
+      "price": 350,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Точная цена после осмотра",
+      "price": 390,
+      "durationMin": 480
+    },
+    {
+      "key": "headlights",
+      "name": "Полировка фар",
+      "description": "Обе фары",
+      "price": 50,
+      "durationMin": 60
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Полировка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Химчистка"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Трёхфазная мойка"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

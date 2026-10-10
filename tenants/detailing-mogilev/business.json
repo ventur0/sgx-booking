@@ -1,0 +1,131 @@
+{
+  "slug": "detailing-mogilev",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@detailing-mogilev.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Детейлинг студия на Космонавтов",
+    "shortName": "Детейлинг",
+    "kind": "Детейлинг · Могилёв",
+    "tagline": "Тонировка, химчистка и детейлинг на Космонавтов, 57А",
+    "description": "Тонирование стёкол, химчистка салона и детейлинг. Подарочные сертификаты и рассрочка. Демо-версия сайта для студии: цены, длительность и часы примерные, их владелец меняет в кабинете.",
+    "address": "г. Могилёв, ул. Космонавтов, 57А",
+    "phone": "+375 44 573-56-94",
+    "accent": "#A78BFA",
+    "messengers": {
+      "telegram": "kot_marquis"
+    },
+    "cards": [
+      {
+        "title": "Тонировка",
+        "text": "Плёнки разной светопропускаемости."
+      },
+      {
+        "title": "Рассрочка",
+        "text": "Дорогие работы — частями."
+      },
+      {
+        "title": "Сертификаты",
+        "text": "Подарок для автолюбителя."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Пост"
+    }
+  ],
+  "services": [
+    {
+      "key": "tint",
+      "name": "Тонировка задней полусферы",
+      "description": "",
+      "price": 180,
+      "durationMin": 180
+    },
+    {
+      "key": "interior",
+      "name": "Химчистка салона",
+      "description": "Полная",
+      "price": 280,
+      "durationMin": 300
+    },
+    {
+      "key": "polish",
+      "name": "Полировка кузова",
+      "description": "Двухэтапная",
+      "price": 400,
+      "durationMin": 480
+    },
+    {
+      "key": "ceramic",
+      "name": "Керамическое покрытие",
+      "description": "Подготовка и нанесение",
+      "price": 750,
+      "durationMin": 1440
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "10:00",
+      "closes": "21:00"
+    },
+    "tue": {
+      "opens": "10:00",
+      "closes": "21:00"
+    },
+    "wed": {
+      "opens": "10:00",
+      "closes": "21:00"
+    },
+    "thu": {
+      "opens": "10:00",
+      "closes": "21:00"
+    },
+    "fri": {
+      "opens": "10:00",
+      "closes": "21:00"
+    },
+    "sat": {
+      "opens": "10:00",
+      "closes": "21:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Тонировка"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Химчистка"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Полировка"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}
