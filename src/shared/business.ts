@@ -45,13 +45,6 @@ export const ProfileSchema = z.object({
   cards: z.array(z.object({ title: z.string().trim().min(1).max(40), text: z.string().trim().max(160) })).length(3),
   booking: BookingRulesSchema,
   legal: LegalSchema.optional(),
-  /** Мессенджеры для связи: Telegram — имя (без @) или номер +375…; Viber — номер +375… */
-  messengers: z
-    .object({
-      telegram: z.string().trim().regex(/^(\+375\d{9}|[A-Za-z0-9_]{4,32})$/, "Telegram: имя без @ или номер +375XXXXXXXXX").optional(),
-      viber: z.string().trim().regex(/^\+375\d{9}$/, "Viber: номер в виде +375XXXXXXXXX").optional(),
-    })
-    .optional(),
   media: z.object({ hero: z.string().min(1), logo: z.string().min(1) }).optional(),
 });
 export type Profile = z.infer<typeof ProfileSchema>;
@@ -124,14 +117,6 @@ export const BusinessSchema = z
 export type Business = z.infer<typeof BusinessSchema>;
 
 export const WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
-
-/** Ссылки «написать» для мессенджеров студии (Telegram-имя или номер, Viber-номер). */
-export function messengerLinks(m: Profile["messengers"]) {
-  const out: { kind: "telegram" | "viber"; label: string; href: string }[] = [];
-  if (m?.telegram) out.push({ kind: "telegram", label: "Telegram", href: `https://t.me/${m.telegram.replace(/^@/, "")}` });
-  if (m?.viber) out.push({ kind: "viber", label: "Viber", href: `viber://chat?number=${encodeURIComponent(m.viber)}` });
-  return out;
-}
 
 /** Проверки для перевода студии в live: настоящие контакты и оператор ПД. */
 export function liveReadiness(b: Business): string[] {

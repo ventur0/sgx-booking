@@ -34,10 +34,6 @@
       "leadMin": 60,
       "cancelHours": 3,
       "horizonDays": 30
-    },
-    "messengers": {
-      "telegram": "rd_detailing",
-      "viber": "+375291440099"
     }
   },
   "images": {

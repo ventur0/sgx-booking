@@ -34,9 +34,6 @@
       "leadMin": 60,
       "cancelHours": 3,
       "horizonDays": 30
-    },
-    "messengers": {
-      "viber": "+375445890550"
     }
   },
   "images": {

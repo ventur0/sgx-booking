@@ -34,10 +34,6 @@
       "leadMin": 60,
       "cancelHours": 3,
       "horizonDays": 30
-    },
-    "messengers": {
-      "telegram": "olympic_detailing_minsk",
-      "viber": "+375293145777"
     }
   },
   "images": {

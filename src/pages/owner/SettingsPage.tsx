@@ -74,8 +74,6 @@ function ProfileForm() {
           <Field id="p-desc" label="Описание" full><textarea className="input" id="p-desc" rows={3} value={p.description} onChange={(e) => set("description", e.target.value)} /></Field>
           {text("address", "Адрес", true)}
           {text("phone", "Телефон")}
-          <Field id="p-tg" label="Telegram (имя без @ или номер +375…)"><input className="input" id="p-tg" placeholder="studio_minsk" value={p.messengers?.telegram ?? ""} onChange={(e) => set("messengers", { ...p.messengers, telegram: e.target.value.trim().replace(/^@/, "").replace(/^https?:\/\/t\.me\//, "") || undefined })} /></Field>
-          <Field id="p-viber" label="Viber (номер +375…)"><input className="input mono" id="p-viber" inputMode="tel" placeholder="+375291234567" value={p.messengers?.viber ?? ""} onChange={(e) => set("messengers", { ...p.messengers, viber: e.target.value.replace(/[^\d+]/g, "") || undefined })} /></Field>
           <Field id="p-accent" label="Акцентный цвет"><input className="input" id="p-accent" type="color" value={p.accent} onChange={(e) => set("accent", e.target.value.toUpperCase())} /></Field>
         </div>
       </section>
