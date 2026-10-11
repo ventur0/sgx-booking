@@ -5,6 +5,7 @@ import { existingAccount, makePassword, slugify, useAdminActions, useIsPlatformA
 import { humanError } from "../../lib/errors";
 import { Empty, ErrorState, Field, Loading, Notice } from "../../components/ui/States";
 import { Login } from "../owner/OwnerPage";
+import { TelegramSettings } from "./TelegramSettings";
 
 /**
  * /admin — панель продавца сервиса. Здесь создаются студии и выдаётся доступ владельцам;
@@ -44,6 +45,7 @@ export function AdminPage() {
     <main className="wrap pad-top stack admin">
       {head}
       <NewStudio />
+      <TelegramSettings />
       <section className="stack">
         <h2>Студии{studios.data ? ` · ${studios.data.length}` : ""}</h2>
         {notice && <Notice kind="ok">{notice}</Notice>}

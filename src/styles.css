@@ -185,6 +185,9 @@
   .notify-ask { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding: 10px 12px; margin: 0 0 12px; border-radius: 12px;
                 border: 1px solid var(--line-2); background: var(--surface-2); font-size: 14px; }
   .notify-ask span { flex: 1 1 200px; }
+  .notify-ask p { flex: 1 1 100%; margin: 0; }
+  .row-between { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .row-between svg { vertical-align: -3px; color: #2aa5e0; }
   .notify-ask svg { color: var(--accent); font-size: 18px; }
   @keyframes alert-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
   .notice { padding: 10px 12px; border-radius: 12px; font-size: 14px; border: 1px solid var(--line-2); background: var(--surface-2); }

@@ -19,3 +19,12 @@ create table if not exists storage.buckets (id text primary key, name text, publ
 create table if not exists storage.objects (id uuid default gen_random_uuid(), bucket_id text, name text);
 alter table storage.objects enable row level security;
 create or replace function storage.foldername(name text) returns text[] language sql immutable as $$ select string_to_array(name, '/') $$;
+
+-- Заглушка pg_net: запросы складываются в net.test_requests, ответы тест кладёт в net._http_response сам.
+create schema if not exists net;
+create table if not exists net.test_requests (id bigserial primary key, method text, url text, body jsonb, params jsonb, created timestamptz default now());
+create table if not exists net._http_response (id bigint primary key, status_code int, content text, timed_out boolean, error_msg text, created timestamptz default now());
+create or replace function net.http_get(url text, params jsonb default '{}', headers jsonb default '{}', timeout_milliseconds integer default 5000)
+returns bigint language sql as $$ insert into net.test_requests (method, url, params) values ('GET', url, params) returning id $$;
+create or replace function net.http_post(url text, body jsonb default '{}', params jsonb default '{}', headers jsonb default '{}', timeout_milliseconds integer default 5000)
+returns bigint language sql as $$ insert into net.test_requests (method, url, body, params) values ('POST', url, body, params) returning id $$;

@@ -112,6 +112,19 @@ pnpm deploy                                  # wrangler pages deploy dist
 Маршрутизация (`dist/_redirects`): `/s/<slug>/*` отдаёт оболочку `/t/<slug>/` с метаданными и манифестом этой студии.
 Статика студий лежит в `/t/`, потому что правила `_redirects` в Cloudflare Pages применяются и к существующим файлам.
 
+## 6a. Уведомления владельцу в Telegram
+
+Один бот на весь сервис. Сообщения отправляет база (триггер на `bookings` + `pg_net`), привязку чатов
+обрабатывает задание `pg_cron` раз в 10 секунд (`tg_tick`, getUpdates) — вебхук и Edge Function не нужны.
+
+1. Supabase → SQL Editor: выполнить `supabase/migrations/20261011090000_telegram.sql` (включает `pg_net` и `pg_cron`).
+2. @BotFather → /newbot → токен.
+3. Панель продавца `/admin` → «Уведомления в Telegram»: токен и имя бота → «Сохранить».
+4. Владелец: кабинет → «Подключить» (или Настройки → Telegram) → «Открыть бота» → Start.
+
+Токен хранится в `tg_config` (без доступа для anon/authenticated) и в браузер не возвращается.
+Тесты: `tests/db/06_telegram.sql` (pg_net подменён заглушкой из `supabase_shim.sql`).
+
 ## 7. Новая студия
 
 См. [CLONE-IN-6-MINUTES.md](CLONE-IN-6-MINUTES.md).
