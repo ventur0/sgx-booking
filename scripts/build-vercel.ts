@@ -97,6 +97,8 @@ await build({
   logLevel: "warning",
   define: { __SUPABASE_URL__: JSON.stringify(upstream), __SUPABASE_KEY__: JSON.stringify(publicKey) },
 });
+// корневой package.json проекта — "type": "module"; сборка функции — CommonJS, поэтому явно помечаем папку
+writeFileSync(join(fnDir, "package.json"), JSON.stringify({ type: "commonjs" }) + "\n");
 writeFileSync(join(fnDir, ".vc-config.json"), JSON.stringify({ runtime: "nodejs22.x", handler: "index.js", launcherType: "Nodejs", maxDuration: 20 }, null, 2) + "\n");
 if (!proxyOk || !publicKey) console.warn("⚠ /api/push собрана без адреса или ключа Supabase — уведомления не отправятся");
 
