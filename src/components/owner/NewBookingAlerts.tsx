@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { BellRinging, X } from "@phosphor-icons/react";
 import { realtime, supabase } from "../../lib/supabase";
 import { dayLabel, localDate, localTime } from "../../lib/time";
+import { ownerPushFlag } from "./OwnerPush";
 
 /**
  * Новые записи клиентов в кабинете владельца: всплывающая карточка, короткий звук, счётчик в заголовке вкладки,
@@ -51,7 +52,6 @@ const canNotify = () => typeof window !== "undefined" && "Notification" in windo
 export function NewBookingAlerts({ tenantId, tz, base, studioName }: { tenantId: string; tz: string; base: string; studioName: string }) {
   const navigate = useNavigate();
   const [items, setItems] = useState<Fresh[]>([]);
-  const [perm, setPerm] = useState<NotificationPermission | "unsupported">(canNotify() ? Notification.permission : "unsupported");
   const seen = useRef<string>(store.get(seenKey(tenantId)) ?? new Date().toISOString());
   const shown = useRef(new Set<string>());
   const busy = useRef(false);
@@ -88,7 +88,8 @@ export function NewBookingAlerts({ tenantId, tz, base, studioName }: { tenantId:
       setItems((prev) => [...fresh.reverse(), ...prev].slice(0, 5));
       beep();
       try { navigator.vibrate?.([120, 60, 120]); } catch { /* нет вибрации */ }
-      if (document.hidden && canNotify() && Notification.permission === "granted") {
+      // если это устройство получает push с сервера, своё уведомление не дублируем
+      if (document.hidden && canNotify() && Notification.permission === "granted" && store.get(ownerPushFlag(tenantId)) !== "1") {
         for (const b of fresh.slice(0, 3)) {
           const title = `Новая запись — ${studioName}`;
           const opts: NotificationOptions = { body: `${b.client_name}: ${b.service_name}\n${when(b)} · ${b.client_car}`, tag: b.id, data: { url: link(b) } };
@@ -128,20 +129,9 @@ export function NewBookingAlerts({ tenantId, tz, base, studioName }: { tenantId:
 
   const dismiss = (id: string) => setItems((prev) => prev.filter((b) => b.id !== id));
   const openOne = (b: Fresh) => { dismiss(b.id); navigate(link(b)); };
-  const askPermission = async () => {
-    if (!canNotify()) return;
-    try { setPerm(await Notification.requestPermission()); } catch { /* старый Safari */ }
-  };
 
   return (
     <>
-      {perm === "default" && (
-        <div className="notify-ask">
-          <BellRinging weight="fill" aria-hidden="true" />
-          <span>Показывать новые записи уведомлением, даже когда кабинет свёрнут</span>
-          <button className="btn small primary" onClick={() => void askPermission()}>Включить</button>
-        </div>
-      )}
       <div className="alerts" aria-live="assertive" aria-atomic="false">
         {items.map((b) => (
           <div className="alert-card" role="alert" key={b.id}>

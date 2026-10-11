@@ -17,8 +17,8 @@ function b64ToBytes(b64: string) {
   return Uint8Array.from(raw, (c) => c.charCodeAt(0));
 }
 
-/** Разрешение браузера → подписка этого устройства → сохраняем на сервере для конкретной записи. */
-export async function enableStatusPush(bookingId: string, token: string): Promise<"ok" | "denied" | "not_configured"> {
+/** Разрешение браузера → подписка этого устройства (с ключом сервиса). Общая для клиента и владельца. */
+async function subscribeDevice(): Promise<{ endpoint: string; keys: { p256dh: string; auth: string } } | "denied" | "not_configured"> {
   const { data: key, error: keyErr } = await supabase.rpc("get_push_key");
   if (keyErr) throw keyErr;
   if (!key) return "not_configured";
@@ -31,10 +31,42 @@ export async function enableStatusPush(bookingId: string, token: string): Promis
   const want = b64ToBytes(key as string);
   if (sub && (!cur || cur.length !== want.length || cur.some((v, i) => v !== want[i]))) { await sub.unsubscribe(); sub = null; }
   sub ??= await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: want });
-  const j = sub.toJSON() as { endpoint: string; keys: { p256dh: string; auth: string } };
+  return sub.toJSON() as { endpoint: string; keys: { p256dh: string; auth: string } };
+}
+
+/** Адрес подписки этого устройства, если она уже есть (без запроса разрешения). */
+export async function currentEndpoint(): Promise<string | null> {
+  try {
+    if (!("serviceWorker" in navigator)) return null;
+    const reg = await navigator.serviceWorker.getRegistration();
+    return (await reg?.pushManager.getSubscription())?.endpoint ?? null;
+  } catch {
+    return null;
+  }
+}
+
+export async function enableStatusPush(bookingId: string, token: string): Promise<"ok" | "denied" | "not_configured"> {
+  const j = await subscribeDevice();
+  if (typeof j === "string") return j;
   const { error } = await supabase.rpc("subscribe_status_push", { p_booking: bookingId, p_token: token, p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth });
   if (error) throw error;
   return "ok";
+}
+
+/** Владелец: уведомления о новых записях студии на это устройство. */
+export async function enableOwnerPush(tenantId: string): Promise<"ok" | "denied" | "not_configured"> {
+  const j = await subscribeDevice();
+  if (typeof j === "string") return j;
+  const { error } = await supabase.rpc("owner_push_subscribe", { p_tenant: tenantId, p_endpoint: j.endpoint, p_p256dh: j.keys.p256dh, p_auth: j.keys.auth });
+  if (error) throw error;
+  return "ok";
+}
+
+export async function disableOwnerPush(tenantId: string) {
+  const endpoint = await currentEndpoint();
+  if (!endpoint) return;
+  const { error } = await supabase.rpc("owner_push_unsubscribe", { p_tenant: tenantId, p_endpoint: endpoint });
+  if (error) throw error;
 }
 
 export async function disableStatusPush(bookingId: string, token: string) {

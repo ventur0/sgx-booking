@@ -125,6 +125,10 @@ pnpm deploy                                  # wrangler pages deploy dist
 `insert into public.push_config (vapid_public, vapid_private) values ('<public>', '<private>');`
 На iPhone push работает только в приложении с экрана «Домой» (iOS 16.4+). Тесты: `tests/db/06_status_push.sql`.
 
+Владельцу (миграция `20261011140000_owner_push.sql`): кабинет → «Включить» (или Настройки → Уведомления) —
+устройство получает push о каждой новой записи клиента и об отмене клиентом, даже когда кабинет закрыт.
+Та же отправка (`/api/push`), задания с `audience = 'owner'`. Тесты: `tests/db/07_owner_push.sql`.
+
 ## 7. Новая студия
 
 См. [CLONE-IN-6-MINUTES.md](CLONE-IN-6-MINUTES.md).
