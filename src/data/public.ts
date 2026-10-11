@@ -98,6 +98,11 @@ export function useMyBooking(id: string, token: string) {
   return useQuery({
     queryKey: ["my", id],
     retry: (n, e) => n < 2 && !String((e as Error)?.message).includes("not_found"),
+    // статус (принята → готова → завершена) обновляется сам: раз в 15 секунд, пока страница открыта,
+    // и сразу при возвращении на вкладку. Завершённые и отменённые записи больше не опрашиваем.
+    refetchInterval: (q) => (q.state.data && ["done", "cancelled"].includes(q.state.data.status) ? false : 15_000),
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
     queryFn: async () => {
       const { data, error } = await supabase.rpc("get_my_booking", { p_booking: id, p_token: token });
       if (error) throw error;

@@ -203,6 +203,10 @@
   .bk-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
   .status { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid; white-space: nowrap; align-self: flex-start; }
   .status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .status-changed { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px;
+                    border: 1px solid var(--ok); background: rgba(60,203,138,.1); font-size: 15px; animation: alert-in .25s ease-out; }
+  .live-hint { margin: 0; display: flex; align-items: center; gap: 6px; }
+  .live-hint::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ok); }
   .st-new { color: var(--accent); } .st-accepted { color: var(--warn); } .st-ready { color: var(--ok); } .st-done { color: var(--muted); } .st-cancelled { color: var(--bad); }
   .confirm { padding: 12px; border: 1px solid rgba(255,100,100,.35); border-radius: 12px; display: flex; flex-direction: column; gap: 10px; }
   .reminder h3 { font-size: 15px; }

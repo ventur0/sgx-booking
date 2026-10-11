@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useStudioCtx } from "./StudioLayout";
 import { useCancelMyBooking, useMyBooking } from "../../data/public";
@@ -49,6 +49,18 @@ function MyCard({ r, compact, onForget }: { r: MyRef; compact?: boolean; onForge
   const q = useMyBooking(r.id, r.token);
   const cancel = useCancelMyBooking();
   const [confirm, setConfirm] = useState(false);
+  // смена статуса без перезагрузки страницы: заметная плашка и вибрация
+  const prev = useRef<string | null>(null);
+  const [changed, setChanged] = useState<string | null>(null);
+  const status = q.data?.status;
+  useEffect(() => {
+    if (!status) return;
+    if (prev.current && prev.current !== status && !cancel.isSuccess) {
+      setChanged(status);
+      try { navigator.vibrate?.([150, 80, 150]); } catch { /* нет вибрации */ }
+    }
+    prev.current = status;
+  }, [status, cancel.isSuccess]);
 
   if (q.isPending) return <article className="bk"><Loading rows={2} /></article>;
   if (q.error) {
@@ -65,6 +77,12 @@ function MyCard({ r, compact, onForget }: { r: MyRef; compact?: boolean; onForge
   return (
     <article className="bk">
       <div className="bk-top"><h2>{b.serviceName}</h2><span className={`status st-${b.status}`}>{STATUS[b.status]}</span></div>
+      {changed && changed === b.status && (
+        <div className="status-changed" role="status">
+          <span>Статус обновился: <b>{STATUS[b.status]}</b></span>
+          <button className="icon-btn" aria-label="Скрыть" onClick={() => setChanged(null)}>×</button>
+        </div>
+      )}
       {b.isDemo && <Notice kind="info">Демонстрационная запись студии-образца.</Notice>}
       <dl className="summary">
         <dt>Когда</dt><dd>{when}</dd>
@@ -73,6 +91,7 @@ function MyCard({ r, compact, onForget }: { r: MyRef; compact?: boolean; onForge
         <dt>Стоимость</dt><dd className="mono">{moneyBYN(b.price)}</dd>
         <dt>Адрес</dt><dd>{p.address}</dd>
       </dl>
+      {b.status !== "done" && b.status !== "cancelled" && <p className="muted small live-hint">Статус обновляется автоматически</p>}
       {compact ? (
         <Link className="btn small" to={`/s/${studio.tenant.slug}/my/${b.id}`}>Подробнее</Link>
       ) : (
