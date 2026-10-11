@@ -54,22 +54,7 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ci-placeholder
         run: pnpm build:vercel && pnpm exec tsx scripts/check-vercel-routes.ts
       - name: Функция /api/push запускается
-        run: |
-          node -e '
-            const h = require("./.vercel/output/functions/api/push.func/index.js");
-            const fn = h.default || h;
-            const { Readable } = require("node:stream");
-            const call = (method, body) => new Promise((res) => {
-              const req = Readable.from(body ? [body] : []); req.method = method; req.setEncoding = () => {};
-              const out = { statusCode: 0, headers: {}, setHeader(k, v) { this.headers[k] = v; }, end(b) { res({ status: this.statusCode, body: b }); } };
-              fn(req, out);
-            });
-            (async () => {
-              const a = await call("GET"); const b = await call("POST", "{\"job\":\"x\"}");
-              console.log(a, b);
-              if (a.status !== 405 || b.status !== 400) process.exit(1);
-            })();
-          '
+        run: node scripts/smoke-push.cjs
       - name: Итог проверки типов
         if: steps.typecheck.outcome == 'failure'
         run: |
