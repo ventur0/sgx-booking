@@ -54,7 +54,9 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ci-placeholder
         run: pnpm build:vercel && pnpm exec tsx scripts/check-vercel-routes.ts
       - name: Функция /api/push запускается
-        run: node scripts/smoke-push.cjs
+        run: |
+          node scripts/smoke-push.cjs > smoke.txt 2>&1 && cat smoke.txt && exit 0
+          cat smoke.txt; echo "::error::$(tail -c 1500 smoke.txt | tr '\n' ' ')"; exit 1
       - name: Итог проверки типов
         if: steps.typecheck.outcome == 'failure'
         run: |
