@@ -9,7 +9,6 @@ import { dayLabel, durationLabel, todayIn, trimTime } from "../../lib/time";
 import { humanError } from "../../lib/errors";
 import { Empty, Field, Notice } from "../../components/ui/States";
 import { mediaUrl } from "../../lib/supabase";
-import { TelegramConnect } from "../../components/owner/TelegramConnect";
 
 export function SettingsPage() {
   const { studio } = useStudioCtx();
@@ -23,7 +22,6 @@ export function SettingsPage() {
         <NavLink to={`${base}/schedule`}>График</NavLink>
         <NavLink to={`${base}/photos`}>Фото</NavLink>
         {studio.tenant.mode === "preview" && <NavLink to={`${base}/launch`}>Запуск</NavLink>}
-        <NavLink to={`${base}/telegram`}>Telegram</NavLink>
         <NavLink to={`${base}/account`}>Аккаунт</NavLink>
       </nav>
       <Routes>
@@ -33,7 +31,6 @@ export function SettingsPage() {
         <Route path="schedule" element={<ScheduleForm />} />
         <Route path="photos" element={<PhotosForm />} />
         <Route path="launch" element={<LaunchForm />} />
-        <Route path="telegram" element={<TelegramConnect tenantId={studio.tenant.id} />} />
         <Route path="account" element={<AccountForm />} />
       </Routes>
     </>
