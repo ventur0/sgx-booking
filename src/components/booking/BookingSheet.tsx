@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Sheet } from "../ui/Sheet";
 import { ErrorState, Field, Loading, Notice } from "../ui/States";
 import { Reminder } from "./Reminder";
+import { StatusPush } from "./StatusPush";
 import { useAvailability, useCreateBooking, type Studio } from "../../data/public";
 import { addDays, dayLabel, dayNum, durationLabel, rangeLabel, todayIn, trimTime, weekdayShort } from "../../lib/time";
 import { errorCode, humanError, isRetryable } from "../../lib/errors";
@@ -221,6 +222,7 @@ export function BookingSheet({ studio, open, onClose, initialServiceId }: { stud
             <dt>Стоимость</dt><dd className="mono">{moneyBYN(svc.price)}</dd>
             <dt>Адрес</dt><dd>{tenant.profile.address}</dd>
           </dl>
+          <StatusPush bookingId={done.id} token={done.token} />
           <Reminder bookingId={done.id} token={done.token}
             event={{ id: done.id, title: `${svc.name} — ${tenant.profile.name}`, startsAt: done.startsAt, endsAt: done.endsAt, location: tenant.profile.address, details: `Телефон студии: ${tenant.profile.phone}` }} />
           <div className="row">

@@ -21,6 +21,7 @@ const { version, routes } = JSON.parse(readFileSync(join(OUT, "config.json"), "u
 
 const fileFor = (path: string): string | null => {
   const p = decodeURIComponent(path);
+  if (existsSync(join(OUT, "functions", `${p}.func`, ".vc-config.json"))) return `${p} (функция)`;
   const f = join(STATIC, p);
   if (existsSync(f) && statSync(f).isFile()) return p;
   const idx = join(f, "index.html");
@@ -105,6 +106,12 @@ for (const s of [slug, slugs[slugs.length - 1]]) {
   const r = resolve("/admin");
   check("/admin → SPA /index.html", r.kind === "file" && r.target === "/index.html", r);
   check("заголовки безопасности", r.headers["X-Content-Type-Options"] === "nosniff", r.headers);
+}
+{
+  const r = resolve("/api/push");
+  check("/api/push → функция отправки уведомлений", r.kind === "file" && r.target === "/api/push (функция)", r);
+  const cfg = JSON.parse(readFileSync(join(OUT, "functions", "api", "push.func", ".vc-config.json"), "utf8")) as { runtime: string; handler: string };
+  check("функция собрана (index.js, Node)", existsSync(join(OUT, "functions", "api", "push.func", cfg.handler)) && cfg.runtime.startsWith("nodejs"), cfg);
 }
 for (const f of ["_redirects", "_headers", "_routes.json"]) check(`нет ${f} в static`, !existsSync(join(STATIC, f)), f);
 

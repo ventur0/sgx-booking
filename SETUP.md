@@ -112,6 +112,19 @@ pnpm deploy                                  # wrangler pages deploy dist
 Маршрутизация (`dist/_redirects`): `/s/<slug>/*` отдаёт оболочку `/t/<slug>/` с метаданными и манифестом этой студии.
 Статика студий лежит в `/t/`, потому что правила `_redirects` в Cloudflare Pages применяются и к существующим файлам.
 
+## 6a. Уведомления клиенту о статусе (Web Push)
+
+Клиент на «Моя запись» (или сразу после записи) нажимает «Сообщить о готовности» — подписка этого устройства
+сохраняется для записи. Владелец меняет статус (принята, готова, перенос, отмена студией) → триггер в базе создаёт
+задание с одноразовым nonce и через `pg_net` вызывает `/api/push` на Vercel (`server/push.ts`, собирается в
+`scripts/build-vercel.ts`). Функция забирает задание по nonce (`push_job_claim`), отправляет push и отмечает
+результат (`push_job_done`). Повтор — `pg_cron` раз в минуту (`push_retry`). Своих секретов у функции нет.
+
+Включение: выполнить `supabase/migrations/20261011130000_status_push.sql` и задать ключи VAPID
+(`npx web-push generate-vapid-keys`):
+`insert into public.push_config (vapid_public, vapid_private) values ('<public>', '<private>');`
+На iPhone push работает только в приложении с экрана «Домой» (iOS 16.4+). Тесты: `tests/db/06_status_push.sql`.
+
 ## 7. Новая студия
 
 См. [CLONE-IN-6-MINUTES.md](CLONE-IN-6-MINUTES.md).

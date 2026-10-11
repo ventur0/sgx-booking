@@ -8,6 +8,7 @@ import { humanError } from "../../lib/errors";
 import { formatBYPhone, moneyBYN, normalizeBYPhone } from "../../shared/by";
 import { Empty, ErrorState, Loading, Notice } from "../../components/ui/States";
 import { Reminder } from "../../components/booking/Reminder";
+import { StatusPush } from "../../components/booking/StatusPush";
 
 const STATUS: Record<string, string> = { new: "Ждём вас", accepted: "Машина принята", ready: "Готова, можно забирать", done: "Завершена", cancelled: "Отменена" };
 
@@ -96,6 +97,9 @@ function MyCard({ r, compact, onForget }: { r: MyRef; compact?: boolean; onForge
         <Link className="btn small" to={`/s/${studio.tenant.slug}/my/${b.id}`}>Подробнее</Link>
       ) : (
         <>
+          {b.status !== "cancelled" && b.status !== "done" && (
+            <StatusPush key={String(b.pushOn)} bookingId={b.id} token={r.token} on={!!b.pushOn} ready={!!b.pushReady} onChanged={() => void q.refetch()} />
+          )}
           {b.status !== "cancelled" && b.status !== "done" && (
             <Reminder bookingId={b.id} token={r.token} serverState={b.reminder} onChanged={() => q.refetch()}
               event={{ id: b.id, title: `${b.serviceName} — ${p.name}`, startsAt: b.startsAt, endsAt: b.endsAt, location: p.address, details: `Телефон студии: ${p.phone}` }} />

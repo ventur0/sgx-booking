@@ -90,7 +90,7 @@ export function useCreateBooking(slug: string) {
 
 export type MyBooking = {
   id: string; slug: string; timezone: string; serviceName: string; price: number; startsAt: string; endsAt: string;
-  resourceName: string; status: "new" | "accepted" | "ready" | "done" | "cancelled"; clientName: string; clientCar: string;
+  resourceName: string; status: "new" | "accepted" | "ready" | "done" | "cancelled"; clientName: string; clientCar: string; pushOn?: boolean; pushReady?: boolean;
   isDemo: boolean; cancelHours: number; canCancel: boolean; reminder: "none" | "pending" | "processing" | "sent" | "skipped" | "cancelled" | "failed";
 };
 

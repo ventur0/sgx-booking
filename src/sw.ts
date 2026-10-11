@@ -60,15 +60,17 @@ registerRoute(
 // Свободное время — только из сети (устаревшее расписание опаснее, чем «нет связи»).
 registerRoute(({ url }) => url.pathname.endsWith("/rpc/get_availability"), new NetworkFirst({ cacheName: `sgx-${slug}-noop`, networkTimeoutSeconds: 8, plugins: [{ cacheWillUpdate: async () => null }] }), "POST");
 
-// Уведомления (Web Push) сейчас отключены; обработчик оставлен на случай, если их снова включат.
+// Web Push о смене статуса записи (машина принята, готова; перенос или отмена студией) — см. server/push.ts.
 self.addEventListener("push", (event) => {
-  let data = { title: "Напоминание о записи", body: "", url: `/s/${slug}/my` };
+  let data = { title: "Ваша запись", body: "", url: `/s/${slug}/my` };
   try {
     data = { ...data, ...(event.data?.json() as object) };
   } catch {
     data.body = event.data?.text() ?? "";
   }
-  event.waitUntil(self.registration.showNotification(data.title, { body: data.body, data: { url: data.url }, icon: `/t/${slug}/icon-192.png`, badge: `/t/${slug}/icon-192.png`, tag: data.url }));
+  event.waitUntil(self.registration.showNotification(data.title, { body: data.body, data: { url: data.url }, icon: `/t/${slug}/icon-192.png`, badge: `/t/${slug}/icon-192.png`, tag: data.url,
+    // «готова» заменяет «принята» по той же записи, но снова звучит и показывается
+    renotify: true } as NotificationOptions));
 });
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();

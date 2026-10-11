@@ -10,9 +10,11 @@
  *   /s/<slug>/*                             → оболочка /t/<slug>/index.html (студии из tenants/)
  *   /s/<другая>/*                           → общая оболочка /index.html (студии из панели продавца, только в БД)
  *   остальное без файла                     → /index.html (как SPA-фолбэк Cloudflare Pages)
+ *   functions/api/push.func — отправка Web Push клиенту при смене статуса (server/push.ts)
  * Realtime (WebSocket) Vercel не проксирует: на Vercel кабинет подключается к Realtime напрямую (см. src/lib/supabase.ts).
  */
-import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { build } from "esbuild";
 import { basename, join } from "node:path";
 
 // Без ./lib (zod не нужен): тот же список студий, что и у build-shells — папки tenants/* с business.json, кроме _*.
@@ -37,7 +39,16 @@ for (const s of slugs) {
   if (!existsSync(join(DIST, "t", s, "index.html"))) throw new Error(`Нет оболочки dist/t/${s}/index.html — запустите pnpm build`);
 }
 
-const upstream = (process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || "").replace(/\/+$/, "");
+// Публичные настройки Supabase: переменные окружения хостинга, иначе .env.production (как у Vite)
+const envFile: Record<string, string> = {};
+if (existsSync(join(ROOT, ".env.production")))
+  for (const line of readFileSync(join(ROOT, ".env.production"), "utf8").split("\n")) {
+    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
+    if (m) envFile[m[1]] = m[2];
+  }
+const env = (k: string) => process.env[k] || envFile[k] || "";
+const upstream = (env("SUPABASE_URL") || env("VITE_SUPABASE_URL")).replace(/\/+$/, "");
+const publicKey = env("VITE_SUPABASE_ANON_KEY");
 const proxyOk = /^https:\/\/[a-z0-9-]+\.supabase\.co$/.test(upstream);
 if (!proxyOk) console.warn(`⚠ VITE_SUPABASE_URL не похож на https://<ref>.supabase.co ("${upstream}") — /sb не будет работать`);
 
@@ -71,6 +82,23 @@ const routes: Route[] = [
   { src: "^/s/[^/]+/.*$", dest: "/index.html" },
   { src: "^/.*$", dest: "/index.html" },
 ];
+
+// ---------- функция /api/push: Web Push клиенту при смене статуса (server/push.ts) ----------
+const fnDir = join(OUT, "functions", "api", "push.func");
+mkdirSync(fnDir, { recursive: true });
+await build({
+  entryPoints: [join(ROOT, "server", "push.ts")],
+  outfile: join(fnDir, "index.js"),
+  bundle: true,
+  platform: "node",
+  format: "cjs",
+  target: "node20",
+  minify: true,
+  logLevel: "warning",
+  define: { __SUPABASE_URL__: JSON.stringify(upstream), __SUPABASE_KEY__: JSON.stringify(publicKey) },
+});
+writeFileSync(join(fnDir, ".vc-config.json"), JSON.stringify({ runtime: "nodejs22.x", handler: "index.js", launcherType: "Nodejs", maxDuration: 20 }, null, 2) + "\n");
+if (!proxyOk || !publicKey) console.warn("⚠ /api/push собрана без адреса или ключа Supabase — уведомления не отправятся");
 
 writeFileSync(join(OUT, "config.json"), JSON.stringify({ version: 3, routes }, null, 2) + "\n");
 console.log(`✓ .vercel/output: ${slugs.length} студий, прокси /sb → ${proxyOk ? upstream : "выключен"}`);
