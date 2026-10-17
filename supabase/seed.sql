@@ -2192,8 +2192,10 @@ begin
   end if;
   foreach s in array array['agat-vitebsk', 'alfa-korolya', 'alyans-gomel', 'artline-motors', 'avtomoyka-88', 'avtoverdikt', 'avtozal-vitebsk', 'bip-service', 'bleskcar', 'centralnaya-brest', 'chameleon', 'chistaya-sovest', 'cleanart', 'detailing-mogilev', 'detailing-room', 'dsm-garage', 'dtlpro-gomel', 'dvs-master-grodno', 'fastclean', 'fortuna-auto', 'forum-wash', 'genservice', 'graphite', 'happy-car', 'hdh-detailing', 'kolyada', 'kometa-brest', 'lab888', 'mehanika', 'mig-vitebsk', 'ministo', 'moonshine-gomel', 'motorbob', 'moyka-grishina', 'moyka-trostenetskaya', 'nata-gomel', 'nero', 'ofs-service', 'olimpik', 'powerboost-mogilev', 'procto-mogilev', 'protector', 'qservice-brest', 'rd-detailing', 'restyling-gomel', 'safari-service', 'samurai-gomel', 'servicepoint-grodno', 'shinka-pushkina', 'shinka20', 'shinomontazh-vitebsk', 'spas-mogilev', 'sto-furgon', 'sto-plus-grodno', 'sto325', 'titan-gomel', 'vershina-tires', 'vvk-komplekt'] loop
     u := md5('owner-' || s)::uuid;
-    execute $q$insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at, raw_app_meta_data, raw_user_meta_data)
-      values ('00000000-0000-0000-0000-000000000000', $1, 'authenticated', 'authenticated', $2, crypt('demo-owner-pass', gen_salt('bf')), now(), now(), now(), '{"provider":"email","providers":["email"]}', '{}')
+    execute $q$insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at, raw_app_meta_data, raw_user_meta_data,
+        confirmation_token, recovery_token, email_change_token_new, email_change, email_change_token_current, reauthentication_token)
+      values ('00000000-0000-0000-0000-000000000000', $1, 'authenticated', 'authenticated', $2, crypt('demo-owner-pass', gen_salt('bf')), now(), now(), now(), '{"provider":"email","providers":["email"]}', '{}',
+        '', '', '', '', '', '')
       on conflict (id) do nothing$q$ using u, 'owner@' || s || '.local';
     execute $q$insert into auth.identities (id, user_id, provider_id, identity_data, provider, created_at, updated_at, last_sign_in_at)
       values (gen_random_uuid(), $1, $1::text, jsonb_build_object('sub', $1::text, 'email', $2), 'email', now(), now(), now())

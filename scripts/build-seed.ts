@@ -60,6 +60,7 @@ on conflict (tenant_id, key) do update set name = excluded.name, description = e
 }
 
 // Демо-владельцы для локального Supabase (auth.users с паролем). На чистом PostgreSQL без схемы Supabase Auth шаг пропускается.
+// Служебные токены — пустые строки, а не NULL: иначе вход падает с «Database error querying schema».
 out.push(`-- ===== демо-владельцы (только локально) =====
 do $$
 declare s text; u uuid;
@@ -69,8 +70,10 @@ begin
   end if;
   foreach s in array array[${listTenants().map((x) => q(x)).join(", ")}] loop
     u := md5('owner-' || s)::uuid;
-    execute $q$insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at, raw_app_meta_data, raw_user_meta_data)
-      values ('00000000-0000-0000-0000-000000000000', $1, 'authenticated', 'authenticated', $2, crypt('demo-owner-pass', gen_salt('bf')), now(), now(), now(), '{"provider":"email","providers":["email"]}', '{}')
+    execute $q$insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, created_at, updated_at, raw_app_meta_data, raw_user_meta_data,
+        confirmation_token, recovery_token, email_change_token_new, email_change, email_change_token_current, reauthentication_token)
+      values ('00000000-0000-0000-0000-000000000000', $1, 'authenticated', 'authenticated', $2, crypt('demo-owner-pass', gen_salt('bf')), now(), now(), now(), '{"provider":"email","providers":["email"]}', '{}',
+        '', '', '', '', '', '')
       on conflict (id) do nothing$q$ using u, 'owner@' || s || '.local';
     execute $q$insert into auth.identities (id, user_id, provider_id, identity_data, provider, created_at, updated_at, last_sign_in_at)
       values (gen_random_uuid(), $1, $1::text, jsonb_build_object('sub', $1::text, 'email', $2), 'email', now(), now(), now())
