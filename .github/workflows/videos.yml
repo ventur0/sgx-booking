@@ -28,8 +28,9 @@ jobs:
           pnpm exec supabase status -o env > sb.env
           grep -E '^(API_URL|ANON_KEY)=' sb.env | sed 's/^/found /' | cut -c1-40
           set -a; . ./sb.env; set +a
-          psql "$DB_URL" -tAc "select email, (encrypted_password is not null), (select count(*) from auth.identities i where i.user_id = u.id) from auth.users u where email like 'owner@graphite%'" || true
-          curl -s -X POST "$API_URL/auth/v1/token?grant_type=password" -H "apikey: $ANON_KEY" -H "Content-Type: application/json" -d '{"email":"owner@graphite.local","password":"demo-owner-pass"}' | cut -c1-200; echo
+          U=$(psql "$DB_URL" -tAc "select email || ' pw=' || (encrypted_password is not null) || ' ident=' || (select count(*) from auth.identities i where i.user_id = u.id) || ' members=' || (select count(*) from public.tenant_members m where m.user_id = u.id) from auth.users u where email like 'owner@graphite%'" 2>&1)
+          T=$(curl -s -X POST "$API_URL/auth/v1/token?grant_type=password" -H "apikey: $ANON_KEY" -H "Content-Type: application/json" -d '{"email":"owner@graphite.local","password":"demo-owner-pass"}' | cut -c1-300)
+          echo "::warning::демо-владелец: [$U] вход: [$T] keys: $(cut -d= -f1 sb.env | tr '\n' ' ')"
       - name: Сборка сайта под локальную базу
         run: |
           set -a; . ./sb.env; set +a
