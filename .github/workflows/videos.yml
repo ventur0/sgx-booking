@@ -39,6 +39,12 @@ jobs:
           U=$(psql "$DB_URL" -tAc "select email || ' pw=' || (encrypted_password is not null) || ' ident=' || (select count(*) from auth.identities i where i.user_id = u.id) || ' members=' || (select count(*) from public.tenant_members m where m.user_id = u.id) from auth.users u where email like 'owner@graphite%'" 2>&1)
           T=$(curl -s -X POST "$API_URL/auth/v1/token?grant_type=password" -H "apikey: $ANON_KEY" -H "Content-Type: application/json" -d '{"email":"owner@graphite.local","password":"demo-owner-pass"}' | cut -c1-300)
           echo "::warning::демо-владелец: [$U] вход: [$T] keys: $(cut -d= -f1 sb.env | tr '\n' ' ')"
+      - name: Ключи уведомлений для тестовой копии (чтобы были видны кнопки уведомлений)
+        run: |
+          set -a; . ./sb.env; set +a
+          K=$(node -e 'const c=require("crypto");const {publicKey:p,privateKey:k}=c.generateKeyPairSync("ec",{namedCurve:"prime256v1"});const a=p.export({format:"jwk"}),b=k.export({format:"jwk"});const raw=Buffer.concat([Buffer.from([4]),Buffer.from(a.x,"base64url"),Buffer.from(a.y,"base64url")]).toString("base64url");console.log(raw+" "+b.d)')
+          set -- $K
+          psql "$DB_URL" -qc "insert into public.push_config (vapid_public, vapid_private, site_url) values ('$1', '$2', 'https://localhost.invalid') on conflict (id) do nothing"
       - name: Сборка сайта под локальную базу
         run: |
           set -a; . ./sb.env; set +a

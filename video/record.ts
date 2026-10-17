@@ -22,8 +22,8 @@ const failures: string[] = [];
 const OVERLAY = String.raw`(() => {
   const css = "#vcap{position:fixed;left:10px;right:10px;top:10px;z-index:2147483647;pointer-events:none;" +
     "background:rgba(10,14,20,.92);color:#fff;border:1px solid rgba(70,144,255,.7);border-radius:16px;padding:12px 14px;" +
-    "font:600 17px/1.3 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.5)}" +
-    "#vcap small{display:block;font-weight:400;font-size:14px;color:#c9d6ea;margin-top:4px}#vcap:empty{display:none}" +
+    "font:600 18px/1.3 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.5)}" +
+    "#vcap small{display:block;font-weight:400;font-size:15px;color:#c9d6ea;margin-top:4px}#vcap:empty{display:none}" +
     ".vtap{position:fixed;z-index:2147483646;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;" +
     "background:rgba(70,144,255,.35);border:3px solid #4690ff;animation:vtap .7s ease-out forwards}" +
     "@keyframes vtap{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.5);opacity:0}}";
@@ -83,7 +83,7 @@ async function step(name: string, fn: () => Promise<void>) {
 }
 async function titleCard(p: Page, num: string, title: string, lines: string[]) {
   await p.evaluate(() => (window as unknown as { __cap: (s: string) => void }).__cap("")).catch(() => {});
-  await p.setContent(`<html><body style="margin:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:32px;box-sizing:border-box;
+  await p.setContent(`<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:32px;box-sizing:border-box;
     background:radial-gradient(120% 80% at 50% 0%,#12305f,#050607 70%);color:#fff;font-family:-apple-system,Segoe UI,Roboto,sans-serif">
     <div style="color:#4690ff;font:700 15px/1 sans-serif;letter-spacing:.12em;text-transform:uppercase">Видеоинструкция ${num}</div>
     <h1 style="font-size:34px;line-height:1.15;margin:14px 0 18px">${title}</h1>
@@ -93,7 +93,7 @@ async function titleCard(p: Page, num: string, title: string, lines: string[]) {
 }
 async function endCard(p: Page, text: string) {
   await p.evaluate(() => (window as unknown as { __cap: (s: string) => void }).__cap("")).catch(() => {});
-  await p.setContent(`<html><body style="margin:0;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px;box-sizing:border-box;
+  await p.setContent(`<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px;box-sizing:border-box;
     background:#050607;color:#fff;font-family:-apple-system,Segoe UI,Roboto,sans-serif"><div><div style="font-size:54px">✓</div>
     <h2 style="font-size:26px;line-height:1.25">${text}</h2></div></body></html>`);
   await wait(p, 2500);
@@ -138,8 +138,10 @@ async function quickClientBooking(browser: Browser, who: { name: string; phone: 
   await p.getByRole("button", { name: "Записаться" }).first().click();
   const sheet = p.getByRole("dialog");
   await sheet.locator(".choice").nth(serviceIndex).click();
-  await sheet.locator(".date:not([disabled])").first().click();
-  await sheet.locator(".time:not(.busy)").nth(timeIndex).click();
+  await sheet.locator(".date:not([disabled])").nth(1).click();
+  const times = sheet.locator(".time:not(.busy)");
+  await times.first().waitFor({ timeout: 10000 });
+  await (await times.count() > timeIndex ? times.nth(timeIndex) : times.first()).click();
   await sheet.locator("#bk-name").fill(who.name);
   await sheet.locator("#bk-phone").fill(who.phone);
   await sheet.locator("#bk-car").fill(who.car);
@@ -261,7 +263,7 @@ async function video3(browser: Browser, statePath: string) {
     await tap(p, p.locator(".abk", { hasText: "Сергей" }).first(), 1400);
     await cap(p, "Перенести на другое время", "", 900);
     await tap(p, sheet.getByRole("button", { name: "Перенести" }), 1400);
-    await tap(p, sheet.locator(".time:not(.busy)").nth(6), 900);
+    await tap(p, sheet.locator(".time:not(.busy)").first(), 900);
     await tap(p, sheet.getByRole("button", { name: "Перенести" }).last(), 1800);
     await cap(p, "Готово — запись перенесена", "Если клиент включил уведомления, он получит новое время", 2800);
     await p.keyboard.press("Escape"); await wait(p, 800);
@@ -269,8 +271,10 @@ async function video3(browser: Browser, statePath: string) {
   await step("блокировка", async () => {
     await tap(p, p.getByRole("link", { name: "Блокировки" }), 1500);
     await cap(p, "Блокировки", "Пост на ремонте, обед или своя машина — закройте время, и онлайн его не займут", 3200);
-    await scrollBy(p, 300, 1000);
-    await tap(p, p.getByRole("button", { name: "Заблокировать пост" }), 1800);
+    await p.getByLabel("С (время)").fill("13:00").catch(() => {});
+    await p.getByLabel("По (время)").fill("14:00").catch(() => {});
+    await type(p, p.getByLabel("Причина"), "Обед");
+    await tap(p, p.getByRole("button", { name: "Заблокировать", exact: true }), 1800);
     await cap(p, "Пост заблокирован", "Снять блокировку — одной кнопкой", 2600);
   });
   await endCard(p, "Звонки, переносы и перерывы — без накладок");
