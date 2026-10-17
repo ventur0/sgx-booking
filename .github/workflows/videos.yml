@@ -27,6 +27,9 @@ jobs:
           pnpm exec supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor,postgres-meta
           pnpm exec supabase status -o env > sb.env
           grep -E '^(API_URL|ANON_KEY)=' sb.env | sed 's/^/found /' | cut -c1-40
+          set -a; . ./sb.env; set +a
+          psql "$DB_URL" -tAc "select email, (encrypted_password is not null), (select count(*) from auth.identities i where i.user_id = u.id) from auth.users u where email like 'owner@graphite%'" || true
+          curl -s -X POST "$API_URL/auth/v1/token?grant_type=password" -H "apikey: $ANON_KEY" -H "Content-Type: application/json" -d '{"email":"owner@graphite.local","password":"demo-owner-pass"}' | cut -c1-200; echo
       - name: Сборка сайта под локальную базу
         run: |
           set -a; . ./sb.env; set +a
@@ -45,7 +48,7 @@ jobs:
           pnpm exec tsx video/record.ts ${{ inputs.only }} > video/out/record.log 2>&1
           rc=$?
           cat video/out/record.log
-          echo "::warning::$(grep -E '⚠|Шаги|Все шаги|Error|error' video/out/record.log | tail -c 1800 | tr '\n' ' ')"
+          echo "::warning::$(grep -E '⚠|вход:|текст страницы|Шаги|Все шаги|Error|error' video/out/record.log | tail -c 3500 | tr '\n' ' ')"
           exit $rc
       - name: MP4
         run: |
@@ -57,7 +60,7 @@ jobs:
       - name: В ветку videos
         if: always()
         run: |
-          mkdir -p pub && cp video/out/*.mp4 video/out/record.log pub/ 2>/dev/null || true
+          mkdir -p pub && cp video/out/*.mp4 video/out/*.png video/out/record.log pub/ 2>/dev/null || true
           cd pub && ls -la
           git init -q -b videos && git add . && git -c user.name="github-actions" -c user.email="actions@github.com" commit -q -m "Видео $(date -u +%F_%H%M)"
           git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" videos

@@ -68,8 +68,18 @@ async function scrollBy(p: Page, dy: number, ms = 900) {
   await p.evaluate((d) => window.scrollBy({ top: d, behavior: "smooth" }), dy);
   await wait(p, ms);
 }
+let current: Page | null = null;
 async function step(name: string, fn: () => Promise<void>) {
-  try { await fn(); } catch (e) { failures.push(`${name}: ${(e as Error).message.split("\n")[0]}`); console.warn("⚠", name, (e as Error).message.split("\n")[0]); }
+  try { await fn(); } catch (e) {
+    failures.push(`${name}: ${(e as Error).message.split("\n")[0]}`);
+    console.warn("⚠", name, (e as Error).message.split("\n")[0]);
+    if (current) {
+      const f = name.replace(/[^a-zа-я0-9]+/gi, "-");
+      await current.screenshot({ path: join(OUT, `fail-${f}.png`) }).catch(() => {});
+      const txt = await current.evaluate(() => document.body.innerText.slice(0, 600)).catch(() => "");
+      console.warn("   текст страницы:", txt.replace(/\s+/g, " "));
+    }
+  }
 }
 async function titleCard(p: Page, num: string, title: string, lines: string[]) {
   await p.evaluate(() => (window as unknown as { __cap: (s: string) => void }).__cap("")).catch(() => {});
@@ -97,6 +107,7 @@ async function newRecorded(browser: Browser, name: string, storageStateIn?: stri
   });
   await ctx.addInitScript({ content: OVERLAY });
   const page = await ctx.newPage();
+  current = page;
   return {
     ctx, page,
     save: async () => {
@@ -113,6 +124,8 @@ async function ownerLogin(p: Page) {
     await type(p, p.getByLabel("Почта"), OWNER_EMAIL);
     await type(p, p.getByLabel("Пароль"), OWNER_PASSWORD);
     await tap(p, p.getByRole("button", { name: "Войти" }), 2500);
+    const err = await p.locator(".err").first().textContent({ timeout: 1000 }).catch(() => null);
+    if (err) console.warn("   вход:", err);
   }
   await p.getByRole("button", { name: "Неделя" }).waitFor({ timeout: 15000 });
 }
@@ -127,9 +140,9 @@ async function quickClientBooking(browser: Browser, who: { name: string; phone: 
   await sheet.locator(".choice").nth(serviceIndex).click();
   await sheet.locator(".date:not([disabled])").first().click();
   await sheet.locator(".time:not(.busy)").nth(timeIndex).click();
-  await sheet.getByLabel("Имя").fill(who.name);
-  await sheet.getByLabel("Телефон").fill(who.phone);
-  await sheet.getByLabel("Автомобиль").fill(who.car);
+  await sheet.locator("#bk-name").fill(who.name);
+  await sheet.locator("#bk-phone").fill(who.phone);
+  await sheet.locator("#bk-car").fill(who.car);
   await sheet.getByRole("checkbox").check();
   await p.getByRole("button", { name: "Подтвердить запись" }).click();
   await p.getByRole("heading", { name: "Вы записаны" }).waitFor({ timeout: 20000 });
@@ -164,9 +177,9 @@ async function video1(browser: Browser) {
     await cap(p, "3. Выбирает свободное время", "Занятое время отмечено и недоступно — накладок не будет", 2600);
     await tap(p, sheet.locator(".time:not(.busy)").nth(2), 1200);
     await cap(p, "4. Оставляет имя, телефон и машину", "", 900);
-    await type(p, sheet.getByLabel("Имя"), "Андрей");
-    await type(p, sheet.getByLabel("Телефон"), "+375 29 555-12-34");
-    await type(p, sheet.getByLabel("Автомобиль"), "VW Passat B8");
+    await type(p, sheet.locator("#bk-name"), "Андрей");
+    await type(p, sheet.locator("#bk-phone"), "+375 29 555-12-34");
+    await type(p, sheet.locator("#bk-car"), "VW Passat B8");
     await cap(p, "Согласие на обработку данных", "По Закону РБ № 99-З", 1200);
     await tap(p, sheet.getByRole("checkbox"), 700);
     await tap(p, p.getByRole("button", { name: "Подтвердить запись" }), 500);
@@ -238,9 +251,9 @@ async function video3(browser: Browser, statePath: string) {
     await sheet.getByLabel("Дата").fill(day.toISOString().slice(0, 10));
     await wait(p, 1500);
     await tap(p, sheet.locator(".time:not(.busy)").nth(4), 900);
-    await type(p, sheet.getByLabel("Имя клиента"), "Сергей");
-    await type(p, sheet.getByLabel("Телефон"), "+375 44 123-45-67");
-    await type(p, sheet.getByLabel("Автомобиль"), "BMW X5");
+    await type(p, sheet.locator("#nb-name"), "Сергей");
+    await type(p, sheet.locator("#bk-phone"), "+375 44 123-45-67");
+    await type(p, sheet.locator("#bk-car"), "BMW X5");
     await tap(p, p.getByRole("button", { name: "Записать клиента" }), 2000);
     await cap(p, "Время занято", "Онлайн на это время уже никто не запишется", 3000);
   });
