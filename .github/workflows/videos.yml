@@ -69,7 +69,8 @@ jobs:
         run: |
           cd video/out
           for f in *.webm; do
-            ffmpeg -y -loglevel error -i "$f" -c:v libx264 -preset slow -crf 24 -pix_fmt yuv420p -r 30 -movflags +faststart "${f%.webm}.mp4"
+            # Playwright кладёт картинку 390×844 в левый верхний угол кадра 780×1688 — обрезаем серое поле и увеличиваем
+            ffmpeg -y -loglevel error -i "$f" -vf "crop=390:844:0:0,scale=780:1688:flags=lanczos,setsar=1" -c:v libx264 -preset slow -crf 20 -pix_fmt yuv420p -r 30 -movflags +faststart "${f%.webm}.mp4"
           done
           ls -la
       - name: В ветку videos
