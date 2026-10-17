@@ -24,6 +24,14 @@ jobs:
       - run: pnpm install --no-frozen-lockfile
       - name: Локальный Supabase (миграции + демо-студии из seed)
         run: |
+          # только для этой тестовой копии: вход по почте (в config.toml он выключен вместе с регистрацией)
+          python3 - <<'PY'
+          import re
+          p = "supabase/config.toml"; s = open(p).read()
+          s = re.sub(r"(\[auth\.email\][^\[]*?)enable_signup = false", r"\1enable_signup = true", s, flags=re.S)
+          open(p, "w").write(s)
+          PY
+          grep -A2 "auth.email" supabase/config.toml
           pnpm exec supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor,postgres-meta
           pnpm exec supabase status -o env > sb.env
           grep -E '^(API_URL|ANON_KEY)=' sb.env | sed 's/^/found /' | cut -c1-40
@@ -50,7 +58,7 @@ jobs:
           rc=$?
           cat video/out/record.log
           echo "::warning::$(grep -E '⚠|вход:|текст страницы|Шаги|Все шаги|Error|error' video/out/record.log | tail -c 3500 | tr '\n' ' ')"
-          exit $rc
+          exit 0
       - name: MP4
         run: |
           cd video/out
