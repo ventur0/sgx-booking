@@ -51,7 +51,10 @@ async function cap(p: Page, title: string, sub = "", hold = 1800) {
   await wait(p, hold);
 }
 async function tap(p: Page, loc: Locator, after = 900) {
-  await loc.scrollIntoViewIfNeeded({ timeout: 8000 });
+  await loc.waitFor({ state: "visible", timeout: 8000 });
+  // по центру экрана: иначе кнопку внизу может перекрыть нижняя панель навигации
+  await loc.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" as ScrollBehavior }));
+  await wait(p, 250);
   const box = await loc.boundingBox();
   if (box) await p.evaluate(([x, y]) => (window as unknown as { __tap?: (a: number, b: number) => void }).__tap?.(x, y), [box.x + box.width / 2, box.y + box.height / 2]).catch(() => {});
   await wait(p, 450);
@@ -208,7 +211,6 @@ async function video2(browser: Browser, statePath: string) {
     await p.goto(`${BASE}/s/${SLUG}/owner/`);
     await cap(p, "Кабинет владельца", "Адрес: ссылка студии + /owner. Входите по почте и паролю", 2600);
     await ownerLogin(p);
-    await ctx.storageState({ path: statePath });
     await cap(p, "Записи на сегодня", "Переключатель «День / Неделя», стрелки — другие дни", 3000);
   });
   await step("новая запись приходит", async () => {
@@ -238,6 +240,7 @@ async function video2(browser: Browser, statePath: string) {
     await tap(p, p.getByRole("button", { name: "Неделя" }), 1200);
     await cap(p, "Вся неделя одним списком", "Видно, какие посты и дни уже заняты", 3200);
   });
+  await ctx.storageState({ path: statePath }).catch(() => {});
   await endCard(p, "Все записи и деньги — в одном кабинете");
   await save();
 }
@@ -255,7 +258,7 @@ async function video3(browser: Browser, statePath: string) {
     while (day.getUTCDay() === 0 || day.getUTCDay() === 6) day.setUTCDate(day.getUTCDate() + 1);
     await sheet.getByLabel("Дата").fill(day.toISOString().slice(0, 10));
     await wait(p, 1500);
-    await tap(p, sheet.locator(".time:not(.busy)").nth(4), 900);
+    await tap(p, sheet.locator(".time:not(.busy)").first(), 900);
     await type(p, sheet.locator("#nb-name"), "Сергей");
     await type(p, sheet.locator("#nb-phone"), "+375 44 123-45-67");
     await type(p, sheet.locator("#nb-car"), "BMW X5");
