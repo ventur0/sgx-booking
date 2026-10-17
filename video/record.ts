@@ -269,12 +269,18 @@ async function video3(browser: Browser, statePath: string) {
     await tap(p, p.locator(".abk", { hasText: "Сергей" }).first(), 1400);
     await cap(p, "Перенести на другое время", "", 900);
     await tap(p, sheet.getByRole("button", { name: "Перенести" }), 1400);
+    // на следующий рабочий день, где точно есть свободное время
+    const next = new Date(Date.now() + 3 * 864e5);
+    while (next.getUTCDay() === 0 || next.getUTCDay() === 6) next.setUTCDate(next.getUTCDate() + 1);
+    await sheet.getByLabel("Дата").fill(next.toISOString().slice(0, 10));
+    await wait(p, 1500);
     await tap(p, sheet.locator(".time:not(.busy)").first(), 900);
     await tap(p, sheet.getByRole("button", { name: "Перенести" }).last(), 1800);
     await cap(p, "Готово — запись перенесена", "Если клиент включил уведомления, он получит новое время", 2800);
     await p.keyboard.press("Escape"); await wait(p, 800);
   });
   await step("блокировка", async () => {
+    if (await p.getByRole("dialog").isVisible()) { await p.keyboard.press("Escape"); await wait(p, 800); }
     await tap(p, p.getByRole("link", { name: "Блокировки" }), 1500);
     await cap(p, "Блокировки", "Пост на ремонте, обед или своя машина — закройте время, и онлайн его не займут", 3200);
     await p.getByLabel("С (время)").fill("13:00").catch(() => {});
