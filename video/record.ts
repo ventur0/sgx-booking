@@ -252,7 +252,7 @@ async function video3(browser: Browser, statePath: string) {
     await wait(p, 1500);
     await tap(p, sheet.locator(".time:not(.busy)").nth(4), 900);
     await type(p, sheet.locator("#nb-name"), "Сергей");
-    await type(p, sheet.locator("#bk-phone"), "+375 44 123-45-67");
+    await type(p, sheet.locator("#nb-phone"), "+375 44 123-45-67");
     await type(p, sheet.locator("#bk-car"), "BMW X5");
     await tap(p, p.getByRole("button", { name: "Записать клиента" }), 2000);
     await cap(p, "Время занято", "Онлайн на это время уже никто не запишется", 3000);
