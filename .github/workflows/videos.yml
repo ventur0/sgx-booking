@@ -1,0 +1,56 @@
+# Видеоинструкции для покупателей: локальный Supabase с демо-студией, сборка сайта, запись экрана телефона
+# (video/record.ts), перевод в MP4. Результат — ветка videos (video/*.mp4). Запуск вручную.
+name: Videos
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: Номер видео (пусто — все)
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --no-frozen-lockfile
+      - name: Локальный Supabase (миграции + демо-студии из seed)
+        run: |
+          pnpm exec supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor,postgres-meta
+          pnpm exec supabase status -o env > sb.env
+          grep -E '^(API_URL|ANON_KEY)=' sb.env | sed 's/^/found /' | cut -c1-40
+      - name: Сборка сайта под локальную базу
+        run: |
+          set -a; . ./sb.env; set +a
+          VITE_SUPABASE_URL="$API_URL" VITE_SUPABASE_ANON_KEY="$ANON_KEY" VITE_SUPABASE_PROXY=off pnpm build
+      - name: Браузер и ffmpeg
+        run: |
+          pnpm exec playwright install --with-deps chromium
+          which ffmpeg || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+      - name: Запись
+        run: |
+          node video/serve.mjs > serve.log 2>&1 &
+          sleep 2
+          pnpm exec tsx video/record.ts ${{ inputs.only }} 2>&1 | tee video/out/record.log
+      - name: MP4
+        run: |
+          cd video/out
+          for f in *.webm; do
+            ffmpeg -y -loglevel error -i "$f" -c:v libx264 -preset slow -crf 24 -pix_fmt yuv420p -r 30 -movflags +faststart "${f%.webm}.mp4"
+          done
+          ls -la
+      - name: В ветку videos
+        if: always()
+        run: |
+          mkdir -p pub && cp video/out/*.mp4 video/out/record.log pub/ 2>/dev/null || true
+          cd pub && ls -la
+          git init -q -b videos && git add . && git -c user.name="github-actions" -c user.email="actions@github.com" commit -q -m "Видео $(date -u +%F_%H%M)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" videos
