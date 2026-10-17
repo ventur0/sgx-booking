@@ -140,10 +140,7 @@ export function useStats(tenantId: string, from: string, to: string) {
   });
 }
 
-export const parseRange = (r: string) => {
-  const m = r.match(/^[[(]"?([^",]+)"?,"?([^")\]]+)"?[)\]]$/);
-  return m ? { from: new Date(m[1].replace(" ", "T")), to: new Date(m[2].replace(" ", "T")) } : null;
-};
+export { parseRange } from "../shared/range";
 
 export function useOwnerActions(tenantId: string, slug: string) {
   const qc = useQueryClient();
