@@ -187,6 +187,8 @@
   .notify-ask span { flex: 1 1 200px; }
   .notify-ask svg { color: var(--accent); font-size: 18px; }
   @keyframes alert-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  .order-btns { display: inline-flex; gap: 2px; }
+  .order-btns .btn { min-width: 34px; padding-inline: 8px; }
   .notice { padding: 10px 12px; border-radius: 12px; font-size: 14px; border: 1px solid var(--line-2); background: var(--surface-2); }
   .notice svg { vertical-align: -3px; }
   .notice.ok { border-color: rgba(60,203,138,.4); color: #bdf2d9; background: rgba(60,203,138,.07); }

@@ -5,7 +5,7 @@ import { supabase } from "../lib/supabase";
 /** Панель продавца: студии, владельцы, приостановка. Права проверяет сервер (platform_admins). */
 export type StudioRow = {
   id: string; slug: string; name: string; mode: "preview" | "live"; suspended: boolean;
-  createdAt: string; wentLiveAt: string | null; bookings30: number; lastBookingAt: string | null;
+  createdAt: string; wentLiveAt: string | null; bookings30: number; lastBookingAt: string | null; sort?: number | null;
   owners: { userId: string; email: string }[];
 };
 
@@ -71,6 +71,18 @@ export function useAdminActions() {
     deleteStudio: useMutation({
       mutationFn: (a: { tenantId: string; confirmEmail: string }) => users<{ ok: true }>({ action: "delete_studio", ...a }),
       onSuccess: done,
+    }),
+    /** Порядок студий в панели: id сверху вниз. Список на экране меняется сразу, сервер сохраняет. */
+    setOrder: useMutation({
+      mutationFn: (ids: string[]) => rpc<void>("admin_set_order", { p_ids: ids }),
+      onMutate: async (ids) => {
+        await qc.cancelQueries({ queryKey: ["admin", "studios"] });
+        const prev = qc.getQueryData<StudioRow[]>(["admin", "studios"]);
+        if (prev) qc.setQueryData(["admin", "studios"], ids.map((id) => prev.find((x) => x.id === id)).filter(Boolean));
+        return { prev };
+      },
+      onError: (_e, _ids, c) => { if (c?.prev) qc.setQueryData(["admin", "studios"], c.prev); },
+      onSettled: done,
     }),
     setSuspended: useMutation({ mutationFn: (a: { tenantId: string; suspended: boolean }) => rpc<void>("admin_set_suspended", { p_tenant: a.tenantId, p_suspended: a.suspended }), onSuccess: done }),
   };

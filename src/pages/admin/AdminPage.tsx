@@ -14,6 +14,7 @@ export function AdminPage() {
   const session = useSession();
   const admin = useIsPlatformAdmin(session.data?.user.id);
   const studios = useStudios(admin.data === true);
+  const act = useAdminActions();
   const [notice, setNotice] = useState("");
 
   useEffect(() => {
@@ -50,7 +51,18 @@ export function AdminPage() {
         {studios.isLoading && <Loading rows={3} />}
         {studios.error && <ErrorState error={studios.error} onRetry={() => studios.refetch()} />}
         {studios.data?.length === 0 && <Empty>Студий пока нет.</Empty>}
-        {studios.data?.map((s) => <StudioCard key={s.id} s={s} onNotice={setNotice} />)}
+        {studios.data && studios.data.length > 1 && <p className="muted small">Порядок студий задаёте сами: стрелки «↑ ↓» и «Наверх» у каждой студии.</p>}
+        {studios.data?.map((s, i, all) => (
+          <StudioCard key={s.id} s={s} onNotice={setNotice}
+            onMove={(to) => {
+              const ids = all.map((x) => x.id);
+              const [moved] = ids.splice(i, 1);
+              ids.splice(Math.max(0, Math.min(ids.length, to)), 0, moved);
+              act.setOrder.mutate(ids);
+            }}
+            index={i} first={i === 0} last={i === all.length - 1} />
+        ))}
+        {act.setOrder.error && <Notice kind="bad">Порядок не сохранён: {humanError(act.setOrder.error)}</Notice>}
       </section>
     </main>
   );
@@ -169,7 +181,7 @@ function NewStudio() {
   );
 }
 
-function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) => void }) {
+function StudioCard({ s, onNotice, onMove, index, first, last }: { s: StudioRow; onNotice: (text: string) => void; onMove: (to: number) => void; index: number; first: boolean; last: boolean }) {
   const act = useAdminActions();
   const me = useSession().data?.user.id;
   const [panel, setPanel] = useState<null | { kind: "add" | "delete" } | { kind: "password" | "email" | "deleteUser"; userId: string; email: string }>(null);
@@ -205,6 +217,11 @@ function StudioCard({ s, onNotice }: { s: StudioRow; onNotice: (text: string) =>
           <div className="muted small mono">/s/{s.slug}/</div>
         </div>
         <div className="row">
+          <div className="order-btns" role="group" aria-label={`Порядок: ${s.name}`}>
+            <button className="btn small ghost" disabled={first} aria-label="Наверх" title="Наверх" onClick={() => onMove(0)}>⤒</button>
+            <button className="btn small ghost" disabled={first} aria-label="Выше" title="Выше" onClick={() => onMove(index - 1)}>↑</button>
+            <button className="btn small ghost" disabled={last} aria-label="Ниже" title="Ниже" onClick={() => onMove(index + 1)}>↓</button>
+          </div>
           <span className={`pill ${s.mode === "live" ? "ok" : ""}`}>{s.mode === "live" ? "Работает" : "Образец"}</span>
           {s.suspended && <span className="pill bad">Приостановлена</span>}
         </div>
