@@ -1,0 +1,146 @@
+{
+  "slug": "alyans-gomel",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@alyans-gomel.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Автокомплекс Альянс",
+    "shortName": "Альянс",
+    "kind": "СТО · Гомель",
+    "tagline": "Автокомплекс на Подгорной: обслуживание, ремонт, покраска, тонировка",
+    "description": "ТО и ремонт, диагностика, кузовной ремонт и покраска, тонировка, развал-схождение. Зона ожидания с кофе и Wi-Fi, скидки постоянным клиентам. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Гомель, ул. Подгорная, 12",
+    "phone": "+375 29 153-13-10",
+    "accent": "#5AA9E6",
+    "cards": [
+      {
+        "title": "Зона ожидания",
+        "text": "Кофе, Wi-Fi и кондиционер."
+      },
+      {
+        "title": "Кузов и покраска",
+        "text": "Ремонт и тонировка в одном месте."
+      },
+      {
+        "title": "Скидки",
+        "text": "Для постоянных клиентов."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "",
+      "price": 55,
+      "durationMin": 40
+    },
+    {
+      "key": "cabin",
+      "name": "Замена салонного фильтра",
+      "description": "",
+      "price": 33,
+      "durationMin": 20
+    },
+    {
+      "key": "air",
+      "name": "Замена воздушного фильтра",
+      "description": "",
+      "price": 33,
+      "durationMin": 20
+    },
+    {
+      "key": "fuel",
+      "name": "Замена топливного фильтра",
+      "description": "",
+      "price": 66,
+      "durationMin": 45
+    },
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "Примерная цена",
+      "price": 40,
+      "durationMin": 45
+    },
+    {
+      "key": "align",
+      "name": "Развал-схождение",
+      "description": "Примерная цена",
+      "price": 50,
+      "durationMin": 60
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

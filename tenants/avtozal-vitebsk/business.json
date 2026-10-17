@@ -1,0 +1,139 @@
+{
+  "slug": "avtozal-vitebsk",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@avtozal-vitebsk.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Автозал",
+    "shortName": "Автозал",
+    "kind": "СТО · Витебск",
+    "tagline": "СТО на Жесткова: эндоскопия, электрика, фаркопы, электромобили",
+    "description": "Эндоскопия двигателя, восстановление подушек безопасности, установка фаркопов и допоборудования, ГРМ, кондиционеры, тормоза. Обслуживаем и электромобили. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Витебск, ул. Жесткова, 11В, корп. 9",
+    "phone": "+375 33 300-55-65",
+    "accent": "#7C9CFF",
+    "cards": [
+      {
+        "title": "Эндоскопия двигателя",
+        "text": "Видим состояние без разборки."
+      },
+      {
+        "title": "Электромобили",
+        "text": "Обслуживаем и их."
+      },
+      {
+        "title": "Допоборудование",
+        "text": "Фаркопы и не только."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "susp",
+      "name": "Диагностика подвески",
+      "description": "Ходовая, тормоза, подтёки",
+      "price": 15,
+      "durationMin": 30
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "Снятие защиты +10 BYN",
+      "price": 35,
+      "durationMin": 40
+    },
+    {
+      "key": "endo",
+      "name": "Эндоскопия двигателя",
+      "description": "",
+      "price": 80,
+      "durationMin": 60
+    },
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "Примерная цена",
+      "price": 30,
+      "durationMin": 45
+    },
+    {
+      "key": "tow",
+      "name": "Установка фаркопа",
+      "description": "",
+      "price": 350,
+      "durationMin": 240
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

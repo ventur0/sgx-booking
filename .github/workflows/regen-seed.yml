@@ -1,0 +1,28 @@
+# Пересобрать supabase/seed.sql и supabase/cloud-setup.sql из tenants/*/business.json и закоммитить в main.
+# Запуск вручную после добавления студий.
+name: Regen seed
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --no-frozen-lockfile
+      - name: Проверка всех студий
+        run: |
+          for d in tenants/*/; do s=$(basename "$d"); case "$s" in _*) continue;; esac; pnpm -s tenant:validate "$s" > /tmp/v.txt 2>&1 || { cat /tmp/v.txt; echo "::error::$s: $(tail -c 600 /tmp/v.txt | tr '\n' ' ')"; exit 1; }; done
+          echo "все студии проходят проверку"
+      - run: pnpm cloud-sql
+      - name: Коммит
+        run: |
+          git config user.name "github-actions"; git config user.email "actions@github.com"
+          git add supabase/seed.sql supabase/cloud-setup.sql
+          git diff --cached --quiet && { echo "без изменений"; exit 0; }
+          git commit -q -m "seed.sql и cloud-setup.sql пересобраны из tenants/"
+          git push -q

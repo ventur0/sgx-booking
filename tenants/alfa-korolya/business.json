@@ -1,0 +1,136 @@
+{
+  "slug": "alfa-korolya",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@alfa-korolya.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "СТО Альфа",
+    "shortName": "Альфа",
+    "kind": "СТО · Минск",
+    "tagline": "СТО у метро «Фрунзенская»: двигатель, сцепление, тормоза, электрика",
+    "description": "Ремонт иномарок и отечественных авто: двигатель, КПП, сцепление, тормоза, кондиционер, автоэлектрика, сварка. 560 м от метро «Фрунзенская». Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Минск, ул. Короля, 2, корп. 1",
+    "phone": "+375 44 590-80-70",
+    "accent": "#E5484D",
+    "cards": [
+      {
+        "title": "Рядом с метро",
+        "text": "5 минут пешком от «Фрунзенской»."
+      },
+      {
+        "title": "Любые марки",
+        "text": "Иномарки и отечественные авто."
+      },
+      {
+        "title": "Оплата картой",
+        "text": "Наличные, карта, безнал."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "pads",
+      "name": "Замена тормозных колодок",
+      "description": "Одна ось",
+      "price": 63,
+      "durationMin": 60
+    },
+    {
+      "key": "clutch",
+      "name": "Замена сцепления",
+      "description": "Цена зависит от марки",
+      "price": 360,
+      "durationMin": 300
+    },
+    {
+      "key": "bleed",
+      "name": "Прокачка сцепления",
+      "description": "Без стоимости жидкости",
+      "price": 63,
+      "durationMin": 45
+    },
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "Примерная цена",
+      "price": 40,
+      "durationMin": 45
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "Примерная цена",
+      "price": 35,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sat": null,
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

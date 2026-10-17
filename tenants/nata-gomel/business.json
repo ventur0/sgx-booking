@@ -1,0 +1,146 @@
+{
+  "slug": "nata-gomel",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@nata-gomel.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Автокомплекс Ната",
+    "shortName": "Ната",
+    "kind": "СТО · Гомель",
+    "tagline": "СТО, шиномонтаж и мойка на Хатаевича",
+    "description": "Ремонт ходовой, тормозов, ГРМ и КПП, замена масла в АКПП, промывка радиаторов, кондиционеры, шиномонтаж и автомойка. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Гомель, ул. Хатаевича, 38",
+    "phone": "+375 44 555-83-83",
+    "accent": "#FF5C8A",
+    "cards": [
+      {
+        "title": "Ремонт и мойка",
+        "text": "Всё за один визит."
+      },
+      {
+        "title": "Масло в АКПП",
+        "text": "Полная замена на оборудовании."
+      },
+      {
+        "title": "Подарочные сертификаты",
+        "text": "На обслуживание и мойку."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "chassis",
+      "name": "Диагностика подвески",
+      "description": "",
+      "price": 36,
+      "durationMin": 30
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла в двигателе",
+      "description": "",
+      "price": 36,
+      "durationMin": 40
+    },
+    {
+      "key": "atf",
+      "name": "Полная замена масла в АКПП",
+      "description": "Работа, цена от",
+      "price": 180,
+      "durationMin": 120
+    },
+    {
+      "key": "radiator",
+      "name": "Промывка радиатора печки",
+      "description": "",
+      "price": 210,
+      "durationMin": 180
+    },
+    {
+      "key": "wash",
+      "name": "Мойка кузова",
+      "description": "Цена от",
+      "price": 18,
+      "durationMin": 30
+    },
+    {
+      "key": "wash-in",
+      "name": "Мойка с пылесосом",
+      "description": "Цена от",
+      "price": 25,
+      "durationMin": 45
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

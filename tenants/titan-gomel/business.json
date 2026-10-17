@@ -1,0 +1,146 @@
+{
+  "slug": "titan-gomel",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@titan-gomel.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Титан",
+    "shortName": "Титан",
+    "kind": "СТО · Гомель",
+    "tagline": "СТО и шиномонтаж на Хозяйственной: 3D развал-схождение, ремонт, запчасти",
+    "description": "Диагностика, ремонт двигателя, тормозов, сцепления и ходовой, замена ГРМ, заправка кондиционеров, 3D развал-схождение, шиномонтаж, запчасти. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Гомель, ул. Хозяйственная, 27",
+    "phone": "+375 29 182-02-22",
+    "accent": "#9B6BFF",
+    "cards": [
+      {
+        "title": "3D развал-схождение",
+        "text": "Легковые, кроссоверы и бусы."
+      },
+      {
+        "title": "Запчасти на месте",
+        "text": "Свой магазин и склад."
+      },
+      {
+        "title": "Акции и скидки",
+        "text": "Подарочные сертификаты."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "",
+      "price": 36,
+      "durationMin": 45
+    },
+    {
+      "key": "check",
+      "name": "Проверка углов установки колёс",
+      "description": "",
+      "price": 36,
+      "durationMin": 20
+    },
+    {
+      "key": "align",
+      "name": "3D развал-схождение, легковой",
+      "description": "Две оси",
+      "price": 54,
+      "durationMin": 60
+    },
+    {
+      "key": "align-suv1",
+      "name": "3D развал-схождение, кроссовер, одна ось",
+      "description": "",
+      "price": 48,
+      "durationMin": 40
+    },
+    {
+      "key": "align-suv",
+      "name": "3D развал-схождение, кроссовер",
+      "description": "Две оси",
+      "price": 60,
+      "durationMin": 60
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "Примерная цена",
+      "price": 35,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

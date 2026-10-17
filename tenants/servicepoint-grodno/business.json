@@ -1,0 +1,146 @@
+{
+  "slug": "servicepoint-grodno",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@servicepoint-grodno.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "ServicePoint",
+    "shortName": "ServicePoint",
+    "kind": "СТО · Гродно",
+    "tagline": "СТО на Победы: ГРМ, сцепление, ходовая, ремонт DSG",
+    "description": "Ремонт двигателя и механических КПП, DSG, сцепление, ГРМ, рулевое, суппорты, глушители. Оплата картой, QR и в рассрочку, подарочные сертификаты. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Гродно, ул. Победы, 16, корп. 14",
+    "phone": "+375 29 604-50-30",
+    "accent": "#00B4D8",
+    "cards": [
+      {
+        "title": "Ремонт DSG",
+        "text": "Работаем с роботизированными КПП."
+      },
+      {
+        "title": "Рассрочка",
+        "text": "Карта, QR-код или рассрочка."
+      },
+      {
+        "title": "Цены «от» на сайте",
+        "text": "Понятно ещё до звонка."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "oil",
+      "name": "Замена масла в двигателе",
+      "description": "Цена от",
+      "price": 45,
+      "durationMin": 40
+    },
+    {
+      "key": "pads",
+      "name": "Замена тормозных колодок",
+      "description": "Цена от",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "silent",
+      "name": "Замена сайлент-блоков",
+      "description": "Цена от",
+      "price": 45,
+      "durationMin": 90
+    },
+    {
+      "key": "ball",
+      "name": "Замена шаровой опоры",
+      "description": "Цена от",
+      "price": 60,
+      "durationMin": 60
+    },
+    {
+      "key": "clutch",
+      "name": "Замена сцепления",
+      "description": "Цена от",
+      "price": 280,
+      "durationMin": 300
+    },
+    {
+      "key": "chain",
+      "name": "Замена цепи ГРМ",
+      "description": "Цена от",
+      "price": 300,
+      "durationMin": 360
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

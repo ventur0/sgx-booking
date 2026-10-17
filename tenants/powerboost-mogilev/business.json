@@ -1,0 +1,146 @@
+{
+  "slug": "powerboost-mogilev",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@powerboost-mogilev.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Power Boost",
+    "shortName": "Power Boost",
+    "kind": "СТО · Могилёв",
+    "tagline": "СТО на Сапёрной: диагностика, чип-тюнинг, 3D развал, покраска",
+    "description": "Комплексная диагностика, турбины, тормоза, КПП, чип-тюнинг, антикор, покраска, 3D развал-схождение и шиномонтаж. Рассрочка и подарочные сертификаты. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Могилёв, ул. Сапёрная, 42",
+    "phone": "+375 29 238-33-33",
+    "accent": "#F5A524",
+    "cards": [
+      {
+        "title": "Чип-тюнинг",
+        "text": "Больше мощности без переделок."
+      },
+      {
+        "title": "3D развал-схождение",
+        "text": "И сезонный шиномонтаж."
+      },
+      {
+        "title": "Рассрочка",
+        "text": "Карта, QR и безнал."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Комплексная диагностика",
+      "description": "",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "elec",
+      "name": "Диагностика электрики",
+      "description": "",
+      "price": 25,
+      "durationMin": 30
+    },
+    {
+      "key": "chassis",
+      "name": "Диагностика подвески",
+      "description": "",
+      "price": 25,
+      "durationMin": 30
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла в двигателе",
+      "description": "",
+      "price": 40,
+      "durationMin": 40
+    },
+    {
+      "key": "align",
+      "name": "3D развал-схождение",
+      "description": "",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "tires",
+      "name": "Сезонная замена шин",
+      "description": "",
+      "price": 20,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

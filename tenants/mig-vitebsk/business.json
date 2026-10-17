@@ -1,0 +1,139 @@
+{
+  "slug": "mig-vitebsk",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@mig-vitebsk.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "МИГ",
+    "shortName": "МИГ",
+    "kind": "СТО · Витебск",
+    "tagline": "Автосервис на Павлова: диагностика, ходовая, фаркопы, коммерческий транспорт",
+    "description": "Диагностика, ходовая, тормоза, двигатель, кондиционеры, выхлоп, парктроники и фаркопы, ремонт коммерческого транспорта. Есть зона ожидания. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Витебск, ул. Академика Павлова, 46А",
+    "phone": "+375 33 399-66-33",
+    "accent": "#5AA9E6",
+    "cards": [
+      {
+        "title": "Зона ожидания",
+        "text": "Подождите в тепле, пока чиним."
+      },
+      {
+        "title": "Фаркопы и парктроники",
+        "text": "Установка допоборудования."
+      },
+      {
+        "title": "Коммерческий транспорт",
+        "text": "Ремонт бусов и фургонов."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "",
+      "price": 25,
+      "durationMin": 45
+    },
+    {
+      "key": "chassis",
+      "name": "Диагностика ходовой",
+      "description": "Без разборки",
+      "price": 20,
+      "durationMin": 30
+    },
+    {
+      "key": "guard",
+      "name": "Снятие/установка защиты",
+      "description": "",
+      "price": 10,
+      "durationMin": 20
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "Примерная цена",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "align",
+      "name": "Развал-схождение",
+      "description": "Примерная цена",
+      "price": 45,
+      "durationMin": 60
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

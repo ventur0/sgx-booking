@@ -430,5 +430,245 @@
       "polish",
       "interior"
     ]
+  },
+  {
+    "slug": "kolyada",
+    "accent": "#E8833A",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "К",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "avtoverdikt",
+    "accent": "#4FB286",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "АВ",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "alfa-korolya",
+    "accent": "#E5484D",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "A",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "ministo",
+    "accent": "#F5A524",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "М",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "genservice",
+    "accent": "#7C9CFF",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "G",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "sto325",
+    "accent": "#2EC4B6",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "325",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "sto-furgon",
+    "accent": "#D9A83A",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "Ф",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "alyans-gomel",
+    "accent": "#5AA9E6",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "АА",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "titan-gomel",
+    "accent": "#9B6BFF",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "T",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "nata-gomel",
+    "accent": "#FF5C8A",
+    "body": "#22262D",
+    "scene": "wash",
+    "mark": "N",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "sto-plus-grodno",
+    "accent": "#3CC98A",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "С+",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "servicepoint-grodno",
+    "accent": "#00B4D8",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "SP",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "dvs-master-grodno",
+    "accent": "#F59E0B",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "ДВС",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "qservice-brest",
+    "accent": "#4690FF",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "Q",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "kometa-brest",
+    "accent": "#E8833A",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "К",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "procto-mogilev",
+    "accent": "#3CC98A",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "P",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "spas-mogilev",
+    "accent": "#E5484D",
+    "body": "#22262D",
+    "scene": "wash",
+    "mark": "С",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "powerboost-mogilev",
+    "accent": "#F5A524",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "PB",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "mig-vitebsk",
+    "accent": "#5AA9E6",
+    "body": "#22262D",
+    "scene": "hex",
+    "mark": "МИГ",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
+  },
+  {
+    "slug": "avtozal-vitebsk",
+    "accent": "#7C9CFF",
+    "body": "#22262D",
+    "scene": "studio",
+    "mark": "АЗ",
+    "works": [
+      "wheel",
+      "polish",
+      "film"
+    ]
   }
 ]

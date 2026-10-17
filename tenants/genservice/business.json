@@ -1,0 +1,146 @@
+{
+  "slug": "genservice",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@genservice.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "GenService",
+    "shortName": "GenService",
+    "kind": "СТО · Минск",
+    "tagline": "СТО на Кальварийской: 3D развал-схождение, антикор, кондиционеры",
+    "description": "Ремонт двигателя, КПП, тормозов и рулевого, компьютерная диагностика и эндоскопия, 3D развал-схождение, антикоррозийная обработка, заправка кондиционеров. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Минск, ул. Кальварийская, 33, корп. 14",
+    "phone": "+375 29 634-84-44",
+    "accent": "#7C9CFF",
+    "cards": [
+      {
+        "title": "3D развал",
+        "text": "Точная настройка за час."
+      },
+      {
+        "title": "Антикор днища",
+        "text": "Защита кузова от соли и влаги."
+      },
+      {
+        "title": "Удобная оплата",
+        "text": "Карта, бесконтакт, безнал."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "align1",
+      "name": "3D развал-схождение, одна ось",
+      "description": "",
+      "price": 40,
+      "durationMin": 40
+    },
+    {
+      "key": "align2",
+      "name": "3D развал-схождение, две оси",
+      "description": "",
+      "price": 55,
+      "durationMin": 60
+    },
+    {
+      "key": "align-suv",
+      "name": "3D развал-схождение, внедорожник",
+      "description": "Две оси",
+      "price": 65,
+      "durationMin": 60
+    },
+    {
+      "key": "elec",
+      "name": "Диагностика автоэлектрики",
+      "description": "",
+      "price": 30,
+      "durationMin": 60
+    },
+    {
+      "key": "ac",
+      "name": "Заправка кондиционера",
+      "description": "Работа + 100 г фреона и УФ-краситель",
+      "price": 35,
+      "durationMin": 60
+    },
+    {
+      "key": "anticor",
+      "name": "Антикоррозийная обработка днища",
+      "description": "",
+      "price": 750,
+      "durationMin": 480
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "slug": "sto-furgon",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@sto-furgon.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "СТО Фургон",
+    "shortName": "Фургон",
+    "kind": "СТО · Минск",
+    "tagline": "Ремонт подвески, сцепления, ГРМ и экспресс-замена масла на Тимирязева",
+    "description": "Ремонт легковых и коммерческих авто: подвеска и её диагностика, сцепление, двигатель, замена ремня ГРМ, экспресс-замена масла. Демо-версия сайта для СТО: цены, длительность и часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Минск, ул. Тимирязева, 93",
+    "phone": "+375 29 113-08-80",
+    "accent": "#D9A83A",
+    "cards": [
+      {
+        "title": "Экспресс-масло",
+        "text": "Замена масла без долгого ожидания."
+      },
+      {
+        "title": "Коммерческий транспорт",
+        "text": "Бусы и фургоны — тоже к нам."
+      },
+      {
+        "title": "Смета заранее",
+        "text": "Согласуем цену до ремонта."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "oil",
+      "name": "Экспресс-замена масла",
+      "description": "",
+      "price": 30,
+      "durationMin": 30
+    },
+    {
+      "key": "chassis",
+      "name": "Диагностика подвески",
+      "description": "",
+      "price": 20,
+      "durationMin": 30
+    },
+    {
+      "key": "susp",
+      "name": "Ремонт подвески",
+      "description": "Цена от",
+      "price": 60,
+      "durationMin": 120
+    },
+    {
+      "key": "clutch",
+      "name": "Замена сцепления",
+      "description": "Цена от",
+      "price": 250,
+      "durationMin": 300
+    },
+    {
+      "key": "grm",
+      "name": "Замена ремня ГРМ",
+      "description": "Цена от",
+      "price": 180,
+      "durationMin": 240
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

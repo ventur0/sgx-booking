@@ -1,0 +1,136 @@
+{
+  "slug": "sto325",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@sto325.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "СТО 325",
+    "shortName": "СТО 325",
+    "kind": "СТО · Минск",
+    "tagline": "СТО в Первомайском районе: масло, развал, двигатель, электрика",
+    "description": "Замена масла, развал-схождение, шиномонтаж, ремонт двигателя и МКПП, автоэлектрик, кондиционеры. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Минск, 1-й Твёрдый пер., 7Б, корп. 3, пом. 3",
+    "phone": "+375 29 623-53-25",
+    "accent": "#2EC4B6",
+    "cards": [
+      {
+        "title": "Всё для машины",
+        "text": "От масла до ремонта двигателя."
+      },
+      {
+        "title": "Цены на сайте",
+        "text": "Видно до записи."
+      },
+      {
+        "title": "Запись на время",
+        "text": "Без очереди на месте."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "",
+      "price": 30,
+      "durationMin": 45
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла",
+      "description": "",
+      "price": 40,
+      "durationMin": 40
+    },
+    {
+      "key": "align",
+      "name": "Развал-схождение",
+      "description": "",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "tires",
+      "name": "Шиномонтаж",
+      "description": "4 колеса",
+      "price": 66,
+      "durationMin": 60
+    },
+    {
+      "key": "elec",
+      "name": "Автоэлектрик",
+      "description": "Цена от",
+      "price": 140,
+      "durationMin": 120
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sat": null,
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "slug": "procto-mogilev",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@procto-mogilev.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "ПроСТО",
+    "shortName": "ПроСТО",
+    "kind": "СТО · Могилёв",
+    "tagline": "Автосервис на Пысина: слесарка, электрика, развал-схождение",
+    "description": "Подвеска, тормоза, двигатель, ГРМ, сварка, кондиционеры, автоэлектрик, развал-схождение, шиномонтаж, коммерческий транспорт. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Могилёв, ул. Алексея Пысина, 24А",
+    "phone": "+375 33 315-41-41",
+    "accent": "#3CC98A",
+    "cards": [
+      {
+        "title": "Всё по слесарке",
+        "text": "Ходовая, тормоза, двигатель."
+      },
+      {
+        "title": "Автоэлектрик",
+        "text": "Найдём и устраним неисправность."
+      },
+      {
+        "title": "Коммерческий транспорт",
+        "text": "Бусы тоже обслуживаем."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "align",
+      "name": "Развал-схождение",
+      "description": "",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "elec",
+      "name": "Автоэлектрик",
+      "description": "Цена от",
+      "price": 45,
+      "durationMin": 60
+    },
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "Примерная цена",
+      "price": 35,
+      "durationMin": 45
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "Примерная цена",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "pads",
+      "name": "Замена тормозных колодок",
+      "description": "Примерная цена",
+      "price": 40,
+      "durationMin": 60
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "15:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

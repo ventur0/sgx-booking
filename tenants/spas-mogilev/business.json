@@ -1,0 +1,142 @@
+{
+  "slug": "spas-mogilev",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@spas-mogilev.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Спас",
+    "shortName": "Спас",
+    "kind": "СТО · Могилёв",
+    "tagline": "СТО, техпомощь и мойка на Димитрова",
+    "description": "Ремонт и диагностика, 3D развал-схождение, регулировка фар, шиномонтаж, мойка и полировка, техпомощь и эвакуация. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Могилёв, пр-т Димитрова, 19Б",
+    "phone": "+375 29 547-11-11",
+    "accent": "#E5484D",
+    "cards": [
+      {
+        "title": "Техпомощь",
+        "text": "Эвакуация и помощь на дороге."
+      },
+      {
+        "title": "Ремонт и мойка",
+        "text": "Всё в одном комплексе."
+      },
+      {
+        "title": "3D развал-схождение",
+        "text": "Точная настройка."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "",
+      "price": 54,
+      "durationMin": 45
+    },
+    {
+      "key": "align",
+      "name": "3D развал-схождение",
+      "description": "Цена от",
+      "price": 58.8,
+      "durationMin": 60
+    },
+    {
+      "key": "lights",
+      "name": "Регулировка фар",
+      "description": "Цена от",
+      "price": 25.2,
+      "durationMin": 30
+    },
+    {
+      "key": "play",
+      "name": "Диагностика люфтов подвески",
+      "description": "",
+      "price": 50.4,
+      "durationMin": 40
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "Обычная цена, бывают акции",
+      "price": 45,
+      "durationMin": 40
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sun": {
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

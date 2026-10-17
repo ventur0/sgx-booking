@@ -1,0 +1,139 @@
+{
+  "slug": "kometa-brest",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@kometa-brest.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "Комета",
+    "shortName": "Комета",
+    "kind": "СТО · Брест",
+    "tagline": "Автоцентр на 2-й Заводской: ремонт, кузов, электрика, запчасти",
+    "description": "Ремонт подвески, рулевых реек и выхлопа, кузовной ремонт и покраска, автоэлектрик, кондиционеры, развал-схождение, шиномонтаж, магазин запчастей. Демо-версия сайта для СТО: цены, длительность и часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Брест, ул. 2-я Заводская, 2/4",
+    "phone": "+375 33 344-92-90",
+    "accent": "#E8833A",
+    "cards": [
+      {
+        "title": "Кузов и покраска",
+        "text": "Ремонт после ДТП."
+      },
+      {
+        "title": "Свой магазин запчастей",
+        "text": "Подбор и установка."
+      },
+      {
+        "title": "Акции и скидки",
+        "text": "Следите за предложениями."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "",
+      "price": 35,
+      "durationMin": 45
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "susp",
+      "name": "Ремонт подвески",
+      "description": "Цена от",
+      "price": 60,
+      "durationMin": 120
+    },
+    {
+      "key": "align",
+      "name": "Развал-схождение",
+      "description": "",
+      "price": 45,
+      "durationMin": 60
+    },
+    {
+      "key": "tires",
+      "name": "Шиномонтаж",
+      "description": "4 колеса",
+      "price": 50,
+      "durationMin": 60
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "20:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

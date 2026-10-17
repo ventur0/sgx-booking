@@ -1,0 +1,136 @@
+{
+  "slug": "qservice-brest",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@qservice-brest.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "QService",
+    "shortName": "QService",
+    "kind": "СТО · Брест",
+    "tagline": "Сертифицированный автосервис на Рябцева",
+    "description": "Сертифицированный сервис: диагностика, КПП, сцепление, тормоза, развал-схождение, ремонт по ОСАГО. Демо-версия сайта для СТО: цены взяты из карточки на картах и могли измениться, часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Брест, ул. Лейтенанта Рябцева, 33Б",
+    "phone": "+375 29 818-80-20",
+    "accent": "#4690FF",
+    "cards": [
+      {
+        "title": "Сертифицированный сервис",
+        "text": "Работаем по стандартам."
+      },
+      {
+        "title": "Ремонт по ОСАГО",
+        "text": "Поможем с документами."
+      },
+      {
+        "title": "Оплата картой",
+        "text": "Wi-Fi и парковка."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "oil",
+      "name": "Замена масла в двигателе",
+      "description": "",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "Примерная цена",
+      "price": 40,
+      "durationMin": 45
+    },
+    {
+      "key": "align",
+      "name": "Развал-схождение",
+      "description": "Примерная цена",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "pads",
+      "name": "Замена тормозных колодок",
+      "description": "Примерная цена",
+      "price": 40,
+      "durationMin": 60
+    },
+    {
+      "key": "clutch",
+      "name": "Замена сцепления",
+      "description": "Цена от",
+      "price": 260,
+      "durationMin": 300
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sat": null,
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

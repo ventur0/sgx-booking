@@ -1,0 +1,139 @@
+{
+  "slug": "dvs-master-grodno",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@dvs-master-grodno.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "ДВС Мастер",
+    "shortName": "ДВС Мастер",
+    "kind": "СТО · Гродно",
+    "tagline": "Ремонт двигателей и радиаторов на Космонавтов",
+    "description": "Ремонт двигателей, снятие и ремонт ГБЦ, радиаторы, ходовая, тормоза, замена масла. Запчасти можем купить сами. Демо-версия сайта для СТО: цены, длительность и часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Гродно, пр-т Космонавтов, 100/13",
+    "phone": "+375 29 884-08-01",
+    "accent": "#F59E0B",
+    "cards": [
+      {
+        "title": "Двигатели — наш профиль",
+        "text": "ГБЦ, ГРМ, капремонт."
+      },
+      {
+        "title": "Запчасти берём сами",
+        "text": "Не нужно ничего искать."
+      },
+      {
+        "title": "Запись заранее",
+        "text": "Мастера заняты — бронируйте время."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Диагностика двигателя",
+      "description": "",
+      "price": 35,
+      "durationMin": 45
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "chassis",
+      "name": "Осмотр ходовой",
+      "description": "",
+      "price": 20,
+      "durationMin": 30
+    },
+    {
+      "key": "pads",
+      "name": "Замена тормозных колодок",
+      "description": "Одна ось",
+      "price": 40,
+      "durationMin": 60
+    },
+    {
+      "key": "head",
+      "name": "Снятие и ремонт ГБЦ",
+      "description": "Цена от",
+      "price": 400,
+      "durationMin": 720
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    "tue": {
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    "wed": {
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    "thu": {
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    "fri": {
+      "opens": "08:00",
+      "closes": "17:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "15:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}

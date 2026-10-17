@@ -1,0 +1,139 @@
+{
+  "slug": "sto-plus-grodno",
+  "timezone": "Europe/Minsk",
+  "owner": {
+    "email": "owner@sto-plus-grodno.example"
+  },
+  "noindex": true,
+  "profile": {
+    "name": "СТО+",
+    "shortName": "СТО+",
+    "kind": "СТО · Гродно",
+    "tagline": "СТО на Озёрском шоссе: двигатель, сцепление, 3D развал-схождение",
+    "description": "Ремонт двигателей любой сложности, сцепление, ГРМ, ходовая, тормоза, КПП, пневмосистемы, компьютерная диагностика, 3D развал-схождение. Демо-версия сайта для СТО: цены, длительность и часы примерные — владелец меняет всё в кабинете.",
+    "address": "г. Гродно, Озёрское шоссе, 16Д",
+    "phone": "+375 29 869-88-98",
+    "accent": "#3CC98A",
+    "cards": [
+      {
+        "title": "Двигатели любой сложности",
+        "text": "От диагностики до капремонта."
+      },
+      {
+        "title": "3D развал",
+        "text": "Точная настройка углов."
+      },
+      {
+        "title": "Ремонт по ОСАГО",
+        "text": "Поможем с оформлением."
+      }
+    ],
+    "booking": {
+      "bufferMin": 10,
+      "stepMin": 30,
+      "leadMin": 60,
+      "cancelHours": 3,
+      "horizonDays": 30
+    }
+  },
+  "images": {
+    "hero": "images/hero.svg",
+    "logo": "images/logo.svg"
+  },
+  "resources": [
+    {
+      "key": "post-1",
+      "name": "Подъёмник 1"
+    },
+    {
+      "key": "post-2",
+      "name": "Подъёмник 2"
+    }
+  ],
+  "services": [
+    {
+      "key": "diag",
+      "name": "Компьютерная диагностика",
+      "description": "",
+      "price": 35,
+      "durationMin": 45
+    },
+    {
+      "key": "align",
+      "name": "3D развал-схождение",
+      "description": "",
+      "price": 50,
+      "durationMin": 60
+    },
+    {
+      "key": "oil",
+      "name": "Замена масла и фильтра",
+      "description": "",
+      "price": 30,
+      "durationMin": 40
+    },
+    {
+      "key": "clutch",
+      "name": "Замена сцепления",
+      "description": "Цена от",
+      "price": 280,
+      "durationMin": 300
+    },
+    {
+      "key": "grm",
+      "name": "Замена ремня ГРМ",
+      "description": "Цена от",
+      "price": 250,
+      "durationMin": 240
+    }
+  ],
+  "hours": {
+    "mon": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "tue": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "wed": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "thu": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "fri": {
+      "opens": "09:00",
+      "closes": "18:00"
+    },
+    "sat": {
+      "opens": "09:00",
+      "closes": "14:00"
+    },
+    "sun": null
+  },
+  "holidays": true,
+  "exceptions": [],
+  "works": [
+    {
+      "key": "w1",
+      "image": "images/work-1.svg",
+      "caption": "Колёса и развал-схождение"
+    },
+    {
+      "key": "w2",
+      "image": "images/work-2.svg",
+      "caption": "Кузов после ремонта"
+    },
+    {
+      "key": "w3",
+      "image": "images/work-3.svg",
+      "caption": "Оптика и электрика"
+    }
+  ],
+  "demo": {
+    "bookings": []
+  }
+}
