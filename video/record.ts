@@ -4,7 +4,7 @@
  * Запуск: BASE_URL=http://localhost:4173 tsx video/record.ts → video/out/*.webm
  */
 import { chromium, type Browser, type BrowserContext, type Locator, type Page } from "@playwright/test";
-import { mkdirSync, renameSync } from "node:fs";
+import { existsSync, mkdirSync, renameSync } from "node:fs";
 import { join } from "node:path";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:4173";
@@ -18,31 +18,32 @@ const VIEW = { width: 390, height: 844 };
 const failures: string[] = [];
 
 // ---------- подписи и касания поверх страницы ----------
-const OVERLAY = () => {
-  const css = `
-  #vcap{position:fixed;left:10px;right:10px;top:calc(10px + env(safe-area-inset-top,0px));z-index:2147483647;pointer-events:none;
-    background:rgba(10,14,20,.92);color:#fff;border:1px solid rgba(70,144,255,.7);border-radius:16px;padding:12px 14px;
-    font:600 17px/1.3 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:opacity .25s}
-  #vcap small{display:block;font-weight:400;font-size:14px;color:#c9d6ea;margin-top:4px}
-  #vcap:empty{opacity:0}
-  .vtap{position:fixed;z-index:2147483646;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;
-    background:rgba(70,144,255,.35);border:3px solid #4690ff;animation:vtap .7s ease-out forwards}
-  @keyframes vtap{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.5);opacity:0}}`;
-  const mount = () => {
-    if (document.getElementById("vcap")) return;
-    const st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
-    const d = document.createElement("div"); d.id = "vcap"; document.body.appendChild(d);
-    try { const saved = sessionStorage.getItem("vcap"); if (saved) d.innerHTML = saved; } catch { /* about:blank */ }
+// Скрипт страницы — строкой: tsx/esbuild добавляет в функции служебные вызовы (__name), которых нет в браузере.
+const OVERLAY = String.raw`(() => {
+  const css = "#vcap{position:fixed;left:10px;right:10px;top:10px;z-index:2147483647;pointer-events:none;" +
+    "background:rgba(10,14,20,.92);color:#fff;border:1px solid rgba(70,144,255,.7);border-radius:16px;padding:12px 14px;" +
+    "font:600 17px/1.3 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.5)}" +
+    "#vcap small{display:block;font-weight:400;font-size:14px;color:#c9d6ea;margin-top:4px}#vcap:empty{display:none}" +
+    ".vtap{position:fixed;z-index:2147483646;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;pointer-events:none;" +
+    "background:rgba(70,144,255,.35);border:3px solid #4690ff;animation:vtap .7s ease-out forwards}" +
+    "@keyframes vtap{0%{transform:scale(.4);opacity:1}100%{transform:scale(1.5);opacity:0}}";
+  function mount() {
+    if (!document.body || document.getElementById("vcap")) return;
+    var st = document.createElement("style"); st.textContent = css; document.head.appendChild(st);
+    var d = document.createElement("div"); d.id = "vcap"; document.body.appendChild(d);
+    try { var saved = sessionStorage.getItem("vcap"); if (saved) d.innerHTML = saved; } catch (e) {}
+  }
+  window.__cap = function (html) {
+    mount(); try { sessionStorage.setItem("vcap", html); } catch (e) {}
+    var el = document.getElementById("vcap"); if (el) el.innerHTML = html;
   };
-  (window as unknown as Record<string, unknown>).__cap = (html: string) => {
-    mount(); try { sessionStorage.setItem("vcap", html); } catch { /* about:blank */ } document.getElementById("vcap")!.innerHTML = html;
-  };
-  (window as unknown as Record<string, unknown>).__tap = (x: number, y: number) => {
-    const t = document.createElement("div"); t.className = "vtap"; t.style.left = x + "px"; t.style.top = y + "px";
-    document.body.appendChild(t); setTimeout(() => t.remove(), 800);
+  window.__tap = function (x, y) {
+    if (!document.body) return;
+    var t = document.createElement("div"); t.className = "vtap"; t.style.left = x + "px"; t.style.top = y + "px";
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 800);
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount); else mount();
-};
+})();`;
 
 const wait = (p: Page, ms: number) => p.waitForTimeout(ms);
 async function cap(p: Page, title: string, sub = "", hold = 1800) {
@@ -52,7 +53,7 @@ async function cap(p: Page, title: string, sub = "", hold = 1800) {
 async function tap(p: Page, loc: Locator, after = 900) {
   await loc.scrollIntoViewIfNeeded({ timeout: 8000 });
   const box = await loc.boundingBox();
-  if (box) await p.evaluate(([x, y]) => (window as unknown as { __tap: (a: number, b: number) => void }).__tap(x, y), [box.x + box.width / 2, box.y + box.height / 2]);
+  if (box) await p.evaluate(([x, y]) => (window as unknown as { __tap?: (a: number, b: number) => void }).__tap?.(x, y), [box.x + box.width / 2, box.y + box.height / 2]).catch(() => {});
   await wait(p, 450);
   await loc.click({ timeout: 8000 });
   await wait(p, after);
@@ -88,13 +89,13 @@ async function endCard(p: Page, text: string) {
   await wait(p, 2500);
 }
 
-async function newRecorded(browser: Browser, name: string, storageState?: string): Promise<{ ctx: BrowserContext; page: Page; save: () => Promise<void> }> {
+async function newRecorded(browser: Browser, name: string, storageStateIn?: string): Promise<{ ctx: BrowserContext; page: Page; save: () => Promise<void> }> {
   const ctx = await browser.newContext({
     viewport: VIEW, deviceScaleFactor: 2, isMobile: true, hasTouch: true, locale: "ru-RU", timezoneId: "Europe/Minsk",
     userAgent: "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Mobile Safari/537.36",
-    colorScheme: "dark", storageState, recordVideo: { dir: OUT, size: { width: VIEW.width * 2, height: VIEW.height * 2 } },
+    colorScheme: "dark", storageState: storageStateIn && existsSync(storageStateIn) ? storageStateIn : undefined, recordVideo: { dir: OUT, size: { width: VIEW.width * 2, height: VIEW.height * 2 } },
   });
-  await ctx.addInitScript(OVERLAY);
+  await ctx.addInitScript({ content: OVERLAY });
   const page = await ctx.newPage();
   return {
     ctx, page,
@@ -226,8 +227,7 @@ async function video2(browser: Browser, statePath: string) {
 async function video3(browser: Browser, statePath: string) {
   const { page: p, save } = await newRecorded(browser, "03-zapis-po-telefonu-perenos-blokirovka", statePath);
   await titleCard(p, "3", "Запись по телефону, перенос и блокировка", ["Клиент позвонил или приехал сам", "Перенос в два нажатия", "Закрыть пост на время"]);
-  await p.goto(`${BASE}/s/${SLUG}/owner/`);
-  await p.getByRole("button", { name: "Неделя" }).waitFor({ timeout: 15000 });
+  await ownerLogin(p);
   const sheet = p.getByRole("dialog");
   await step("ручная запись", async () => {
     await cap(p, "Клиент позвонил или приехал без записи", "Нажмите «+ Запись»", 1500);
@@ -267,6 +267,7 @@ async function video3(browser: Browser, statePath: string) {
 async function video4(browser: Browser, statePath: string) {
   const { page: p, save } = await newRecorded(browser, "04-ceny-uslugi-grafik-foto", statePath);
   await titleCard(p, "4", "Цены, услуги, график и фото", ["Всё меняете сами, без программиста", "Изменения сразу на сайте"]);
+  await ownerLogin(p);
   await p.goto(`${BASE}/s/${SLUG}/owner/settings`);
   await wait(p, 1500);
   await step("студия", async () => {
@@ -308,6 +309,7 @@ async function video4(browser: Browser, statePath: string) {
 async function video5(browser: Browser, statePath: string) {
   const { page: p, save } = await newRecorded(browser, "05-itogi-uvedomleniya-zapusk", statePath);
   await titleCard(p, "5", "Итоги, уведомления и запуск", ["Сколько машин и денег", "Уведомления на телефон", "Как запустить приём записей"]);
+  await ownerLogin(p);
   await p.goto(`${BASE}/s/${SLUG}/owner/stats`);
   await wait(p, 1800);
   await step("итоги", async () => {
