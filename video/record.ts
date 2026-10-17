@@ -120,7 +120,10 @@ async function newRecorded(browser: Browser, name: string, storageStateIn?: stri
 
 async function ownerLogin(p: Page) {
   await p.goto(`${BASE}/s/${SLUG}/owner/`);
-  if (await p.getByLabel("Почта").isVisible({ timeout: 6000 }).catch(() => false)) {
+  // ждём, пока кабинет отрисуется: либо форма входа, либо уже записи (вход сохранён)
+  const email = p.getByLabel("Почта"), week = p.getByRole("button", { name: "Неделя" });
+  await email.or(week).first().waitFor({ timeout: 20000 });
+  if (await email.isVisible()) {
     await type(p, p.getByLabel("Почта"), OWNER_EMAIL);
     await type(p, p.getByLabel("Пароль"), OWNER_PASSWORD);
     await tap(p, p.getByRole("button", { name: "Войти" }), 2500);
@@ -352,7 +355,7 @@ async function video5(browser: Browser, statePath: string) {
 }
 
 // =====================================================================
-const browser = await chromium.launch();
+const browser = await chromium.launch({ args: ["--lang=ru-RU"], env: { ...process.env, LANG: "ru_RU.UTF-8", LANGUAGE: "ru_RU:ru" } });
 const statePath = join(OUT, "owner-state.json");
 const only = process.argv[2];
 const run = async (n: string, f: () => Promise<void>) => { if (!only || only === n) { console.log("▶ видео", n); await f(); } };
